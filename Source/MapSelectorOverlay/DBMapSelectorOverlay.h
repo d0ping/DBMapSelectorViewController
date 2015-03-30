@@ -13,7 +13,8 @@
 
 @property (nonatomic, assign) CLLocationCoordinate2D            coordinate;
 @property (nonatomic, assign) CLLocationDistance                radius;
-@property (nonatomic, assign) BOOL                              editing;
+@property (nonatomic, assign) BOOL                              editingCoordinate;
+@property (nonatomic, assign) BOOL                              editingRadius;
 
 - (instancetype)initWithCenterCoordinate:(CLLocationCoordinate2D)coordinate radius:(CLLocationDistance)radius;
 

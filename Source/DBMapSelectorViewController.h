@@ -9,6 +9,12 @@
 #import <UIKit/UIKit.h>
 #import <MapKit/MapKit.h>
 
+typedef NS_ENUM(NSInteger, DBMapSelectorEditingType) {
+    DBMapSelectorEditingTypeFull = 0,
+    DBMapSelectorEditingTypeCoordinateOnly,
+    DBMapSelectorEditingTypeRadiusOnly,
+};
+
 @protocol DBMapSelectorViewControllerProtocol <NSObject>
 
 @optional
@@ -21,6 +27,8 @@
 @interface DBMapSelectorViewController : UIViewController <MKMapViewDelegate, DBMapSelectorViewControllerProtocol>
 
 @property (nonatomic, weak) IBOutlet MKMapView          *mapView;
+
+@property (nonatomic, assign) DBMapSelectorEditingType  selectorEditingType;
 
 @property (nonatomic, assign) CLLocationCoordinate2D    selectorCoordinate;
 @property (nonatomic, assign) CLLocationDistance        selectorRadius;

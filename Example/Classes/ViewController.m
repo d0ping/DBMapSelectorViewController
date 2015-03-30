@@ -28,8 +28,10 @@
     
     _mapView.showsUserLocation = YES;
     
-//    self.selectorCoordinate = _mapView.userLocation.coordinate;
-    //    self.selectorRadius = 1000;
+    // Set Begin Settings
+    self.selectorCoordinate = CLLocationCoordinate2DMake(55.75399400, 37.62209300);
+    self.selectorRadius = 3000;
+    self.selectorRadiusMax = 25000;
     
     _fillColorDict = @{@"Orange": [UIColor orangeColor], @"Green": [UIColor greenColor],  @"Pure": [UIColor purpleColor],  @"Cyan": [UIColor cyanColor], @"Yellow": [UIColor yellowColor],  @"Magenta": [UIColor magentaColor]};
     _strokeColorDict = @{@"Dark Gray": [UIColor darkGrayColor], @"Black": [UIColor blackColor], @"Brown": [UIColor brownColor], @"Red": [UIColor redColor], @"Blue": [UIColor blueColor]};
@@ -51,6 +53,7 @@
     NSString *strokeColorKey = @"Dark Gray";
     _strokeColorTextField.text = strokeColorKey;
     self.selectorStrokeColor = _strokeColorDict[strokeColorKey];
+    
     
     [self didChangeCoordinate:self.selectorCoordinate];
     [self didChangeRadius:self.selectorRadius];
@@ -77,8 +80,13 @@
 
 #pragma mark - Actions
 
+- (IBAction)editingTypeSegmentedControlValueDidChange:(UISegmentedControl *)sender {
+    self.selectorEditingType = sender.selectedSegmentIndex;
+}
+
 - (IBAction)enableSwitchValueDidChange:(UISwitch *)sender {
     self.selectorEnabled = sender.on;
+    self.editingTypeSegmentedControl.enabled = self.selectorEnabled;
 }
 
 #pragma mark - DBMapSelectorViewController Protocol

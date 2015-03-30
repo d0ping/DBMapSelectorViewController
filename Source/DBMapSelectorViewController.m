@@ -15,21 +15,20 @@
 #import "DBMapSelectorOverlayRenderer.h"
 
 
-NSInteger const defaultMinDistance = 100;
-NSInteger const defaultMaxDistance = 10000;
+NSInteger const defaultRadius       = 1000;
+NSInteger const defaultMinDistance  = 100;
+NSInteger const defaultMaxDistance  = 10000;
 
 
 @interface DBMapSelectorViewController () {
     DBMapSelectorOverlay            *_selectorOverlay;
     DBMapSelectorOverlayRenderer    *_selectorOverlayRenderer;
 
-    // TODO:
-    BOOL                        _mapViewGestureEnabled;
-    MKMapPoint                  _lastPoint;
-    CLLocationDistance          _prevRadius;
-    CGRect                      _radiusTouchRect;
-    
-    UIView                      *_radiusTouchView;
+    BOOL                            _mapViewGestureEnabled;
+    MKMapPoint                      _prevMapPoint;
+    CLLocationDistance              _prevRadius;
+    CGRect                          _radiusTouchRect;
+    UIView                          *_radiusTouchView;
 }
 
 @end
@@ -37,8 +36,8 @@ NSInteger const defaultMaxDistance = 10000;
 @implementation DBMapSelectorViewController
 
 - (void)selectorSetDefaults {
-    _selectorCoordinate = CLLocationCoordinate2DMake(55.75399400, 37.62209300);// _mapView.userLocation.coordinate;
-    _selectorRadius = 1000;
+    _selectorEditingType = DBMapSelectorEditingTypeFull;
+    _selectorRadius = defaultRadius;
     _selectorRadiusMin = defaultMinDistance;
     _selectorRadiusMax = defaultMaxDistance;
     _selectorEnabled = YES;
@@ -52,9 +51,7 @@ NSInteger const defaultMaxDistance = 10000;
     [super loadView];
     [self selectorSetDefaults];
     
-    DBMapSelectorAnnotation *selectorAnnotation = [[DBMapSelectorAnnotation alloc] init]; //WithCoordinate:_selectorCoordinate];
-    selectorAnnotation.coordinate = _selectorCoordinate;
-    [self.mapView addAnnotation:selectorAnnotation];
+    [self displaySelectorAnnotationIfNeeded];
     
     _selectorOverlay = [[DBMapSelectorOverlay alloc] initWithCenterCoordinate:_selectorCoordinate radius:_selectorRadius];
     [self.mapView addOverlay:_selectorOverlay];
@@ -71,7 +68,7 @@ NSInteger const defaultMaxDistance = 10000;
     _radiusTouchView = [[UIView alloc] initWithFrame:CGRectZero];
     _radiusTouchView.backgroundColor = [[UIColor redColor] colorWithAlphaComponent:.5f];
     _radiusTouchView.userInteractionEnabled = NO;
-//    [self.mapView addSubview:_radiusTouchView];
+    [self.mapView addSubview:_radiusTouchView];
 #endif
     
     [self setMapRegionForSelector];
@@ -93,7 +90,7 @@ NSInteger const defaultMaxDistance = 10000;
         CLLocationCoordinate2D coord = [weakSelf.mapView convertPoint:touchPoint toCoordinateFromView:weakSelf.mapView];
         MKMapPoint mapPoint = MKMapPointForCoordinate(coord);
         
-        if (CGRectContainsPoint(_radiusTouchRect, touchPoint)){
+        if (CGRectContainsPoint(_radiusTouchRect, touchPoint) && _selectorOverlay.editingRadius){
             __block int t = 0;
             dispatch_async(dispatch_get_main_queue(), ^{
                 t = 1;
@@ -103,7 +100,7 @@ NSInteger const defaultMaxDistance = 10000;
         } else {
             weakSelf.mapView.scrollEnabled = YES;
         }
-        _lastPoint = mapPoint;
+        _prevMapPoint = mapPoint;
         _prevRadius = weakSelf.selectorRadius;
     };
     
@@ -115,7 +112,7 @@ NSInteger const defaultMaxDistance = 10000;
             CLLocationCoordinate2D coord = [weakSelf.mapView convertPoint:touchPoint toCoordinateFromView:weakSelf.mapView];
             MKMapPoint mapPoint = MKMapPointForCoordinate(coord);
             
-            double meterDistance = (mapPoint.x - _lastPoint.x)/MKMapPointsPerMeterAtLatitude(self.mapView.centerCoordinate.latitude) + _prevRadius;
+            double meterDistance = (mapPoint.x - _prevMapPoint.x)/MKMapPointsPerMeterAtLatitude(self.mapView.centerCoordinate.latitude) + _prevRadius;
             weakSelf.selectorRadius = MIN( MAX( meterDistance, _selectorRadiusMin ), _selectorRadiusMax );
 //            NSLog(@"%.2f", (float)meterDistance);
         }
@@ -142,36 +139,40 @@ NSInteger const defaultMaxDistance = 10000;
     return selectorGestureRecognizer;
 }
 
-#pragma mark - DBMapSelectorViewController Protocol
-
-- (void)didChangeCoordinate:(CLLocationCoordinate2D)coordinate {
-}
-
-- (void)didChangeRadius:(CLLocationDistance)radius {
-}
-
 #pragma mark - Accessors
 
 - (void)setSelectorRadius:(CLLocationDistance)selectorRadius {
-    if (_selectorRadius != selectorRadius) {
-        _selectorRadius = selectorRadius;
-        
-        [self didChangeRadius:_selectorRadius];
-        
+    if (_selectorRadius != MAX(MIN(selectorRadius, _selectorRadiusMax), _selectorRadiusMin)) {
+        _selectorRadius = MAX(MIN(selectorRadius, _selectorRadiusMax), _selectorRadiusMin);
         _selectorOverlay.radius = _selectorRadius;
+        [self didChangeRadius:_selectorRadius];
+    }
+}
+
+- (void)setSelectorRadiusMax:(CLLocationDistance)selectorRadiusMax {
+    if (_selectorRadiusMax != selectorRadiusMax) {
+        _selectorRadiusMax = selectorRadiusMax;
+        _selectorRadiusMin = MIN(_selectorRadiusMin, _selectorRadiusMax);
+        self.selectorRadius = _selectorRadius;
+    }
+}
+
+- (void)setSelectorRadiusMin:(CLLocationDistance)selectorRadiusMin {
+    if (_selectorRadiusMin != selectorRadiusMin) {
+        _selectorRadiusMin = selectorRadiusMin;
+        _selectorRadiusMax = MAX(_selectorRadiusMax, _selectorRadiusMin);
+        self.selectorRadius = _selectorRadius;
     }
 }
 
 - (void)setSelectorCoordinate:(CLLocationCoordinate2D)selectorCoordinate {
     if ((_selectorCoordinate.latitude != selectorCoordinate.latitude) || (_selectorCoordinate.longitude != selectorCoordinate.longitude)) {
         _selectorCoordinate = selectorCoordinate;
-        
-        [self didChangeCoordinate:_selectorCoordinate];
-        
         [self.mapView removeOverlay:_selectorOverlay];
         _selectorOverlay.coordinate = _selectorCoordinate;
         [self.mapView addOverlay:_selectorOverlay];
         [self recalculateRadiusTouchRect];
+        [self didChangeCoordinate:_selectorCoordinate];
     }
 }
 
@@ -194,23 +195,20 @@ NSInteger const defaultMaxDistance = 10000;
 - (void)setSelectorEnabled:(BOOL)selectorEnabled {
     if (_selectorEnabled != selectorEnabled) {
         _selectorEnabled = selectorEnabled;
-        _selectorOverlay.editing = _selectorEnabled;
-        
-        for (id<MKAnnotation> annotation in self.mapView.annotations) {
-            if ([annotation isKindOfClass:[DBMapSelectorAnnotation class]]) {
-                [self.mapView removeAnnotation:annotation];
-            }
-        }
-        
-        if (_selectorEnabled) {
-            DBMapSelectorAnnotation *selectorAnnotation = [[DBMapSelectorAnnotation alloc] init];
-            selectorAnnotation.coordinate = _selectorCoordinate;
-            [self.mapView addAnnotation:selectorAnnotation];
-        }
+        [self updateMapSelectorOverlayEditConfig];
+        [self displaySelectorAnnotationIfNeeded];
     }
 }
 
-#pragma mark - DEBUG
+- (void)setSelectorEditingType:(DBMapSelectorEditingType)selectorEditingType {
+    if (_selectorEditingType != selectorEditingType) {
+        _selectorEditingType = selectorEditingType;
+        [self updateMapSelectorOverlayEditConfig];
+        [self displaySelectorAnnotationIfNeeded];
+    }
+}
+
+#pragma mark - Additional
 
 - (void)recalculateRadiusTouchRect {
     MKMapRect selectorMapRect = _selectorOverlay.boundingMapRect;
@@ -230,6 +228,35 @@ NSInteger const defaultMaxDistance = 10000;
     region.center = selectorRegion.center;
     region.span = MKCoordinateSpanMake(selectorRegion.span.latitudeDelta *2.f, selectorRegion.span.longitudeDelta *2.f);
     [self.mapView setRegion:region animated:YES];
+}
+
+- (void)updateMapSelectorOverlayEditConfig {
+    _selectorOverlay.editingCoordinate = _selectorEnabled && (_selectorEditingType == DBMapSelectorEditingTypeCoordinateOnly || _selectorEditingType == DBMapSelectorEditingTypeFull);
+    _selectorOverlay.editingRadius = _selectorEnabled && (_selectorEditingType == DBMapSelectorEditingTypeRadiusOnly || _selectorEditingType == DBMapSelectorEditingTypeFull);
+}
+
+- (void)displaySelectorAnnotationIfNeeded {
+    for (id<MKAnnotation> annotation in self.mapView.annotations) {
+        if ([annotation isKindOfClass:[DBMapSelectorAnnotation class]]) {
+            [self.mapView removeAnnotation:annotation];
+        }
+    }
+    
+    if (_selectorEnabled &&
+        ((_selectorEditingType == DBMapSelectorEditingTypeFull) ||
+         (_selectorEditingType == DBMapSelectorEditingTypeCoordinateOnly))) {
+        DBMapSelectorAnnotation *selectorAnnotation = [[DBMapSelectorAnnotation alloc] init];
+        selectorAnnotation.coordinate = _selectorCoordinate;
+        [self.mapView addAnnotation:selectorAnnotation];
+    }
+}
+
+#pragma mark - DBMapSelectorViewController Protocol
+
+- (void)didChangeCoordinate:(CLLocationCoordinate2D)coordinate {
+}
+
+- (void)didChangeRadius:(CLLocationDistance)radius {
 }
 
 #pragma mark - MKMapView Delegate
@@ -258,11 +285,6 @@ NSInteger const defaultMaxDistance = 10000;
         }
         if (newState == MKAnnotationViewDragStateEnding) {
             self.selectorCoordinate = annotationView.annotation.coordinate;
-
-            // TODO:
-//            if (_delegate && [_delegate respondsToSelector:@selector(mapViewController:didChangedSelectorCenter:)]) {
-//                [_delegate mapViewController:self didChangedSelectorCenter:annotationView.annotation.coordinate];
-//            }
             if (NO == MKMapRectContainsRect(mapView.visibleMapRect, _selectorOverlay.boundingMapRect)) {
                 [self performSelector:@selector(setMapRegionForSelector) withObject:nil afterDelay:.3f];
             }

@@ -14,6 +14,7 @@
 @property (nonatomic, weak) IBOutlet UILabel                *radiusLabel;
 
 @property (nonatomic, weak) IBOutlet UISwitch               *enableSwitch;
+@property (nonatomic, weak) IBOutlet UISegmentedControl     *editingTypeSegmentedControl;
 
 @property (nonatomic, weak) IBOutlet UITextField            *fillColorTextField;
 @property (nonatomic, weak) IBOutlet UITextField            *strokeColorTextField;

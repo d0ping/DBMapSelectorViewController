@@ -19,7 +19,8 @@
         _coordinate = coordinate;
         _radius = radius;
         _boundingMapRect = [self MKMapRectForCoordinate:_coordinate radius:_radius];
-        _editing = YES;
+        _editingCoordinate = YES;
+        _editingRadius = YES;
     }
     return self;
 }

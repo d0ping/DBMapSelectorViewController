@@ -39,19 +39,23 @@
 
 - (void)addOverlayObserver {
     [_selectorOverlay addObserver:self forKeyPath:NSStringFromSelector(@selector(radius)) options:NSKeyValueObservingOptionNew context:nil];
-    [_selectorOverlay addObserver:self forKeyPath:NSStringFromSelector(@selector(editing)) options:NSKeyValueObservingOptionNew context:nil];
+    [_selectorOverlay addObserver:self forKeyPath:NSStringFromSelector(@selector(editingCoordinate)) options:NSKeyValueObservingOptionNew context:nil];
+    [_selectorOverlay addObserver:self forKeyPath:NSStringFromSelector(@selector(editingRadius)) options:NSKeyValueObservingOptionNew context:nil];
 }
 
 - (void)removeOverlayObserver {
     [_selectorOverlay removeObserver:self forKeyPath:NSStringFromSelector(@selector(radius))];
-    [_selectorOverlay removeObserver:self forKeyPath:NSStringFromSelector(@selector(editing))];
+    [_selectorOverlay removeObserver:self forKeyPath:NSStringFromSelector(@selector(editingCoordinate))];
+    [_selectorOverlay removeObserver:self forKeyPath:NSStringFromSelector(@selector(editingRadius))];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
     if ([object isKindOfClass:[_selectorOverlay class]]) {
-//        if ([keyPath isEqualToString:NSStringFromSelector(@selector(radius))]) {
+        if ([keyPath isEqualToString:NSStringFromSelector(@selector(radius))] ||
+            [keyPath isEqualToString:NSStringFromSelector(@selector(editingCoordinate))] ||
+            [keyPath isEqualToString:NSStringFromSelector(@selector(editingRadius))]) {
             [self invalidatePath];
-//        }
+        }
     }
 }
 
@@ -76,35 +80,21 @@
     CGContextAddArc(context, overlayRect.origin.x, overlayRect.origin.y, radiusAtLatitude, 0, 2 * M_PI, true);
     CGContextDrawPath(context, kCGPathFillStroke);
     
-    if (_selectorOverlay.editing) {
-        CGContextSetFillColorWithColor(context, [self.fillColor colorWithAlphaComponent:.75f].CGColor);
-        CGContextAddArc(context, overlayRect.origin.x, overlayRect.origin.y, radiusAtLatitude *.1f, 0, 2 * M_PI, true);
-        CGContextDrawPath(context, kCGPathFillStroke);
-        
-        CGContextSetFillColorWithColor(context, self.strokeColor.CGColor);
-        CGContextAddArc(context, overlayRect.origin.x + radiusAtLatitude, overlayRect.origin.y, radiusAtLatitude *.075f, 0, 2 * M_PI, true);
-        CGContextDrawPath(context, kCGPathFillStroke);
-        
-        CGFloat kDashedLinesLength[] = {overlayRect.size.width * .01f, overlayRect.size.width * .01f};
-        CGContextSetLineWidth(context, overlayRect.size.width *.01f);
-        CGContextSetLineDash(context, .0f, kDashedLinesLength, 1.f);
-        
-        CGContextMoveToPoint(context, overlayRect.origin.x + overlayRect.size.width * .05f, overlayRect.origin.y);
-        CGContextAddLineToPoint(context, overlayRect.origin.x + overlayRect.size.width * .5f, overlayRect.origin.y);
-        CGContextStrokePath(context);
-    } else {
-        CGContextSetFillColorWithColor(context, [self.fillColor colorWithAlphaComponent:.2f].CGColor);
-        CGContextAddArc(context, overlayRect.origin.x, overlayRect.origin.y, radiusAtLatitude *.015f, 0, 2 * M_PI, true);
-        CGContextDrawPath(context, kCGPathFillStroke);
-        
-        CGFloat kDashedLinesLength[] = {overlayRect.size.width * .01f, overlayRect.size.width * .01f};
-        CGContextSetLineWidth(context, overlayRect.size.width *.01f);
-        CGContextSetLineDash(context, .0f, kDashedLinesLength, 1.f);
-        
-        CGContextMoveToPoint(context, overlayRect.origin.x, overlayRect.origin.y);
-        CGContextAddLineToPoint(context, overlayRect.origin.x + overlayRect.size.width * .5f, overlayRect.origin.y);
-        CGContextStrokePath(context);
-    }
+    CGContextSetFillColorWithColor(context, [self.fillColor colorWithAlphaComponent:.75f].CGColor);
+    CGContextAddArc(context, overlayRect.origin.x, overlayRect.origin.y, radiusAtLatitude *(_selectorOverlay.editingCoordinate ? .1f : .015f), 0, 2 * M_PI, true);
+    CGContextDrawPath(context, kCGPathFillStroke);
+    
+    CGContextSetFillColorWithColor(context, self.strokeColor.CGColor);
+    CGContextAddArc(context, overlayRect.origin.x + radiusAtLatitude, overlayRect.origin.y, radiusAtLatitude * (_selectorOverlay.editingRadius ? .075f : .015f), 0, 2 * M_PI, true);
+    CGContextDrawPath(context, kCGPathFillStroke);
+    
+    CGFloat kDashedLinesLength[] = {overlayRect.size.width * .01f, overlayRect.size.width * .01f};
+    CGContextSetLineWidth(context, overlayRect.size.width *.01f);
+    CGContextSetLineDash(context, .0f, kDashedLinesLength, 1.f);
+    
+    CGContextMoveToPoint(context, overlayRect.origin.x + (_selectorOverlay.editingCoordinate ? overlayRect.size.width * .05f : .0f), overlayRect.origin.y);
+    CGContextAddLineToPoint(context, overlayRect.origin.x + overlayRect.size.width * .5f, overlayRect.origin.y);
+    CGContextStrokePath(context);
     
     CGFloat fontSize = _selectorOverlay.radius * zoomScale;
     NSString *radiusStr;

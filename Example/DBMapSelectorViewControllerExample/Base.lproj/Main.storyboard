@@ -70,8 +70,11 @@
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Coordinate =" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="u6i-ox-hcx">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Coordinate =" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="u6i-ox-hcx">
                                         <rect key="frame" x="8" y="8" width="584" height="20"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="20" id="QJr-b6-cm5"/>
+                                        </constraints>
                                         <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="14"/>
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
@@ -86,29 +89,55 @@
                                             <action selector="enableSwitchValueDidChange:" destination="BYZ-38-t0r" eventType="valueChanged" id="9BU-0p-j8I"/>
                                         </connections>
                                     </switch>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Radius = " lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="n6x-6P-EQu">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Radius = " lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="n6x-6P-EQu">
                                         <rect key="frame" x="8" y="28" width="584" height="20"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="20" id="22T-pl-aEr"/>
+                                        </constraints>
                                         <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="14"/>
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="Hgw-hf-28V">
+                                        <rect key="frame" x="8" y="50" width="584" height="29"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="28" id="NAr-fo-G7k"/>
+                                        </constraints>
+                                        <segments>
+                                            <segment title="Full"/>
+                                            <segment title="Coordinate"/>
+                                            <segment title="Radius"/>
+                                        </segments>
+                                        <connections>
+                                            <action selector="editingTypeSegmentedControlValueDidChange:" destination="BYZ-38-t0r" eventType="valueChanged" id="Viq-zv-ONO"/>
+                                        </connections>
+                                    </segmentedControl>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
+                                    <constraint firstItem="u6i-ox-hcx" firstAttribute="top" secondItem="oxZ-6D-vS7" secondAttribute="top" constant="8" id="0hU-z9-vRT"/>
+                                    <constraint firstItem="n6x-6P-EQu" firstAttribute="leading" secondItem="oxZ-6D-vS7" secondAttribute="leading" constant="8" id="0n0-xG-KIE"/>
+                                    <constraint firstAttribute="trailing" secondItem="n6x-6P-EQu" secondAttribute="trailing" constant="8" id="3Y0-8Y-E7p"/>
                                     <constraint firstItem="MDB-lf-wLC" firstAttribute="leading" secondItem="oxZ-6D-vS7" secondAttribute="leading" constant="8" id="6pR-7K-xVQ"/>
+                                    <constraint firstItem="Hgw-hf-28V" firstAttribute="top" secondItem="n6x-6P-EQu" secondAttribute="bottom" constant="2" id="7cJ-xF-ZCB"/>
                                     <constraint firstItem="lBE-ZD-ivg" firstAttribute="leading" secondItem="4Q9-QW-UfI" secondAttribute="trailing" constant="8" id="7jY-X5-quZ"/>
                                     <constraint firstItem="q8C-Kf-ccs" firstAttribute="top" secondItem="Ozs-4O-EYh" secondAttribute="bottom" constant="8" id="9xs-Tp-Nar"/>
                                     <constraint firstAttribute="trailing" secondItem="Ozs-4O-EYh" secondAttribute="trailing" constant="8" id="BNf-q7-uF8"/>
                                     <constraint firstItem="4Q9-QW-UfI" firstAttribute="leading" secondItem="oxZ-6D-vS7" secondAttribute="leading" constant="8" id="FUD-qW-47J"/>
+                                    <constraint firstAttribute="trailing" secondItem="Hgw-hf-28V" secondAttribute="trailing" constant="8" id="Fra-zA-zeS"/>
+                                    <constraint firstAttribute="trailing" secondItem="u6i-ox-hcx" secondAttribute="trailing" constant="8" id="GcS-LQ-JeP"/>
                                     <constraint firstAttribute="trailing" secondItem="lBE-ZD-ivg" secondAttribute="trailing" constant="8" id="HUO-US-86g"/>
                                     <constraint firstItem="lBE-ZD-ivg" firstAttribute="centerY" secondItem="4Q9-QW-UfI" secondAttribute="centerY" id="NH4-k8-6Re"/>
+                                    <constraint firstItem="n6x-6P-EQu" firstAttribute="top" secondItem="u6i-ox-hcx" secondAttribute="bottom" id="Rji-aX-Qdx"/>
                                     <constraint firstItem="q8C-Kf-ccs" firstAttribute="leading" secondItem="MDB-lf-wLC" secondAttribute="trailing" constant="8" id="aAe-9l-jQq"/>
                                     <constraint firstAttribute="trailing" secondItem="q8C-Kf-ccs" secondAttribute="trailing" constant="8" id="aTI-ak-l9W"/>
                                     <constraint firstItem="cvq-ov-NHr" firstAttribute="leading" secondItem="oxZ-6D-vS7" secondAttribute="leading" constant="8" id="k3d-9y-efD"/>
                                     <constraint firstItem="Ozs-4O-EYh" firstAttribute="leading" secondItem="cvq-ov-NHr" secondAttribute="trailing" constant="8" id="qqx-Lt-ndc"/>
                                     <constraint firstItem="lBE-ZD-ivg" firstAttribute="top" secondItem="q8C-Kf-ccs" secondAttribute="bottom" constant="8" id="s3E-NA-1wh"/>
+                                    <constraint firstItem="u6i-ox-hcx" firstAttribute="leading" secondItem="oxZ-6D-vS7" secondAttribute="leading" constant="8" id="tCb-eE-grl"/>
                                     <constraint firstItem="q8C-Kf-ccs" firstAttribute="centerY" secondItem="MDB-lf-wLC" secondAttribute="centerY" id="tca-r4-QPe"/>
                                     <constraint firstAttribute="height" constant="201" id="tkS-a2-8IR"/>
+                                    <constraint firstItem="Hgw-hf-28V" firstAttribute="leading" secondItem="oxZ-6D-vS7" secondAttribute="leading" constant="8" id="uyC-7e-fEr"/>
                                     <constraint firstItem="cvq-ov-NHr" firstAttribute="centerY" secondItem="Ozs-4O-EYh" secondAttribute="centerY" id="v7s-1o-JIw"/>
                                     <constraint firstAttribute="bottom" secondItem="lBE-ZD-ivg" secondAttribute="bottom" constant="8" id="xTY-Cp-H07"/>
                                 </constraints>
@@ -133,6 +162,7 @@
                     </view>
                     <connections>
                         <outlet property="coordinateLabel" destination="u6i-ox-hcx" id="BdD-E8-vWQ"/>
+                        <outlet property="editingTypeSegmentedControl" destination="Hgw-hf-28V" id="Mav-3L-xy6"/>
                         <outlet property="enableSwitch" destination="Ozs-4O-EYh" id="HwG-8P-3L6"/>
                         <outlet property="fillColorTextField" destination="q8C-Kf-ccs" id="f2B-OA-Qsu"/>
                         <outlet property="mapView" destination="g7p-0S-u5B" id="r0n-Sq-Uvo"/>
