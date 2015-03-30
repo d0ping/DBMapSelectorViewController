@@ -1,19 +1,35 @@
 # DBMapSelectorViewController
 
-This component allows you to select circular map region from the MKMapView instance.
+This component allows you to select circular map region from the MKMapView.
 
 ![Screenshot of Example](https://github.com/d0ping/DBMapSelectorViewController/blob/develop/Example/Resources/Screenshot.jpg)
 
-##Installation
+## Adding DBMapSelectorViewController to your project
 
-To install DBMapSelectorViewController into your app, drag the DBMapSelectorViewController folder with subfolders and files into your project. 
+### Cocoapods
 
-To install DBMapSelectorViewController via CocoaPods into your app, add following line:
-`pod 'DBMapSelectorViewController', '~> 1.0.0'`
-and execute pod install.
+To add DBMapSelectorViewController via [CocoaPods](http://cocoapods.org/) into your project:
 
-To use it, just import the DBMapSelectorViewController.h header file into any UIViewController class, and specify the DBMapSelectorViewController class as a parent.
+1. Add a pod entry for DBMapSelectorViewController to your Podfile `pod 'DBMapSelectorViewController', '~> 1.0.0'`
+2. Install the pod by running `pod install`
 
+### Source Files
+
+To add DBMapSelectorViewController manually into your project: 
+
+1. Download the latest code, using `git clone`
+2. Open your project in Xcode, then drag and drop `DBMapSelectorViewController` folder with all its content into your project (Make sure to select Copy items when asked if you extracted the code archive outside of your project)
+
+## Usage
+
+To use DBMapSelectorViewController in your project you should perform the following steps:
+
+1. Create a subclass of `DBMapSelectorViewController` class (for example `MyViewController` class name)
+2. Into your Storyboard file create an instance of ViewController and specify your `MyViewController` class as a parent
+3. Add MKMapView instance on ViewController on Storyboard
+4. Make a connection for MKMapView and mapView outlets property
+5. Set the ViewController as a delegate for the mapView
+6. Add your implementation on the `MyViewController.m`
 
 ##License
 
