@@ -37,23 +37,27 @@
 
 #pragma mark - Observering
 
+- (NSArray *)overlayObserverArray {
+    return @[NSStringFromSelector(@selector(radius)),
+             NSStringFromSelector(@selector(editingCoordinate)),
+             NSStringFromSelector(@selector(editingRadius))];
+}
+
 - (void)addOverlayObserver {
-    [_selectorOverlay addObserver:self forKeyPath:NSStringFromSelector(@selector(radius)) options:NSKeyValueObservingOptionNew context:nil];
-    [_selectorOverlay addObserver:self forKeyPath:NSStringFromSelector(@selector(editingCoordinate)) options:NSKeyValueObservingOptionNew context:nil];
-    [_selectorOverlay addObserver:self forKeyPath:NSStringFromSelector(@selector(editingRadius)) options:NSKeyValueObservingOptionNew context:nil];
+    for (NSString *keyPath in [self overlayObserverArray]) {
+        [_selectorOverlay addObserver:self forKeyPath:keyPath options:NSKeyValueObservingOptionNew context:nil];
+    }
 }
 
 - (void)removeOverlayObserver {
-    [_selectorOverlay removeObserver:self forKeyPath:NSStringFromSelector(@selector(radius))];
-    [_selectorOverlay removeObserver:self forKeyPath:NSStringFromSelector(@selector(editingCoordinate))];
-    [_selectorOverlay removeObserver:self forKeyPath:NSStringFromSelector(@selector(editingRadius))];
+    for (NSString *keyPath in [self overlayObserverArray]) {
+        [_selectorOverlay removeObserver:self forKeyPath:keyPath];
+    }
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
     if ([object isKindOfClass:[_selectorOverlay class]]) {
-        if ([keyPath isEqualToString:NSStringFromSelector(@selector(radius))] ||
-            [keyPath isEqualToString:NSStringFromSelector(@selector(editingCoordinate))] ||
-            [keyPath isEqualToString:NSStringFromSelector(@selector(editingRadius))]) {
+        if ([[self overlayObserverArray] containsObject:keyPath]) {
             [self invalidatePath];
         }
     }

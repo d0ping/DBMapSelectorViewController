@@ -13,6 +13,7 @@ typedef NS_ENUM(NSInteger, DBMapSelectorEditingType) {
     DBMapSelectorEditingTypeFull = 0,
     DBMapSelectorEditingTypeCoordinateOnly,
     DBMapSelectorEditingTypeRadiusOnly,
+    DBMapSelectorEditingTypeNone,
 };
 
 @protocol DBMapSelectorViewControllerProtocol <NSObject>
@@ -28,18 +29,38 @@ typedef NS_ENUM(NSInteger, DBMapSelectorEditingType) {
 
 @property (nonatomic, weak) IBOutlet MKMapView          *mapView;
 
+/*!
+ @brief Used to specify the selector editing type
+ @discussion Property can equal one of four values:
+ DBMapSelectorEditingTypeFull allows to edit coordinate and radius,
+ DBMapSelectorEditingTypeCoordinateOnly allows to edit cooordinate only,
+ DBMapSelectorEditingTypeRadiusOnly allows to edit radius only,
+ DBMapSelectorEditingTypeNone read only mode.
+ */
 @property (nonatomic, assign) DBMapSelectorEditingType  selectorEditingType;
 
+/*! @brief Used to specify the selector coordinate */
 @property (nonatomic, assign) CLLocationCoordinate2D    selectorCoordinate;
+
+/*! @brief Used to specify the selector radius */
 @property (nonatomic, assign) CLLocationDistance        selectorRadius;
+
+/*! @brief Used to specify the minimum selector radius */
 @property (nonatomic, assign) CLLocationDistance        selectorRadiusMin;
+
+/*! @brief Used to specify the maximum selector radius */
 @property (nonatomic, assign) CLLocationDistance        selectorRadiusMax;
 
-@property (nonatomic, assign) BOOL                      selectorEnabled;
-@property (nonatomic, assign) BOOL                      selectorInside;
-@property (nonatomic, assign) BOOL                      selectorFixedCoordinate;
-
+/*! 
+ @brief Used to specify the selector fill color
+ @discussion Color is used to fill the circular map region
+ */
 @property (nonatomic, strong) UIColor                   *selectorFillColor;
+
+/*! 
+ @brief Used to specify the selector stroke color 
+ @discussion Color is used to delimit the circular map region
+ */
 @property (nonatomic, strong) UIColor                   *selectorStrokeColor;
 
 @end

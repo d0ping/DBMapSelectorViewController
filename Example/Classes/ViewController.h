@@ -13,7 +13,6 @@
 @property (nonatomic, weak) IBOutlet UILabel                *coordinateLabel;
 @property (nonatomic, weak) IBOutlet UILabel                *radiusLabel;
 
-@property (nonatomic, weak) IBOutlet UISwitch               *enableSwitch;
 @property (nonatomic, weak) IBOutlet UISegmentedControl     *editingTypeSegmentedControl;
 
 @property (nonatomic, weak) IBOutlet UITextField            *fillColorTextField;

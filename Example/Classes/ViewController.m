@@ -84,11 +84,6 @@
     self.selectorEditingType = sender.selectedSegmentIndex;
 }
 
-- (IBAction)enableSwitchValueDidChange:(UISwitch *)sender {
-    self.selectorEnabled = sender.on;
-    self.editingTypeSegmentedControl.enabled = self.selectorEnabled;
-}
-
 #pragma mark - DBMapSelectorViewController Protocol
 
 - (void)didChangeCoordinate:(CLLocationCoordinate2D)coordinate {

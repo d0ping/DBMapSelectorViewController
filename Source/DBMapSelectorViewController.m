@@ -40,9 +40,6 @@ NSInteger const defaultMaxDistance  = 10000;
     _selectorRadius = defaultRadius;
     _selectorRadiusMin = defaultMinDistance;
     _selectorRadiusMax = defaultMaxDistance;
-    _selectorEnabled = YES;
-    _selectorFixedCoordinate = NO;
-    _selectorInside = YES;
 }
 
 #pragma mark - Life cycle
@@ -68,7 +65,7 @@ NSInteger const defaultMaxDistance  = 10000;
     _radiusTouchView = [[UIView alloc] initWithFrame:CGRectZero];
     _radiusTouchView.backgroundColor = [[UIColor redColor] colorWithAlphaComponent:.5f];
     _radiusTouchView.userInteractionEnabled = NO;
-    [self.mapView addSubview:_radiusTouchView];
+//    [self.mapView addSubview:_radiusTouchView];
 #endif
     
     [self setMapRegionForSelector];
@@ -192,18 +189,12 @@ NSInteger const defaultMaxDistance  = 10000;
     }
 }
 
-- (void)setSelectorEnabled:(BOOL)selectorEnabled {
-    if (_selectorEnabled != selectorEnabled) {
-        _selectorEnabled = selectorEnabled;
-        [self updateMapSelectorOverlayEditConfig];
-        [self displaySelectorAnnotationIfNeeded];
-    }
-}
-
 - (void)setSelectorEditingType:(DBMapSelectorEditingType)selectorEditingType {
     if (_selectorEditingType != selectorEditingType) {
         _selectorEditingType = selectorEditingType;
-        [self updateMapSelectorOverlayEditConfig];
+        
+        _selectorOverlay.editingCoordinate = (_selectorEditingType == DBMapSelectorEditingTypeCoordinateOnly || _selectorEditingType == DBMapSelectorEditingTypeFull);
+        _selectorOverlay.editingRadius = (_selectorEditingType == DBMapSelectorEditingTypeRadiusOnly || _selectorEditingType == DBMapSelectorEditingTypeFull);
         [self displaySelectorAnnotationIfNeeded];
     }
 }
@@ -230,11 +221,6 @@ NSInteger const defaultMaxDistance  = 10000;
     [self.mapView setRegion:region animated:YES];
 }
 
-- (void)updateMapSelectorOverlayEditConfig {
-    _selectorOverlay.editingCoordinate = _selectorEnabled && (_selectorEditingType == DBMapSelectorEditingTypeCoordinateOnly || _selectorEditingType == DBMapSelectorEditingTypeFull);
-    _selectorOverlay.editingRadius = _selectorEnabled && (_selectorEditingType == DBMapSelectorEditingTypeRadiusOnly || _selectorEditingType == DBMapSelectorEditingTypeFull);
-}
-
 - (void)displaySelectorAnnotationIfNeeded {
     for (id<MKAnnotation> annotation in self.mapView.annotations) {
         if ([annotation isKindOfClass:[DBMapSelectorAnnotation class]]) {
@@ -242,9 +228,7 @@ NSInteger const defaultMaxDistance  = 10000;
         }
     }
     
-    if (_selectorEnabled &&
-        ((_selectorEditingType == DBMapSelectorEditingTypeFull) ||
-         (_selectorEditingType == DBMapSelectorEditingTypeCoordinateOnly))) {
+    if ((_selectorEditingType == DBMapSelectorEditingTypeFull) || (_selectorEditingType == DBMapSelectorEditingTypeCoordinateOnly)) {
         DBMapSelectorAnnotation *selectorAnnotation = [[DBMapSelectorAnnotation alloc] init];
         selectorAnnotation.coordinate = _selectorCoordinate;
         [self.mapView addAnnotation:selectorAnnotation];
