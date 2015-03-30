@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <MapKit/MapKit.h>
 
+/*! @brief Determines how the selector can be edited */
 typedef NS_ENUM(NSInteger, DBMapSelectorEditingType) {
     DBMapSelectorEditingTypeFull = 0,
     DBMapSelectorEditingTypeCoordinateOnly,
