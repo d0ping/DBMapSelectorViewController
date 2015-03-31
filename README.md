@@ -4,7 +4,7 @@ This component allows you to select circular map region from the MKMapView.
 
 ![Screenshot of Example](https://github.com/d0ping/DBMapSelectorViewController/blob/develop/Example/Resources/Screenshot.jpg)
 
-## Adding DBMapSelectorViewController to your project
+## Adding to your project
 
 ### Cocoapods
 
@@ -18,7 +18,7 @@ To add DBMapSelectorViewController via [CocoaPods](http://cocoapods.org/) into y
 To add DBMapSelectorViewController manually into your project: 
 
 1. Download the latest code, using `git clone`
-2. Open your project in Xcode, then drag and drop `DBMapSelectorViewController` folder with all its content into your project (Make sure to select Copy items when asked if you extracted the code archive outside of your project)
+2. Open your project in Xcode, then drag and drop entire contents of the `Source` folder into your project (Make sure to select Copy items when asked if you extracted the code archive outside of your project)
 
 ## Usage
 
@@ -44,7 +44,7 @@ To customize the selector you should set selector properties in the loadView met
     self.selectorRadiusMin = 500;
     self.selectorRadiusMax = 25000;
 
-    self.selectorFillColor = [UIColor pureColor];
+    self.selectorFillColor = [UIColor purpleColor];
     self.selectorStrokeColor = [UIColor darkGrayColor];
 }
 ```
