@@ -31,6 +31,72 @@ To use DBMapSelectorViewController in your project you should perform the follow
 5. Set the ViewController as a delegate for the mapView
 6. Add your implementation on the `MyViewController.m`
 
+### Setting
+
+To customize the selector you should set selector properties in the loadView method of your `MyViewController`. Selector properties must be set after execute `[super loadView];`. For example, how it can be implemented:
+
+```objc
+- (void)loadView {
+    [super loadView];
+
+    self.selectorCoordinate = CLLocationCoordinate2DMake(55.75399400, 37.62209300);
+    self.selectorRadius = 2500;
+    self.selectorRadiusMin = 500;
+    self.selectorRadiusMax = 25000;
+
+    self.selectorFillColor = [UIColor pureColor];
+    self.selectorStrokeColor = [UIColor darkGrayColor];
+}
+```
+
+### Property list selector
+
+- `DBMapSelectorEditingType selectorEditingType` - Used to specify the selector editing type. Property can equal one of four values:
+  - `DBMapSelectorEditingTypeFull` allows to edit coordinate and radius,
+  - `DBMapSelectorEditingTypeCoordinateOnly` allows to edit cooordinate only,
+  - `DBMapSelectorEditingTypeRadiusOnly` allows to edit radius only,
+  - `DBMapSelectorEditingTypeNone` read only mode;
+- `CLLocationCoordinate2D selectorCoordinate` - Used to specify the selector coordinate;
+- `CLLocationDistance selectorRadius` - Used to specify the selector radius;
+- `CLLocationDistance selectorRadiusMin` - Used to specify the minimum selector radius;
+- `CLLocationDistance selectorRadiusMax` - Used to specify the maximum selector radius;
+- `UIColor *selectorFillColor` - Used to specify the selector fill color. Color is used to fill the circular map region;
+- `UIColor *selectorStrokeColor` - Used to specify the selector stroke color. Color is used to delimit the circular map region.
+
+### DBMapSelectorViewControllerProtocol
+
+Inside the `DBMapSelectorViewController` class is implemented `DBMapSelectorViewControllerProtocol`. It's allows to receive messages when the main properties (coordinate and radius) of the selector will be changed.
+
+```objc
+@protocol DBMapSelectorViewControllerProtocol <NSObject>
+
+@optional
+- (void)didChangeCoordinate:(CLLocationCoordinate2D)coordinate;
+- (void)didChangeRadius:(CLLocationDistance)radius;
+
+@end
+```
+
+You can implement these methods in your `MyViewController` class in order to respond to these changes. For example, how it can be implemented in your class:
+
+```objc
+- (void)didChangeCoordinate:(CLLocationCoordinate2D)coordinate {
+    _coordinateLabel.text = [NSString stringWithFormat:@"Coordinate = {%.5f, %.5f}", coordinate.latitude, coordinate.longitude];
+}
+
+- (void)didChangeRadius:(CLLocationDistance)radius {
+    NSString *radiusStr = (radius >= 1000) ? [NSString stringWithFormat:@"%.1f km", radius * .001f] : [NSString stringWithFormat:@"%.0f m", radius];
+    _radiusLabel.text = [@"Radius = " stringByAppendingString:radiusStr];
+}
+```
+
+## Contact
+
+Denis Bogatyrev
+
+- https://github.com/d0ping
+- denis.bogatyrev@gmail.com
+
 ##License
 
 DBMapSelectorViewController - Copyright (c) 2015 Denis Bogatyrev
