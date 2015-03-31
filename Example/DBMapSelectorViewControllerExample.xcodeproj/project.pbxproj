@@ -1,0 +1,383 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		C3FDCD671AC57B350053FDC7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C3FDCD661AC57B350053FDC7 /* main.m */; };
+		C3FDCD6A1AC57B350053FDC7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C3FDCD691AC57B350053FDC7 /* AppDelegate.m */; };
+		C3FDCD701AC57B350053FDC7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C3FDCD6E1AC57B350053FDC7 /* Main.storyboard */; };
+		C3FDCD751AC57B350053FDC7 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = C3FDCD731AC57B350053FDC7 /* LaunchScreen.xib */; };
+		C3FDCD8F1AC57C2B0053FDC7 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C3FDCD8C1AC57C2B0053FDC7 /* ViewController.m */; };
+		C3FDCD901AC57C2B0053FDC7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C3FDCD8E1AC57C2B0053FDC7 /* Images.xcassets */; };
+		C3FDCD921AC57C710053FDC7 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C3FDCD911AC57C710053FDC7 /* MapKit.framework */; };
+		C3FDCD991AC57CE40053FDC7 /* DBMapSelectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C3FDCD981AC57CE40053FDC7 /* DBMapSelectorViewController.m */; };
+		C3FDCD9E1AC580990053FDC7 /* DBMapSelectorAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = C3FDCD9D1AC580990053FDC7 /* DBMapSelectorAnnotation.m */; };
+		C3FDCDA11AC581DE0053FDC7 /* DBMapSelectorOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = C3FDCDA01AC581DE0053FDC7 /* DBMapSelectorOverlay.m */; };
+		C3FDCDA41AC5830E0053FDC7 /* DBMapSelectorOverlayRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = C3FDCDA31AC5830E0053FDC7 /* DBMapSelectorOverlayRenderer.m */; };
+		C3FDCDA91AC6A2060053FDC7 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C3FDCDA81AC6A2060053FDC7 /* CoreLocation.framework */; };
+		C3FDCDAC1AC6EF450053FDC7 /* DBMapSelectorGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = C3FDCDAB1AC6EF450053FDC7 /* DBMapSelectorGestureRecognizer.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		C3FDCD611AC57B350053FDC7 /* DBMapSelectorViewControllerExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DBMapSelectorViewControllerExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C3FDCD651AC57B350053FDC7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C3FDCD661AC57B350053FDC7 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		C3FDCD681AC57B350053FDC7 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		C3FDCD691AC57B350053FDC7 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		C3FDCD6F1AC57B350053FDC7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		C3FDCD741AC57B350053FDC7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
+		C3FDCD8B1AC57C2B0053FDC7 /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		C3FDCD8C1AC57C2B0053FDC7 /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		C3FDCD8E1AC57C2B0053FDC7 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		C3FDCD911AC57C710053FDC7 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		C3FDCD971AC57CE40053FDC7 /* DBMapSelectorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DBMapSelectorViewController.h; path = ../../Source/DBMapSelectorViewController.h; sourceTree = "<group>"; };
+		C3FDCD981AC57CE40053FDC7 /* DBMapSelectorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DBMapSelectorViewController.m; path = ../../Source/DBMapSelectorViewController.m; sourceTree = "<group>"; };
+		C3FDCD9C1AC580990053FDC7 /* DBMapSelectorAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBMapSelectorAnnotation.h; sourceTree = "<group>"; };
+		C3FDCD9D1AC580990053FDC7 /* DBMapSelectorAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DBMapSelectorAnnotation.m; sourceTree = "<group>"; };
+		C3FDCD9F1AC581DE0053FDC7 /* DBMapSelectorOverlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBMapSelectorOverlay.h; sourceTree = "<group>"; };
+		C3FDCDA01AC581DE0053FDC7 /* DBMapSelectorOverlay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DBMapSelectorOverlay.m; sourceTree = "<group>"; };
+		C3FDCDA21AC5830E0053FDC7 /* DBMapSelectorOverlayRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBMapSelectorOverlayRenderer.h; sourceTree = "<group>"; };
+		C3FDCDA31AC5830E0053FDC7 /* DBMapSelectorOverlayRenderer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DBMapSelectorOverlayRenderer.m; sourceTree = "<group>"; };
+		C3FDCDA81AC6A2060053FDC7 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		C3FDCDAA1AC6EF450053FDC7 /* DBMapSelectorGestureRecognizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DBMapSelectorGestureRecognizer.h; path = ../../Source/DBMapSelectorGestureRecognizer.h; sourceTree = "<group>"; };
+		C3FDCDAB1AC6EF450053FDC7 /* DBMapSelectorGestureRecognizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DBMapSelectorGestureRecognizer.m; path = ../../Source/DBMapSelectorGestureRecognizer.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		C3FDCD5E1AC57B350053FDC7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C3FDCDA91AC6A2060053FDC7 /* CoreLocation.framework in Frameworks */,
+				C3FDCD921AC57C710053FDC7 /* MapKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		C3FDCD581AC57B350053FDC7 = {
+			isa = PBXGroup;
+			children = (
+				C3FDCDA81AC6A2060053FDC7 /* CoreLocation.framework */,
+				C3FDCD911AC57C710053FDC7 /* MapKit.framework */,
+				C3FDCD631AC57B350053FDC7 /* DBMapSelectorViewControllerExample */,
+				C3FDCD8A1AC57C2B0053FDC7 /* Classes */,
+				C3FDCD8D1AC57C2B0053FDC7 /* Resources */,
+				C3FDCD621AC57B350053FDC7 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		C3FDCD621AC57B350053FDC7 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C3FDCD611AC57B350053FDC7 /* DBMapSelectorViewControllerExample.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C3FDCD631AC57B350053FDC7 /* DBMapSelectorViewControllerExample */ = {
+			isa = PBXGroup;
+			children = (
+				C3FDCD681AC57B350053FDC7 /* AppDelegate.h */,
+				C3FDCD691AC57B350053FDC7 /* AppDelegate.m */,
+				C3FDCD731AC57B350053FDC7 /* LaunchScreen.xib */,
+				C3FDCD641AC57B350053FDC7 /* Supporting Files */,
+			);
+			path = DBMapSelectorViewControllerExample;
+			sourceTree = "<group>";
+		};
+		C3FDCD641AC57B350053FDC7 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				C3FDCD651AC57B350053FDC7 /* Info.plist */,
+				C3FDCD661AC57B350053FDC7 /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		C3FDCD8A1AC57C2B0053FDC7 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				C3FDCD931AC57C860053FDC7 /* DBMapSelectorViewController */,
+				C3FDCD6E1AC57B350053FDC7 /* Main.storyboard */,
+				C3FDCD8B1AC57C2B0053FDC7 /* ViewController.h */,
+				C3FDCD8C1AC57C2B0053FDC7 /* ViewController.m */,
+			);
+			path = Classes;
+			sourceTree = "<group>";
+		};
+		C3FDCD8D1AC57C2B0053FDC7 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				C3FDCD8E1AC57C2B0053FDC7 /* Images.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		C3FDCD931AC57C860053FDC7 /* DBMapSelectorViewController */ = {
+			isa = PBXGroup;
+			children = (
+				C3FDCDAA1AC6EF450053FDC7 /* DBMapSelectorGestureRecognizer.h */,
+				C3FDCDAB1AC6EF450053FDC7 /* DBMapSelectorGestureRecognizer.m */,
+				C3FDCD9A1AC5805B0053FDC7 /* MapSelectorAnnotation */,
+				C3FDCD9B1AC5805B0053FDC7 /* MapSelectorOverlay */,
+				C3FDCD971AC57CE40053FDC7 /* DBMapSelectorViewController.h */,
+				C3FDCD981AC57CE40053FDC7 /* DBMapSelectorViewController.m */,
+			);
+			name = DBMapSelectorViewController;
+			sourceTree = "<group>";
+		};
+		C3FDCD9A1AC5805B0053FDC7 /* MapSelectorAnnotation */ = {
+			isa = PBXGroup;
+			children = (
+				C3FDCD9C1AC580990053FDC7 /* DBMapSelectorAnnotation.h */,
+				C3FDCD9D1AC580990053FDC7 /* DBMapSelectorAnnotation.m */,
+			);
+			name = MapSelectorAnnotation;
+			path = ../../Source/MapSelectorAnnotation;
+			sourceTree = "<group>";
+		};
+		C3FDCD9B1AC5805B0053FDC7 /* MapSelectorOverlay */ = {
+			isa = PBXGroup;
+			children = (
+				C3FDCD9F1AC581DE0053FDC7 /* DBMapSelectorOverlay.h */,
+				C3FDCDA01AC581DE0053FDC7 /* DBMapSelectorOverlay.m */,
+				C3FDCDA21AC5830E0053FDC7 /* DBMapSelectorOverlayRenderer.h */,
+				C3FDCDA31AC5830E0053FDC7 /* DBMapSelectorOverlayRenderer.m */,
+			);
+			name = MapSelectorOverlay;
+			path = ../../Source/MapSelectorOverlay;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		C3FDCD601AC57B350053FDC7 /* DBMapSelectorViewControllerExample */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C3FDCD841AC57B350053FDC7 /* Build configuration list for PBXNativeTarget "DBMapSelectorViewControllerExample" */;
+			buildPhases = (
+				C3FDCD5D1AC57B350053FDC7 /* Sources */,
+				C3FDCD5E1AC57B350053FDC7 /* Frameworks */,
+				C3FDCD5F1AC57B350053FDC7 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = DBMapSelectorViewControllerExample;
+			productName = DBMapSelectorViewControllerExample;
+			productReference = C3FDCD611AC57B350053FDC7 /* DBMapSelectorViewControllerExample.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		C3FDCD591AC57B350053FDC7 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0620;
+				ORGANIZATIONNAME = "Denis Bogatyrev";
+				TargetAttributes = {
+					C3FDCD601AC57B350053FDC7 = {
+						CreatedOnToolsVersion = 6.2;
+					};
+				};
+			};
+			buildConfigurationList = C3FDCD5C1AC57B350053FDC7 /* Build configuration list for PBXProject "DBMapSelectorViewControllerExample" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = C3FDCD581AC57B350053FDC7;
+			productRefGroup = C3FDCD621AC57B350053FDC7 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				C3FDCD601AC57B350053FDC7 /* DBMapSelectorViewControllerExample */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		C3FDCD5F1AC57B350053FDC7 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C3FDCD901AC57C2B0053FDC7 /* Images.xcassets in Resources */,
+				C3FDCD701AC57B350053FDC7 /* Main.storyboard in Resources */,
+				C3FDCD751AC57B350053FDC7 /* LaunchScreen.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		C3FDCD5D1AC57B350053FDC7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C3FDCD991AC57CE40053FDC7 /* DBMapSelectorViewController.m in Sources */,
+				C3FDCD8F1AC57C2B0053FDC7 /* ViewController.m in Sources */,
+				C3FDCDA41AC5830E0053FDC7 /* DBMapSelectorOverlayRenderer.m in Sources */,
+				C3FDCDA11AC581DE0053FDC7 /* DBMapSelectorOverlay.m in Sources */,
+				C3FDCD6A1AC57B350053FDC7 /* AppDelegate.m in Sources */,
+				C3FDCD9E1AC580990053FDC7 /* DBMapSelectorAnnotation.m in Sources */,
+				C3FDCDAC1AC6EF450053FDC7 /* DBMapSelectorGestureRecognizer.m in Sources */,
+				C3FDCD671AC57B350053FDC7 /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		C3FDCD6E1AC57B350053FDC7 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C3FDCD6F1AC57B350053FDC7 /* Base */,
+			);
+			name = Main.storyboard;
+			path = ../DBMapSelectorViewControllerExample;
+			sourceTree = "<group>";
+		};
+		C3FDCD731AC57B350053FDC7 /* LaunchScreen.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C3FDCD741AC57B350053FDC7 /* Base */,
+			);
+			name = LaunchScreen.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		C3FDCD821AC57B350053FDC7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		C3FDCD831AC57B350053FDC7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		C3FDCD851AC57B350053FDC7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = DBMapSelectorViewControllerExample/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		C3FDCD861AC57B350053FDC7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = DBMapSelectorViewControllerExample/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		C3FDCD5C1AC57B350053FDC7 /* Build configuration list for PBXProject "DBMapSelectorViewControllerExample" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C3FDCD821AC57B350053FDC7 /* Debug */,
+				C3FDCD831AC57B350053FDC7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C3FDCD841AC57B350053FDC7 /* Build configuration list for PBXNativeTarget "DBMapSelectorViewControllerExample" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C3FDCD851AC57B350053FDC7 /* Debug */,
+				C3FDCD861AC57B350053FDC7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = C3FDCD591AC57B350053FDC7 /* Project object */;
+}
