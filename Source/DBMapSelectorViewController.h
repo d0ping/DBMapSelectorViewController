@@ -44,13 +44,16 @@ typedef NS_ENUM(NSInteger, DBMapSelectorEditingType) {
 @property (nonatomic, assign) CLLocationCoordinate2D    selectorCoordinate;
 
 /*! @brief Used to specify the selector radius */
-@property (nonatomic, assign) CLLocationDistance        selectorRadius;
+@property (nonatomic, assign) CLLocationDistance        selectorRadius;         // default is equal 1000 meter
 
 /*! @brief Used to specify the minimum selector radius */
-@property (nonatomic, assign) CLLocationDistance        selectorRadiusMin;
+@property (nonatomic, assign) CLLocationDistance        selectorRadiusMin;      // default is equal 100 meter
 
 /*! @brief Used to specify the maximum selector radius */
-@property (nonatomic, assign) CLLocationDistance        selectorRadiusMax;
+@property (nonatomic, assign) CLLocationDistance        selectorRadiusMax;      // default is equal 10000 meter
+
+/*! @brief Used to hide or show selector */
+@property (nonatomic, getter=isHidden) BOOL             selectorHidden;         // default is NO
 
 /*! 
  @brief Used to specify the selector fill color

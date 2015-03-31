@@ -57,9 +57,10 @@ To customize the selector you should set selector properties in the loadView met
   - `DBMapSelectorEditingTypeRadiusOnly` allows to edit radius only,
   - `DBMapSelectorEditingTypeNone` read only mode;
 - `CLLocationCoordinate2D selectorCoordinate` - Used to specify the selector coordinate;
-- `CLLocationDistance selectorRadius` - Used to specify the selector radius;
-- `CLLocationDistance selectorRadiusMin` - Used to specify the minimum selector radius;
-- `CLLocationDistance selectorRadiusMax` - Used to specify the maximum selector radius;
+- `CLLocationDistance selectorRadius` - Used to specify the selector radius. Default is equal 1000 meter;
+- `CLLocationDistance selectorRadiusMin` - Used to specify the minimum selector radius. Default is equal 100 meter;
+- `CLLocationDistance selectorRadiusMax` - Used to specify the maximum selector radius. Default is equal 10000 meter;
+- `BOOL selectorHidden` - Used to hide or show selector. Default is NO;
 - `UIColor *selectorFillColor` - Used to specify the selector fill color. Color is used to fill the circular map region;
 - `UIColor *selectorStrokeColor` - Used to specify the selector stroke color. Color is used to delimit the circular map region.
 

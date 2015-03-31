@@ -40,6 +40,7 @@ NSInteger const defaultMaxDistance  = 10000;
     _selectorRadius = defaultRadius;
     _selectorRadiusMin = defaultMinDistance;
     _selectorRadiusMax = defaultMaxDistance;
+    _selectorHidden = NO;
 }
 
 #pragma mark - Life cycle
@@ -87,7 +88,7 @@ NSInteger const defaultMaxDistance  = 10000;
         CLLocationCoordinate2D coord = [weakSelf.mapView convertPoint:touchPoint toCoordinateFromView:weakSelf.mapView];
         MKMapPoint mapPoint = MKMapPointForCoordinate(coord);
         
-        if (CGRectContainsPoint(_radiusTouchRect, touchPoint) && _selectorOverlay.editingRadius){
+        if (CGRectContainsPoint(_radiusTouchRect, touchPoint) && _selectorOverlay.editingRadius && (_selectorHidden == NO)){
             __block int t = 0;
             dispatch_async(dispatch_get_main_queue(), ^{
                 t = 1;
@@ -174,7 +175,9 @@ NSInteger const defaultMaxDistance  = 10000;
         }
         [self.mapView removeOverlay:_selectorOverlay];
         _selectorOverlay.coordinate = _selectorCoordinate;
-        [self.mapView addOverlay:_selectorOverlay];
+        if (_selectorHidden == NO) {
+            [self.mapView addOverlay:_selectorOverlay];
+        }
         [self recalculateRadiusTouchRect];
         [self didChangeCoordinate:_selectorCoordinate];
     }
@@ -206,13 +209,27 @@ NSInteger const defaultMaxDistance  = 10000;
     }
 }
 
+- (void)setSelectorHidden:(BOOL)selectorHidden {
+    if (_selectorHidden != selectorHidden) {
+        _selectorHidden = selectorHidden;
+        
+        [self displaySelectorAnnotationIfNeeded];
+        if (_selectorHidden) {
+            [self.mapView removeOverlay:_selectorOverlay];
+        } else {
+            [self.mapView addOverlay:_selectorOverlay];
+        }
+        [self recalculateRadiusTouchRect];
+    }
+}
+
 #pragma mark - Additional
 
 - (void)recalculateRadiusTouchRect {
     MKMapRect selectorMapRect = _selectorOverlay.boundingMapRect;
     MKMapPoint selectorRadiusPoint = MKMapPointMake(MKMapRectGetMaxX(selectorMapRect), MKMapRectGetMidY(selectorMapRect));
     MKCoordinateRegion coordinateRegion = MKCoordinateRegionMakeWithDistance(MKCoordinateForMapPoint(selectorRadiusPoint), _selectorRadius *.3f, _selectorRadius *.3f);
-    BOOL needDisplay = MKMapRectContainsPoint(self.mapView.visibleMapRect, selectorRadiusPoint);
+    BOOL needDisplay = MKMapRectContainsPoint(self.mapView.visibleMapRect, selectorRadiusPoint) && (_selectorHidden == NO);
     _radiusTouchRect = needDisplay ? [self.mapView convertRegion:coordinateRegion toRectToView:self.view] : CGRectZero;
 #ifdef DEBUG
     _radiusTouchView.frame = _radiusTouchRect;
@@ -235,7 +252,9 @@ NSInteger const defaultMaxDistance  = 10000;
         }
     }
     
-    if ((_selectorEditingType == DBMapSelectorEditingTypeFull) || (_selectorEditingType == DBMapSelectorEditingTypeCoordinateOnly)) {
+    if (_selectorHidden == NO &&
+        ((_selectorEditingType == DBMapSelectorEditingTypeFull) ||
+         (_selectorEditingType == DBMapSelectorEditingTypeCoordinateOnly))) {
         DBMapSelectorAnnotation *selectorAnnotation = [[DBMapSelectorAnnotation alloc] init];
         selectorAnnotation.coordinate = _selectorCoordinate;
         [self.mapView addAnnotation:selectorAnnotation];

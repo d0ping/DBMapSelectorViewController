@@ -84,6 +84,10 @@
     self.selectorEditingType = sender.selectedSegmentIndex;
 }
 
+- (IBAction)hiddenSwitchValueDidChange:(UISwitch *)sender {
+    self.selectorHidden = !sender.on;
+}
+
 #pragma mark - DBMapSelectorViewController Protocol
 
 - (void)didChangeCoordinate:(CLLocationCoordinate2D)coordinate {
@@ -123,8 +127,8 @@
     }
 }
 
-#pragma mark - UITextField Delegate
-
+//#pragma mark - UITextField Delegate
+//
 //- (BOOL) textFieldShouldBeginEditing:(UITextView *)textView {
 //    _fillColorPickerView.frame = CGRectMake(0, 500, _fillColorPickerView.frame.size.width, _fillColorPickerView.frame.size.height);
 //    [UIView beginAnimations:nil context:NULL];

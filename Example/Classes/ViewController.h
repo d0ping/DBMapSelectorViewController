@@ -10,6 +10,8 @@
 
 @interface ViewController : DBMapSelectorViewController <UITextFieldDelegate>
 
+@property (nonatomic, weak) IBOutlet UISwitch               *hiddenSwitch;
+
 @property (nonatomic, weak) IBOutlet UILabel                *coordinateLabel;
 @property (nonatomic, weak) IBOutlet UILabel                *radiusLabel;
 

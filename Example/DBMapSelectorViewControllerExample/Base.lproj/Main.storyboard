@@ -62,7 +62,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Coordinate =" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="u6i-ox-hcx">
-                                        <rect key="frame" x="8" y="2" width="584" height="20"/>
+                                        <rect key="frame" x="8" y="2" width="527" height="20"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="20" id="QJr-b6-cm5"/>
                                         </constraints>
@@ -71,7 +71,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Radius = " lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="n6x-6P-EQu">
-                                        <rect key="frame" x="8" y="22" width="584" height="20"/>
+                                        <rect key="frame" x="8" y="22" width="527" height="20"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="20" id="22T-pl-aEr"/>
                                         </constraints>
@@ -94,23 +94,35 @@
                                             <action selector="editingTypeSegmentedControlValueDidChange:" destination="BYZ-38-t0r" eventType="valueChanged" id="Viq-zv-ONO"/>
                                         </connections>
                                     </segmentedControl>
+                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ygw-qM-Ldk">
+                                        <rect key="frame" x="543" y="8" width="51" height="31"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="31" id="B4f-qm-RFM"/>
+                                            <constraint firstAttribute="width" constant="49" id="g8m-m9-XeD"/>
+                                        </constraints>
+                                        <connections>
+                                            <action selector="hiddenSwitchValueDidChange:" destination="BYZ-38-t0r" eventType="valueChanged" id="xE0-bK-eiz"/>
+                                        </connections>
+                                    </switch>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstItem="u6i-ox-hcx" firstAttribute="top" secondItem="oxZ-6D-vS7" secondAttribute="top" constant="2" id="0hU-z9-vRT"/>
                                     <constraint firstItem="n6x-6P-EQu" firstAttribute="leading" secondItem="oxZ-6D-vS7" secondAttribute="leading" constant="8" id="0n0-xG-KIE"/>
-                                    <constraint firstAttribute="trailing" secondItem="n6x-6P-EQu" secondAttribute="trailing" constant="8" id="3Y0-8Y-E7p"/>
+                                    <constraint firstAttribute="trailing" secondItem="n6x-6P-EQu" secondAttribute="trailing" constant="65" id="3Y0-8Y-E7p"/>
                                     <constraint firstItem="MDB-lf-wLC" firstAttribute="leading" secondItem="oxZ-6D-vS7" secondAttribute="leading" constant="8" id="6pR-7K-xVQ"/>
                                     <constraint firstItem="Hgw-hf-28V" firstAttribute="top" secondItem="n6x-6P-EQu" secondAttribute="bottom" constant="6" id="7cJ-xF-ZCB"/>
                                     <constraint firstItem="lBE-ZD-ivg" firstAttribute="leading" secondItem="4Q9-QW-UfI" secondAttribute="trailing" constant="8" id="7jY-X5-quZ"/>
+                                    <constraint firstItem="Ygw-qM-Ldk" firstAttribute="top" secondItem="oxZ-6D-vS7" secondAttribute="top" constant="8" id="8sj-12-9lm"/>
                                     <constraint firstItem="4Q9-QW-UfI" firstAttribute="leading" secondItem="oxZ-6D-vS7" secondAttribute="leading" constant="8" id="FUD-qW-47J"/>
                                     <constraint firstAttribute="trailing" secondItem="Hgw-hf-28V" secondAttribute="trailing" constant="8" id="Fra-zA-zeS"/>
-                                    <constraint firstAttribute="trailing" secondItem="u6i-ox-hcx" secondAttribute="trailing" constant="8" id="GcS-LQ-JeP"/>
+                                    <constraint firstAttribute="trailing" secondItem="u6i-ox-hcx" secondAttribute="trailing" constant="65" id="GcS-LQ-JeP"/>
                                     <constraint firstAttribute="trailing" secondItem="lBE-ZD-ivg" secondAttribute="trailing" constant="8" id="HUO-US-86g"/>
                                     <constraint firstItem="lBE-ZD-ivg" firstAttribute="centerY" secondItem="4Q9-QW-UfI" secondAttribute="centerY" id="NH4-k8-6Re"/>
                                     <constraint firstItem="n6x-6P-EQu" firstAttribute="top" secondItem="u6i-ox-hcx" secondAttribute="bottom" id="Rji-aX-Qdx"/>
                                     <constraint firstItem="q8C-Kf-ccs" firstAttribute="leading" secondItem="MDB-lf-wLC" secondAttribute="trailing" constant="8" id="aAe-9l-jQq"/>
                                     <constraint firstAttribute="trailing" secondItem="q8C-Kf-ccs" secondAttribute="trailing" constant="8" id="aTI-ak-l9W"/>
+                                    <constraint firstAttribute="trailing" secondItem="Ygw-qM-Ldk" secondAttribute="trailing" constant="8" id="joV-Fs-qUJ"/>
                                     <constraint firstItem="lBE-ZD-ivg" firstAttribute="top" secondItem="q8C-Kf-ccs" secondAttribute="bottom" constant="8" id="s3E-NA-1wh"/>
                                     <constraint firstItem="u6i-ox-hcx" firstAttribute="leading" secondItem="oxZ-6D-vS7" secondAttribute="leading" constant="8" id="tCb-eE-grl"/>
                                     <constraint firstItem="q8C-Kf-ccs" firstAttribute="centerY" secondItem="MDB-lf-wLC" secondAttribute="centerY" id="tca-r4-QPe"/>
@@ -141,6 +153,7 @@
                         <outlet property="coordinateLabel" destination="u6i-ox-hcx" id="BdD-E8-vWQ"/>
                         <outlet property="editingTypeSegmentedControl" destination="Hgw-hf-28V" id="Mav-3L-xy6"/>
                         <outlet property="fillColorTextField" destination="q8C-Kf-ccs" id="f2B-OA-Qsu"/>
+                        <outlet property="hiddenSwitch" destination="Ygw-qM-Ldk" id="wok-jK-0Ab"/>
                         <outlet property="mapView" destination="g7p-0S-u5B" id="r0n-Sq-Uvo"/>
                         <outlet property="radiusLabel" destination="n6x-6P-EQu" id="2oQ-ci-t4s"/>
                         <outlet property="strokeColorTextField" destination="lBE-ZD-ivg" id="0lm-np-C8d"/>
