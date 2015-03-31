@@ -92,7 +92,7 @@ You can implement these methods in your `MyViewController` class in order to res
 
 ## Contact
 
-Denis Bogatyrev
+Denis Bogatyrev (maintainer)
 
 - https://github.com/d0ping
 - denis.bogatyrev@gmail.com

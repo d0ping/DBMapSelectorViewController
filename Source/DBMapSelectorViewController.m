@@ -165,6 +165,13 @@ NSInteger const defaultMaxDistance  = 10000;
 - (void)setSelectorCoordinate:(CLLocationCoordinate2D)selectorCoordinate {
     if ((_selectorCoordinate.latitude != selectorCoordinate.latitude) || (_selectorCoordinate.longitude != selectorCoordinate.longitude)) {
         _selectorCoordinate = selectorCoordinate;
+        
+        for (id<MKAnnotation> currentAnnotation in self.mapView.annotations) {
+            if ([currentAnnotation isKindOfClass:DBMapSelectorAnnotation.class]) {
+                [currentAnnotation setCoordinate:_selectorCoordinate];
+                break;
+            }
+        }
         [self.mapView removeOverlay:_selectorOverlay];
         _selectorOverlay.coordinate = _selectorCoordinate;
         [self.mapView addOverlay:_selectorOverlay];
