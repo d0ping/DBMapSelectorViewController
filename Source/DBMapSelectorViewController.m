@@ -35,41 +35,37 @@ NSInteger const defaultMaxDistance  = 10000;
 
 @implementation DBMapSelectorViewController
 
+#pragma mark Defaults
+
 - (void)selectorSetDefaults {
-    _selectorEditingType = DBMapSelectorEditingTypeFull;
-    _selectorRadius = defaultRadius;
-    _selectorRadiusMin = defaultMinDistance;
-    _selectorRadiusMax = defaultMaxDistance;
-    _selectorHidden = NO;
+    self.editingType = DBMapSelectorEditingTypeFull;
+    self.circleRadius = defaultRadius;
+    self.circleRadiusMin = defaultMinDistance;
+    self.circleRadiusMax = defaultMaxDistance;
+    self.hidden = NO;
 }
 
 #pragma mark - Life cycle
 
-- (void)loadView {
-    [super loadView];
+- (void)viewDidLoad {
+    [super viewDidLoad];
     [self selectorSetDefaults];
     
     [self displaySelectorAnnotationIfNeeded];
     
-    _selectorOverlay = [[DBMapSelectorOverlay alloc] initWithCenterCoordinate:_selectorCoordinate radius:_selectorRadius];
+    _selectorOverlay = [[DBMapSelectorOverlay alloc] initWithCenterCoordinate:_circleCoordinate radius:_circleRadius];
     [self.mapView addOverlay:_selectorOverlay];
-    
-    _mapViewGestureEnabled = YES;
-    
-    [self.mapView addGestureRecognizer:[self selectorGestureRecognizer]];
-}
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
     
 #ifdef DEBUG
     _radiusTouchView = [[UIView alloc] initWithFrame:CGRectZero];
     _radiusTouchView.backgroundColor = [[UIColor redColor] colorWithAlphaComponent:.5f];
     _radiusTouchView.userInteractionEnabled = NO;
-//    [self.mapView addSubview:_radiusTouchView];
+    [self.mapView addSubview:_radiusTouchView];
 #endif
     
-    [self setMapRegionForSelector];
+    _mapViewGestureEnabled = YES;
+    [self.mapView addGestureRecognizer:[self selectorGestureRecognizer]];
+    
     [self performSelector:@selector(recalculateRadiusTouchRect) withObject:nil afterDelay:.2f];
 }
 
@@ -88,7 +84,7 @@ NSInteger const defaultMaxDistance  = 10000;
         CLLocationCoordinate2D coord = [weakSelf.mapView convertPoint:touchPoint toCoordinateFromView:weakSelf.mapView];
         MKMapPoint mapPoint = MKMapPointForCoordinate(coord);
         
-        if (CGRectContainsPoint(_radiusTouchRect, touchPoint) && _selectorOverlay.editingRadius && (_selectorHidden == NO)){
+        if (CGRectContainsPoint(_radiusTouchRect, touchPoint) && _selectorOverlay.editingRadius && (weakSelf.hidden == NO)){
             __block int t = 0;
             dispatch_async(dispatch_get_main_queue(), ^{
                 t = 1;
@@ -99,7 +95,7 @@ NSInteger const defaultMaxDistance  = 10000;
             weakSelf.mapView.scrollEnabled = YES;
         }
         _prevMapPoint = mapPoint;
-        _prevRadius = weakSelf.selectorRadius;
+        _prevRadius = weakSelf.circleRadius;
     };
     
     selectorGestureRecognizer.touchesMovedCallback = ^(NSSet * touches, UIEvent * event) {
@@ -111,7 +107,7 @@ NSInteger const defaultMaxDistance  = 10000;
             MKMapPoint mapPoint = MKMapPointForCoordinate(coord);
             
             double meterDistance = (mapPoint.x - _prevMapPoint.x)/MKMapPointsPerMeterAtLatitude(self.mapView.centerCoordinate.latitude) + _prevRadius;
-            weakSelf.selectorRadius = MIN( MAX( meterDistance, _selectorRadiusMin ), _selectorRadiusMax );
+            weakSelf.circleRadius = MIN( MAX( meterDistance, weakSelf.circleRadiusMin ), weakSelf.circleRadiusMax );
 //            NSLog(@"%.2f", (float)meterDistance);
         }
     };
@@ -122,14 +118,10 @@ NSInteger const defaultMaxDistance  = 10000;
         weakSelf.mapView.scrollEnabled = YES;
         weakSelf.mapView.userInteractionEnabled = YES;
         
-        if (_prevRadius != weakSelf.selectorRadius) {
+        if (_prevRadius != weakSelf.circleRadius) {
             [weakSelf recalculateRadiusTouchRect];
-//            if (_delegate && [_delegate respondsToSelector:@selector(mapViewController:didChangedSelectorRadius:)]) {
-//                [_delegate mapViewController:self didChangedSelectorRadius:_setRadius];
-//            }
-            
-            if (((_prevRadius / weakSelf.selectorRadius) >= 1.25f) || ((_prevRadius / weakSelf.selectorRadius) <= .75f)) {
-                [weakSelf setMapRegionForSelector];
+            if (((_prevRadius / weakSelf.circleRadius) >= 1.25f) || ((_prevRadius / weakSelf.circleRadius) <= .75f)) {
+                [weakSelf updateMapRegionForMapSelector];
             }
         }
     };
@@ -139,82 +131,86 @@ NSInteger const defaultMaxDistance  = 10000;
 
 #pragma mark - Accessors
 
-- (void)setSelectorRadius:(CLLocationDistance)selectorRadius {
-    if (_selectorRadius != MAX(MIN(selectorRadius, _selectorRadiusMax), _selectorRadiusMin)) {
-        _selectorRadius = MAX(MIN(selectorRadius, _selectorRadiusMax), _selectorRadiusMin);
-        _selectorOverlay.radius = _selectorRadius;
-        [self didChangeRadius:_selectorRadius];
+- (void)setCircleRadius:(CLLocationDistance)circleRadius {
+    if (_circleRadius!= MAX(MIN(circleRadius, _circleRadiusMax), _circleRadiusMin)) {
+        _circleRadius = MAX(MIN(circleRadius, _circleRadiusMax), _circleRadiusMin);
+        _selectorOverlay.radius = _circleRadius;
+        if (_delegate && [_delegate respondsToSelector:@selector(mapSelectorViewController:didChangeRadius:)]) {
+            [_delegate mapSelectorViewController:self didChangeRadius:_circleRadius];
+        }
     }
 }
 
-- (void)setSelectorRadiusMax:(CLLocationDistance)selectorRadiusMax {
-    if (_selectorRadiusMax != selectorRadiusMax) {
-        _selectorRadiusMax = selectorRadiusMax;
-        _selectorRadiusMin = MIN(_selectorRadiusMin, _selectorRadiusMax);
-        self.selectorRadius = _selectorRadius;
+- (void)setCircleRadiusMax:(CLLocationDistance)circleRadiusMax {
+    if (_circleRadiusMax != circleRadiusMax) {
+        _circleRadiusMax = circleRadiusMax;
+        _circleRadiusMin = MIN(_circleRadiusMin, _circleRadiusMax);
+        self.circleRadius = _circleRadius;
     }
 }
 
-- (void)setSelectorRadiusMin:(CLLocationDistance)selectorRadiusMin {
-    if (_selectorRadiusMin != selectorRadiusMin) {
-        _selectorRadiusMin = selectorRadiusMin;
-        _selectorRadiusMax = MAX(_selectorRadiusMax, _selectorRadiusMin);
-        self.selectorRadius = _selectorRadius;
+- (void)setCircleRadiusMin:(CLLocationDistance)circleRadiusMin {
+    if (_circleRadiusMin != circleRadiusMin) {
+        _circleRadiusMin = circleRadiusMin;
+        _circleRadiusMax = MAX(_circleRadiusMax, _circleRadiusMin);
+        self.circleRadius = _circleRadius;
     }
 }
 
-- (void)setSelectorCoordinate:(CLLocationCoordinate2D)selectorCoordinate {
-    if ((_selectorCoordinate.latitude != selectorCoordinate.latitude) || (_selectorCoordinate.longitude != selectorCoordinate.longitude)) {
-        _selectorCoordinate = selectorCoordinate;
+- (void)setCircleCoordinate:(CLLocationCoordinate2D)circleCoordinate {
+    if ((_circleCoordinate.latitude != circleCoordinate.latitude) || (_circleCoordinate.longitude != circleCoordinate.longitude)) {
+        _circleCoordinate = circleCoordinate;
         
         for (id<MKAnnotation> currentAnnotation in self.mapView.annotations) {
             if ([currentAnnotation isKindOfClass:DBMapSelectorAnnotation.class]) {
-                [currentAnnotation setCoordinate:_selectorCoordinate];
+                [currentAnnotation setCoordinate:_circleCoordinate];
                 break;
             }
         }
         [self.mapView removeOverlay:_selectorOverlay];
-        _selectorOverlay.coordinate = _selectorCoordinate;
-        if (_selectorHidden == NO) {
+        _selectorOverlay.coordinate = _circleCoordinate;
+        if (_hidden == NO) {
             [self.mapView addOverlay:_selectorOverlay];
         }
         [self recalculateRadiusTouchRect];
-        [self didChangeCoordinate:_selectorCoordinate];
+        if (_delegate && [_delegate respondsToSelector:@selector(mapSelectorViewController:didChangeCoordinate:)]) {
+            [_delegate mapSelectorViewController:self didChangeCoordinate:_circleCoordinate];
+        }
     }
 }
 
-- (void)setSelectorFillColor:(UIColor *)selectorFillColor {
-    if (_selectorFillColor != selectorFillColor) {
-        _selectorFillColor = selectorFillColor;
-        _selectorOverlayRenderer.fillColor = selectorFillColor;
+- (void)setFillColor:(UIColor *)fillColor {
+    if (_fillColor != fillColor) {
+        _fillColor = fillColor;
+        _selectorOverlayRenderer.fillColor = fillColor;
         [_selectorOverlayRenderer invalidatePath];
     }
 }
 
-- (void)setSelectorStrokeColor:(UIColor *)selectorStrokeColor {
-    if (_selectorStrokeColor != selectorStrokeColor) {
-        _selectorStrokeColor = selectorStrokeColor;
-        _selectorOverlayRenderer.strokeColor = selectorStrokeColor;
+- (void)setStrokeColor:(UIColor *)strokeColor {
+    if (_strokeColor != strokeColor) {
+        _strokeColor = strokeColor;
+        _selectorOverlayRenderer.strokeColor = strokeColor;
         [_selectorOverlayRenderer invalidatePath];
     }
 }
 
-- (void)setSelectorEditingType:(DBMapSelectorEditingType)selectorEditingType {
-    if (_selectorEditingType != selectorEditingType) {
-        _selectorEditingType = selectorEditingType;
+- (void)setEditingType:(DBMapSelectorEditingType)editingType {
+    if (_editingType != editingType) {
+        _editingType = editingType;
         
-        _selectorOverlay.editingCoordinate = (_selectorEditingType == DBMapSelectorEditingTypeCoordinateOnly || _selectorEditingType == DBMapSelectorEditingTypeFull);
-        _selectorOverlay.editingRadius = (_selectorEditingType == DBMapSelectorEditingTypeRadiusOnly || _selectorEditingType == DBMapSelectorEditingTypeFull);
+        _selectorOverlay.editingCoordinate = (_editingType == DBMapSelectorEditingTypeCoordinateOnly || _editingType == DBMapSelectorEditingTypeFull);
+        _selectorOverlay.editingRadius = (_editingType == DBMapSelectorEditingTypeRadiusOnly || _editingType == DBMapSelectorEditingTypeFull);
         [self displaySelectorAnnotationIfNeeded];
     }
 }
 
-- (void)setSelectorHidden:(BOOL)selectorHidden {
-    if (_selectorHidden != selectorHidden) {
-        _selectorHidden = selectorHidden;
+- (void)setHidden:(BOOL)hidden {
+    if (_hidden != hidden) {
+        _hidden = hidden;
         
         [self displaySelectorAnnotationIfNeeded];
-        if (_selectorHidden) {
+        if (_hidden) {
             [self.mapView removeOverlay:_selectorOverlay];
         } else {
             [self.mapView addOverlay:_selectorOverlay];
@@ -228,8 +224,8 @@ NSInteger const defaultMaxDistance  = 10000;
 - (void)recalculateRadiusTouchRect {
     MKMapRect selectorMapRect = _selectorOverlay.boundingMapRect;
     MKMapPoint selectorRadiusPoint = MKMapPointMake(MKMapRectGetMaxX(selectorMapRect), MKMapRectGetMidY(selectorMapRect));
-    MKCoordinateRegion coordinateRegion = MKCoordinateRegionMakeWithDistance(MKCoordinateForMapPoint(selectorRadiusPoint), _selectorRadius *.3f, _selectorRadius *.3f);
-    BOOL needDisplay = MKMapRectContainsPoint(self.mapView.visibleMapRect, selectorRadiusPoint) && (_selectorHidden == NO);
+    MKCoordinateRegion coordinateRegion = MKCoordinateRegionMakeWithDistance(MKCoordinateForMapPoint(selectorRadiusPoint), _circleRadius *.3f, _circleRadius *.3f);
+    BOOL needDisplay = MKMapRectContainsPoint(self.mapView.visibleMapRect, selectorRadiusPoint) && (_hidden == NO);
     _radiusTouchRect = needDisplay ? [self.mapView convertRegion:coordinateRegion toRectToView:self.view] : CGRectZero;
 #ifdef DEBUG
     _radiusTouchView.frame = _radiusTouchRect;
@@ -237,7 +233,7 @@ NSInteger const defaultMaxDistance  = 10000;
 #endif
 }
 
-- (void)setMapRegionForSelector {
+- (void)updateMapRegionForMapSelector {
     MKCoordinateRegion selectorRegion = MKCoordinateRegionForMapRect(_selectorOverlay.boundingMapRect);
     MKCoordinateRegion region;
     region.center = selectorRegion.center;
@@ -252,21 +248,11 @@ NSInteger const defaultMaxDistance  = 10000;
         }
     }
     
-    if (_selectorHidden == NO &&
-        ((_selectorEditingType == DBMapSelectorEditingTypeFull) ||
-         (_selectorEditingType == DBMapSelectorEditingTypeCoordinateOnly))) {
+    if (_hidden == NO && ((_editingType == DBMapSelectorEditingTypeFull) || (_editingType == DBMapSelectorEditingTypeCoordinateOnly))) {
         DBMapSelectorAnnotation *selectorAnnotation = [[DBMapSelectorAnnotation alloc] init];
-        selectorAnnotation.coordinate = _selectorCoordinate;
+        selectorAnnotation.coordinate = _circleCoordinate;
         [self.mapView addAnnotation:selectorAnnotation];
     }
-}
-
-#pragma mark - DBMapSelectorViewController Protocol
-
-- (void)didChangeCoordinate:(CLLocationCoordinate2D)coordinate {
-}
-
-- (void)didChangeRadius:(CLLocationDistance)radius {
 }
 
 #pragma mark - MKMapView Delegate
@@ -294,9 +280,9 @@ NSInteger const defaultMaxDistance  = 10000;
             _mapViewGestureEnabled = YES;
         }
         if (newState == MKAnnotationViewDragStateEnding) {
-            self.selectorCoordinate = annotationView.annotation.coordinate;
+            self.circleCoordinate = annotationView.annotation.coordinate;
             if (NO == MKMapRectContainsRect(mapView.visibleMapRect, _selectorOverlay.boundingMapRect)) {
-                [self performSelector:@selector(setMapRegionForSelector) withObject:nil afterDelay:.3f];
+                [self performSelector:@selector(updateMapRegionForMapSelector) withObject:nil afterDelay:.3f];
             }
         }
     }
@@ -306,8 +292,8 @@ NSInteger const defaultMaxDistance  = 10000;
     MKOverlayRenderer *overlayRenderer;
     if ([overlay isKindOfClass:[DBMapSelectorOverlay class]]) {
         _selectorOverlayRenderer = [[DBMapSelectorOverlayRenderer alloc] initWithSelectorOverlay:(DBMapSelectorOverlay *)overlay];
-        _selectorOverlayRenderer.fillColor = _selectorFillColor;
-        _selectorOverlayRenderer.strokeColor = _selectorStrokeColor;
+        _selectorOverlayRenderer.fillColor = _fillColor;
+        _selectorOverlayRenderer.strokeColor = _strokeColor;
         overlayRenderer = _selectorOverlayRenderer;
     } else if ([overlay isKindOfClass:[MKTileOverlay class]]) {
         overlayRenderer = [[MKTileOverlayRenderer alloc] initWithTileOverlay:overlay];

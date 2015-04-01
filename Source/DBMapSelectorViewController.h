@@ -17,17 +17,19 @@ typedef NS_ENUM(NSInteger, DBMapSelectorEditingType) {
     DBMapSelectorEditingTypeNone,
 };
 
-@protocol DBMapSelectorViewControllerProtocol <NSObject>
+@class DBMapSelectorViewController;
+@protocol DBMapSelectorViewControllerDelegate <NSObject>
 
 @optional
-- (void)didChangeCoordinate:(CLLocationCoordinate2D)coordinate;
-- (void)didChangeRadius:(CLLocationDistance)radius;
+- (void)mapSelectorViewController:(DBMapSelectorViewController *)mapSelectorViewController didChangeCoordinate:(CLLocationCoordinate2D)coordinate;
+- (void)mapSelectorViewController:(DBMapSelectorViewController *)mapSelectorViewController didChangeRadius:(CLLocationDistance)radius;
 
 @end
 
 @class DBMapSelectorOverlay;
-@interface DBMapSelectorViewController : UIViewController <MKMapViewDelegate, DBMapSelectorViewControllerProtocol>
+@interface DBMapSelectorViewController : UIViewController <MKMapViewDelegate>
 
+@property (nonatomic, weak) id<DBMapSelectorViewControllerDelegate> delegate;
 @property (nonatomic, weak) IBOutlet MKMapView          *mapView;
 
 /*!
@@ -38,33 +40,35 @@ typedef NS_ENUM(NSInteger, DBMapSelectorEditingType) {
  DBMapSelectorEditingTypeRadiusOnly allows to edit radius only,
  DBMapSelectorEditingTypeNone read only mode.
  */
-@property (nonatomic, assign) DBMapSelectorEditingType  selectorEditingType;
+@property (nonatomic, assign) DBMapSelectorEditingType  editingType;
 
 /*! @brief Used to specify the selector coordinate */
-@property (nonatomic, assign) CLLocationCoordinate2D    selectorCoordinate;
+@property (nonatomic, assign) CLLocationCoordinate2D    circleCoordinate;
 
 /*! @brief Used to specify the selector radius */
-@property (nonatomic, assign) CLLocationDistance        selectorRadius;         // default is equal 1000 meter
+@property (nonatomic, assign) CLLocationDistance        circleRadius;           // default is equal 1000 meter
 
 /*! @brief Used to specify the minimum selector radius */
-@property (nonatomic, assign) CLLocationDistance        selectorRadiusMin;      // default is equal 100 meter
+@property (nonatomic, assign) CLLocationDistance        circleRadiusMin;        // default is equal 100 meter
 
 /*! @brief Used to specify the maximum selector radius */
-@property (nonatomic, assign) CLLocationDistance        selectorRadiusMax;      // default is equal 10000 meter
+@property (nonatomic, assign) CLLocationDistance        circleRadiusMax;        // default is equal 10000 meter
 
 /*! @brief Used to hide or show selector */
-@property (nonatomic, getter=isHidden) BOOL             selectorHidden;         // default is NO
+@property (nonatomic, getter=isHidden) BOOL             hidden;                 // default is NO
 
 /*! 
  @brief Used to specify the selector fill color
  @discussion Color is used to fill the circular map region
  */
-@property (nonatomic, strong) UIColor                   *selectorFillColor;
+@property (nonatomic, strong) UIColor                   *fillColor;
 
 /*! 
  @brief Used to specify the selector stroke color 
  @discussion Color is used to delimit the circular map region
  */
-@property (nonatomic, strong) UIColor                   *selectorStrokeColor;
+@property (nonatomic, strong) UIColor                   *strokeColor;
+
+- (void)updateMapRegionForMapSelector;
 
 @end

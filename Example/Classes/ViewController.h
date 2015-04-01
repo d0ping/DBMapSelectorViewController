@@ -8,7 +8,7 @@
 
 #import "DBMapSelectorViewController.h"
 
-@interface ViewController : DBMapSelectorViewController <UITextFieldDelegate>
+@interface ViewController : DBMapSelectorViewController <DBMapSelectorViewControllerDelegate>
 
 @property (nonatomic, weak) IBOutlet UISwitch               *hiddenSwitch;
 
