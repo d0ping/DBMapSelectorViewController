@@ -60,10 +60,13 @@ NSInteger const defaultMaxDistance  = 10000;
     _radiusTouchView = [[UIView alloc] initWithFrame:CGRectZero];
     _radiusTouchView.backgroundColor = [[UIColor redColor] colorWithAlphaComponent:.5f];
     _radiusTouchView.userInteractionEnabled = NO;
-//    [self.mapView addSubview:_radiusTouchView];
+    [self.mapView addSubview:_radiusTouchView];
 #endif
     
+    _mapViewGestureEnabled = YES;
     [self.mapView addGestureRecognizer:[self selectorGestureRecognizer]];
+    
+    [self performSelector:@selector(recalculateRadiusTouchRect) withObject:nil afterDelay:.2f];
 }
 
 #pragma mark - GestureRecognizer
