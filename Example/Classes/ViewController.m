@@ -26,6 +26,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.delegate = self;
     _mapView.showsUserLocation = YES;
     
     // Set Begin Settings
@@ -82,13 +83,13 @@
     self.hidden = !sender.on;
 }
 
-#pragma mark - DBMapSelectorViewController Protocol
+#pragma mark - DBMapSelectorViewController Delegate
 
-- (void)didChangeCoordinate:(CLLocationCoordinate2D)coordinate {
+- (void)mapSelectorViewController:(DBMapSelectorViewController *)mapSelectorViewController didChangeCoordinate:(CLLocationCoordinate2D)coordinate {
     _coordinateLabel.text = [NSString stringWithFormat:@"Coordinate = {%.5f, %.5f}", coordinate.latitude, coordinate.longitude];
 }
 
-- (void)didChangeRadius:(CLLocationDistance)radius {
+- (void)mapSelectorViewController:(DBMapSelectorViewController *)mapSelectorViewController didChangeRadius:(CLLocationDistance)radius {
     NSString *radiusStr = (radius >= 1000) ? [NSString stringWithFormat:@"%.1f km", radius * .001f] : [NSString stringWithFormat:@"%.0f m", radius];
     _radiusLabel.text = [@"Radius = " stringByAppendingString:radiusStr];
 }
@@ -120,18 +121,5 @@
         self.strokeColor = _strokeColorDict[colorKey];
     }
 }
-
-//#pragma mark - UITextField Delegate
-//
-//- (BOOL) textFieldShouldBeginEditing:(UITextView *)textView {
-//    _fillColorPickerView.frame = CGRectMake(0, 500, _fillColorPickerView.frame.size.width, _fillColorPickerView.frame.size.height);
-//    [UIView beginAnimations:nil context:NULL];
-//    [UIView setAnimationDuration:.3f];
-//    [UIView setAnimationDelegate:self];
-//    _fillColorPickerView.frame = CGRectMake(0, 200, _fillColorPickerView.frame.size.width, _fillColorPickerView.frame.size.height);
-//    [self.view addSubview:_fillColorPickerView];
-//    [UIView commitAnimations];
-//    return NO;
-//}
 
 @end

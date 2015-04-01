@@ -17,17 +17,19 @@ typedef NS_ENUM(NSInteger, DBMapSelectorEditingType) {
     DBMapSelectorEditingTypeNone,
 };
 
-@protocol DBMapSelectorViewControllerProtocol <NSObject>
+@class DBMapSelectorViewController;
+@protocol DBMapSelectorViewControllerDelegate <NSObject>
 
 @optional
-- (void)didChangeCoordinate:(CLLocationCoordinate2D)coordinate;
-- (void)didChangeRadius:(CLLocationDistance)radius;
+- (void)mapSelectorViewController:(DBMapSelectorViewController *)mapSelectorViewController didChangeCoordinate:(CLLocationCoordinate2D)coordinate;
+- (void)mapSelectorViewController:(DBMapSelectorViewController *)mapSelectorViewController didChangeRadius:(CLLocationDistance)radius;
 
 @end
 
 @class DBMapSelectorOverlay;
-@interface DBMapSelectorViewController : UIViewController <MKMapViewDelegate, DBMapSelectorViewControllerProtocol>
+@interface DBMapSelectorViewController : UIViewController <MKMapViewDelegate>
 
+@property (nonatomic, weak) id<DBMapSelectorViewControllerDelegate> delegate;
 @property (nonatomic, weak) IBOutlet MKMapView          *mapView;
 
 /*!

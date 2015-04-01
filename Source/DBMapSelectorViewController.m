@@ -60,7 +60,7 @@ NSInteger const defaultMaxDistance  = 10000;
     _radiusTouchView = [[UIView alloc] initWithFrame:CGRectZero];
     _radiusTouchView.backgroundColor = [[UIColor redColor] colorWithAlphaComponent:.5f];
     _radiusTouchView.userInteractionEnabled = NO;
-    [self.mapView addSubview:_radiusTouchView];
+//    [self.mapView addSubview:_radiusTouchView];
 #endif
     
     [self.mapView addGestureRecognizer:[self selectorGestureRecognizer]];
@@ -132,7 +132,9 @@ NSInteger const defaultMaxDistance  = 10000;
     if (_circleRadius!= MAX(MIN(circleRadius, _circleRadiusMax), _circleRadiusMin)) {
         _circleRadius = MAX(MIN(circleRadius, _circleRadiusMax), _circleRadiusMin);
         _selectorOverlay.radius = _circleRadius;
-        [self didChangeRadius:_circleRadius];
+        if (_delegate && [_delegate respondsToSelector:@selector(mapSelectorViewController:didChangeRadius:)]) {
+            [_delegate mapSelectorViewController:self didChangeRadius:_circleRadius];
+        }
     }
 }
 
@@ -168,7 +170,9 @@ NSInteger const defaultMaxDistance  = 10000;
             [self.mapView addOverlay:_selectorOverlay];
         }
         [self recalculateRadiusTouchRect];
-        [self didChangeCoordinate:_circleCoordinate];
+        if (_delegate && [_delegate respondsToSelector:@selector(mapSelectorViewController:didChangeCoordinate:)]) {
+            [_delegate mapSelectorViewController:self didChangeCoordinate:_circleCoordinate];
+        }
     }
 }
 
@@ -246,14 +250,6 @@ NSInteger const defaultMaxDistance  = 10000;
         selectorAnnotation.coordinate = _circleCoordinate;
         [self.mapView addAnnotation:selectorAnnotation];
     }
-}
-
-#pragma mark - DBMapSelectorViewController Protocol
-
-- (void)didChangeCoordinate:(CLLocationCoordinate2D)coordinate {
-}
-
-- (void)didChangeRadius:(CLLocationDistance)radius {
 }
 
 #pragma mark - MKMapView Delegate

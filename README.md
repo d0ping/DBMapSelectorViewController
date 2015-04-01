@@ -69,16 +69,16 @@ For example, how it can be implemented:
 - `UIColor *fillColor` - Used to specify the selector fill color. Color is used to fill the circular map region;
 - `UIColor *strokeColor` - Used to specify the selector stroke color. Color is used to delimit the circular map region.
 
-### DBMapSelectorViewControllerProtocol
+### DBMapSelectorViewControllerDelegate
 
-Inside the `DBMapSelectorViewController` class is implemented `DBMapSelectorViewControllerProtocol`. It's allows to receive messages when the main properties (coordinate and radius) of the selector will be changed.
+To be able to react when the main properties (coordinate and radius) of the selector will be changed you must become delegate DBMapSelectorViewController. DBMapSelectorViewControllerDelegate protocol you can see here:
 
 ```objc
-@protocol DBMapSelectorViewControllerProtocol <NSObject>
+@protocol DBMapSelectorViewControllerDelegate <NSObject>
 
 @optional
-- (void)didChangeCoordinate:(CLLocationCoordinate2D)coordinate;
-- (void)didChangeRadius:(CLLocationDistance)radius;
+- (void)mapSelectorViewController:(DBMapSelectorViewController *)mapSelectorViewController didChangeCoordinate:(CLLocationCoordinate2D)coordinate;
+- (void)mapSelectorViewController:(DBMapSelectorViewController *)mapSelectorViewController didChangeRadius:(CLLocationDistance)radius;
 
 @end
 ```
@@ -86,11 +86,11 @@ Inside the `DBMapSelectorViewController` class is implemented `DBMapSelectorView
 You can implement these methods in your `MyViewController` class in order to respond to these changes. For example, how it can be implemented in your class:
 
 ```objc
-- (void)didChangeCoordinate:(CLLocationCoordinate2D)coordinate {
+- (void)mapSelectorViewController:(DBMapSelectorViewController *)mapSelectorViewController didChangeCoordinate:(CLLocationCoordinate2D)coordinate {
     _coordinateLabel.text = [NSString stringWithFormat:@"Coordinate = {%.5f, %.5f}", coordinate.latitude, coordinate.longitude];
 }
 
-- (void)didChangeRadius:(CLLocationDistance)radius {
+- (void)mapSelectorViewController:(DBMapSelectorViewController *)mapSelectorViewController didChangeRadius:(CLLocationDistance)radius {
     NSString *radiusStr = (radius >= 1000) ? [NSString stringWithFormat:@"%.1f km", radius * .001f] : [NSString stringWithFormat:@"%.0f m", radius];
     _radiusLabel.text = [@"Radius = " stringByAppendingString:radiusStr];
 }
