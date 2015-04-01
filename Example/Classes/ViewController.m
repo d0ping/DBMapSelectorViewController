@@ -23,15 +23,16 @@
 
 #pragma mark - Source
 
-- (void)loadView {
-    [super loadView];
+- (void)viewDidLoad {
+    [super viewDidLoad];
     
     _mapView.showsUserLocation = YES;
     
     // Set Begin Settings
-    self.selectorCoordinate = CLLocationCoordinate2DMake(55.75399400, 37.62209300);
-    self.selectorRadius = 3000;
-    self.selectorRadiusMax = 25000;
+    self.circleCoordinate = CLLocationCoordinate2DMake(55.75399400, 37.62209300);
+    self.circleRadius = 3000;
+    self.circleRadiusMax = 25000;
+    [self updateMapRegionForMapSelector];
     
     _fillColorDict = @{@"Orange": [UIColor orangeColor], @"Green": [UIColor greenColor],  @"Pure": [UIColor purpleColor],  @"Cyan": [UIColor cyanColor], @"Yellow": [UIColor yellowColor],  @"Magenta": [UIColor magentaColor]};
     _strokeColorDict = @{@"Dark Gray": [UIColor darkGrayColor], @"Black": [UIColor blackColor], @"Brown": [UIColor brownColor], @"Red": [UIColor redColor], @"Blue": [UIColor blueColor]};
@@ -40,7 +41,7 @@
     _fillColorPickerView.delegate = self;
     _fillColorPickerView.dataSource = self;
     _fillColorPickerView.showsSelectionIndicator = YES;
-
+    
     _strokeColorPickerView = [[UIPickerView alloc] init];
     _strokeColorPickerView.delegate = self;
     _strokeColorPickerView.dataSource = self;
@@ -48,19 +49,11 @@
     
     NSString *fillColorKey = @"Orange";
     _fillColorTextField.text = fillColorKey;
-    self.selectorFillColor = _fillColorDict[fillColorKey];
+    self.fillColor = _fillColorDict[fillColorKey];
     
     NSString *strokeColorKey = @"Dark Gray";
     _strokeColorTextField.text = strokeColorKey;
-    self.selectorStrokeColor = _strokeColorDict[strokeColorKey];
-    
-    
-    [self didChangeCoordinate:self.selectorCoordinate];
-    [self didChangeRadius:self.selectorRadius];
-}
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
+    self.strokeColor = _strokeColorDict[strokeColorKey];
     
     UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(inputAccessoryViewDidFinish)];
     UIToolbar *toolbar = [[UIToolbar alloc] initWithFrame:CGRectMake(0,0, 320, 44)];
@@ -71,6 +64,7 @@
     
     _strokeColorTextField.inputView = _strokeColorPickerView;
     _strokeColorTextField.inputAccessoryView = toolbar;
+    
 }
 
 - (void)inputAccessoryViewDidFinish {
@@ -81,11 +75,11 @@
 #pragma mark - Actions
 
 - (IBAction)editingTypeSegmentedControlValueDidChange:(UISegmentedControl *)sender {
-    self.selectorEditingType = sender.selectedSegmentIndex;
+    self.editingType = sender.selectedSegmentIndex;
 }
 
 - (IBAction)hiddenSwitchValueDidChange:(UISwitch *)sender {
-    self.selectorHidden = !sender.on;
+    self.hidden = !sender.on;
 }
 
 #pragma mark - DBMapSelectorViewController Protocol
@@ -120,10 +114,10 @@
     NSString *colorKey = dict.allKeys[row];
     if ([pickerView isEqual:_fillColorPickerView]) {
         self.fillColorTextField.text = colorKey;
-        self.selectorFillColor = _fillColorDict[colorKey];
+        self.fillColor = _fillColorDict[colorKey];
     } else if ([pickerView isEqual:_strokeColorPickerView]) {
         self.strokeColorTextField.text = colorKey;
-        self.selectorStrokeColor = _strokeColorDict[colorKey];
+        self.strokeColor = _strokeColorDict[colorKey];
     }
 }
 
