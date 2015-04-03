@@ -40,7 +40,8 @@
 - (NSArray *)overlayObserverArray {
     return @[NSStringFromSelector(@selector(radius)),
              NSStringFromSelector(@selector(editingCoordinate)),
-             NSStringFromSelector(@selector(editingRadius))];
+             NSStringFromSelector(@selector(editingRadius)),
+             NSStringFromSelector(@selector(insideFilling))];
 }
 
 - (void)addOverlayObserver {
@@ -77,10 +78,26 @@
 //    CGRect overlayRect = [self rectForMapRect:_selectorOverlay.boundingMapRect];
     
     CGContextSetStrokeColorWithColor(context, self.strokeColor.CGColor);
-    CGContextSetFillColorWithColor(context, [self.fillColor colorWithAlphaComponent:.2f].CGColor);
     CGContextSetLineWidth(context, overlayRect.size.width *.015f);
     CGContextSetShouldAntialias(context, YES);
     
+    if (NO == _selectorOverlay.insideFilling) {
+        
+        CGRect rect = [self rectForMapRect:mapRect];
+        CGContextSaveGState(context);
+        CGContextAddRect(context, rect);
+        CGContextSetFillColorWithColor(context, [self.fillColor colorWithAlphaComponent:.2f].CGColor);
+        CGContextFillRect(context, rect);
+        CGContextRestoreGState(context);
+        
+        CGContextSaveGState(context);
+        CGContextSetFillColorWithColor(context, [UIColor whiteColor].CGColor);
+        CGContextSetBlendMode(context, kCGBlendModeClear);
+        CGContextFillEllipseInRect(context, [self rectForMapRect:[self.overlay boundingMapRect]]);
+        CGContextRestoreGState(context);
+    }
+    
+    CGContextSetFillColorWithColor(context, (_selectorOverlay.insideFilling ? [self.fillColor colorWithAlphaComponent:.2f].CGColor : [UIColor clearColor].CGColor));
     CGContextAddArc(context, overlayRect.origin.x, overlayRect.origin.y, radiusAtLatitude, 0, 2 * M_PI, true);
     CGContextDrawPath(context, kCGPathFillStroke);
     
