@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6751" systemVersion="14C1514" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6751" systemVersion="14C1510" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
     <dependencies>
+        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
     </dependencies>
     <scenes>
@@ -17,10 +18,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oxZ-6D-vS7">
-                                <rect key="frame" x="0.0" y="440" width="600" height="160"/>
+                                <rect key="frame" x="0.0" y="400" width="600" height="200"/>
                                 <subviews>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="q8C-Kf-ccs">
-                                        <rect key="frame" x="382" y="84" width="210" height="30"/>
+                                        <rect key="frame" x="382" y="125" width="210" height="30"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="30" id="hwY-yD-D6Q"/>
                                             <constraint firstAttribute="width" constant="210" id="l4F-zR-Keu"/>
@@ -32,7 +33,7 @@
                                         </connections>
                                     </textField>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="lBE-ZD-ivg">
-                                        <rect key="frame" x="382" y="122" width="210" height="30"/>
+                                        <rect key="frame" x="382" y="163" width="210" height="30"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="30" id="1I6-l6-wxT"/>
                                             <constraint firstAttribute="width" constant="210" id="rqd-RF-KQa"/>
@@ -44,7 +45,7 @@
                                         </connections>
                                     </textField>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Fill Color" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MDB-lf-wLC">
-                                        <rect key="frame" x="8" y="89" width="366" height="20"/>
+                                        <rect key="frame" x="8" y="130" width="366" height="20"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="20" id="YcC-HS-ZsY"/>
                                         </constraints>
@@ -53,7 +54,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Stroke Color" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4Q9-QW-UfI">
-                                        <rect key="frame" x="8" y="127" width="366" height="20"/>
+                                        <rect key="frame" x="8" y="168" width="366" height="20"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="20" id="U9C-xV-d2W"/>
                                         </constraints>
@@ -104,6 +105,19 @@
                                             <action selector="hiddenSwitchValueDidChange:" destination="BYZ-38-t0r" eventType="valueChanged" id="xE0-bK-eiz"/>
                                         </connections>
                                     </switch>
+                                    <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="7Jd-Ka-Pjl">
+                                        <rect key="frame" x="8" y="84" width="584" height="29"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="28" id="ceG-Fo-99D"/>
+                                        </constraints>
+                                        <segments>
+                                            <segment title="Inside Circle"/>
+                                            <segment title="Outside Circle"/>
+                                        </segments>
+                                        <connections>
+                                            <action selector="fillingModeSegmentedControlValueDidChange:" destination="BYZ-38-t0r" eventType="valueChanged" id="lFN-PN-4pt"/>
+                                        </connections>
+                                    </segmentedControl>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
@@ -123,16 +137,19 @@
                                     <constraint firstItem="q8C-Kf-ccs" firstAttribute="leading" secondItem="MDB-lf-wLC" secondAttribute="trailing" constant="8" id="aAe-9l-jQq"/>
                                     <constraint firstAttribute="trailing" secondItem="q8C-Kf-ccs" secondAttribute="trailing" constant="8" id="aTI-ak-l9W"/>
                                     <constraint firstAttribute="trailing" secondItem="Ygw-qM-Ldk" secondAttribute="trailing" constant="8" id="joV-Fs-qUJ"/>
+                                    <constraint firstItem="7Jd-Ka-Pjl" firstAttribute="leading" secondItem="oxZ-6D-vS7" secondAttribute="leading" constant="8" id="oTJ-uE-Cqy"/>
                                     <constraint firstItem="lBE-ZD-ivg" firstAttribute="top" secondItem="q8C-Kf-ccs" secondAttribute="bottom" constant="8" id="s3E-NA-1wh"/>
                                     <constraint firstItem="u6i-ox-hcx" firstAttribute="leading" secondItem="oxZ-6D-vS7" secondAttribute="leading" constant="8" id="tCb-eE-grl"/>
                                     <constraint firstItem="q8C-Kf-ccs" firstAttribute="centerY" secondItem="MDB-lf-wLC" secondAttribute="centerY" id="tca-r4-QPe"/>
-                                    <constraint firstAttribute="height" constant="160" id="tkS-a2-8IR"/>
+                                    <constraint firstAttribute="height" constant="200" id="tkS-a2-8IR"/>
                                     <constraint firstItem="Hgw-hf-28V" firstAttribute="leading" secondItem="oxZ-6D-vS7" secondAttribute="leading" constant="8" id="uyC-7e-fEr"/>
-                                    <constraint firstAttribute="bottom" secondItem="lBE-ZD-ivg" secondAttribute="bottom" constant="8" id="xTY-Cp-H07"/>
+                                    <constraint firstAttribute="bottom" secondItem="lBE-ZD-ivg" secondAttribute="bottom" constant="7" id="xTY-Cp-H07"/>
+                                    <constraint firstAttribute="trailing" secondItem="7Jd-Ka-Pjl" secondAttribute="trailing" constant="8" id="z4S-Kp-d15"/>
+                                    <constraint firstItem="7Jd-Ka-Pjl" firstAttribute="top" secondItem="Hgw-hf-28V" secondAttribute="bottom" constant="8" id="ze9-OX-3bo"/>
                                 </constraints>
                             </view>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="g7p-0S-u5B">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="440"/>
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="400"/>
                                 <connections>
                                     <outlet property="delegate" destination="BYZ-38-t0r" id="gXR-9V-qDN"/>
                                 </connections>
@@ -153,6 +170,7 @@
                         <outlet property="coordinateLabel" destination="u6i-ox-hcx" id="BdD-E8-vWQ"/>
                         <outlet property="editingTypeSegmentedControl" destination="Hgw-hf-28V" id="Mav-3L-xy6"/>
                         <outlet property="fillColorTextField" destination="q8C-Kf-ccs" id="f2B-OA-Qsu"/>
+                        <outlet property="fillingModeSegmentedControl" destination="7Jd-Ka-Pjl" id="g01-L4-OMC"/>
                         <outlet property="hiddenSwitch" destination="Ygw-qM-Ldk" id="wok-jK-0Ab"/>
                         <outlet property="mapView" destination="g7p-0S-u5B" id="r0n-Sq-Uvo"/>
                         <outlet property="radiusLabel" destination="n6x-6P-EQu" id="2oQ-ci-t4s"/>
