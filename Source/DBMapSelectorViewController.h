@@ -57,8 +57,8 @@ typedef NS_ENUM(NSInteger, DBMapSelectorEditingType) {
 /*! @brief Used to hide or show selector */
 @property (nonatomic, getter=isHidden) BOOL             hidden;                 // default is NO
 
-/*! @brief Used to hide or show selector */
-@property (nonatomic, getter=isInsideFilling) BOOL      insideFilling;          // default is YES
+/*! @brief Used to switching between inside or outside filling */
+@property (nonatomic, getter=isFillInside) BOOL         fillInside;             // default is YES
 
 /*! 
  @brief Used to specify the selector fill color

@@ -21,7 +21,7 @@
         _boundingMapRect = [self MKMapRectForCoordinate:_coordinate radius:_radius];
         _editingCoordinate = YES;
         _editingRadius = YES;
-        _insideFilling = YES;
+        _fillInside = YES;
     }
     return self;
 }

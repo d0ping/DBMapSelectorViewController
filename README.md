@@ -66,6 +66,7 @@ For example, how it can be implemented:
 - `CLLocationDistance circleRadiusMin` - Used to specify the minimum selector radius. Default is equal 100 meter;
 - `CLLocationDistance circleRadiusMax` - Used to specify the maximum selector radius. Default is equal 10000 meter;
 - `BOOL hidden` - Used to hide or show selector. Default is NO;
+- `BOOL fillInside` - Used to switching between inside or outside filling;
 - `UIColor *fillColor` - Used to specify the selector fill color. Color is used to fill the circular map region;
 - `UIColor *strokeColor` - Used to specify the selector stroke color. Color is used to delimit the circular map region.
 

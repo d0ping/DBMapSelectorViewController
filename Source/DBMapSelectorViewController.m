@@ -43,7 +43,7 @@ NSInteger const defaultMaxDistance  = 10000;
     self.circleRadiusMin = defaultMinDistance;
     self.circleRadiusMax = defaultMaxDistance;
     self.hidden = NO;
-    self.insideFilling = YES;
+    self.fillInside = YES;
 }
 
 #pragma mark - Life cycle
@@ -220,10 +220,10 @@ NSInteger const defaultMaxDistance  = 10000;
     }
 }
 
-- (void)setInsideFilling:(BOOL)insideFilling {
-    if (_insideFilling != insideFilling) {
-        _insideFilling = insideFilling;
-        _selectorOverlay.insideFilling = insideFilling;
+- (void)setFillInside:(BOOL)fillInside {
+    if (_fillInside != fillInside) {
+        _fillInside = fillInside;
+        _selectorOverlay.fillInside = fillInside;
     }
 }
 

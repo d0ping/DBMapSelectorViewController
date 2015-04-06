@@ -80,7 +80,7 @@
 }
 
 - (IBAction)fillingModeSegmentedControlValueDidChange:(UISegmentedControl *)sender {
-    self.insideFilling = (sender.selectedSegmentIndex == 0);
+    self.fillInside = (sender.selectedSegmentIndex == 0);
 }
 
 - (IBAction)hiddenSwitchValueDidChange:(UISwitch *)sender {
