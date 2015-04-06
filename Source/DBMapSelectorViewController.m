@@ -43,6 +43,7 @@ NSInteger const defaultMaxDistance  = 10000;
     self.circleRadiusMin = defaultMinDistance;
     self.circleRadiusMax = defaultMaxDistance;
     self.hidden = NO;
+    self.fillInside = YES;
 }
 
 #pragma mark - Life cycle
@@ -60,7 +61,7 @@ NSInteger const defaultMaxDistance  = 10000;
     _radiusTouchView = [[UIView alloc] initWithFrame:CGRectZero];
     _radiusTouchView.backgroundColor = [[UIColor redColor] colorWithAlphaComponent:.5f];
     _radiusTouchView.userInteractionEnabled = NO;
-    [self.mapView addSubview:_radiusTouchView];
+//    [self.mapView addSubview:_radiusTouchView];
 #endif
     
     _mapViewGestureEnabled = YES;
@@ -216,6 +217,13 @@ NSInteger const defaultMaxDistance  = 10000;
             [self.mapView addOverlay:_selectorOverlay];
         }
         [self recalculateRadiusTouchRect];
+    }
+}
+
+- (void)setFillInside:(BOOL)fillInside {
+    if (_fillInside != fillInside) {
+        _fillInside = fillInside;
+        _selectorOverlay.fillInside = fillInside;
     }
 }
 

@@ -79,6 +79,10 @@
     self.editingType = sender.selectedSegmentIndex;
 }
 
+- (IBAction)fillingModeSegmentedControlValueDidChange:(UISegmentedControl *)sender {
+    self.fillInside = (sender.selectedSegmentIndex == 0);
+}
+
 - (IBAction)hiddenSwitchValueDidChange:(UISwitch *)sender {
     self.hidden = !sender.on;
 }
