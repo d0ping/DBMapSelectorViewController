@@ -17,6 +17,7 @@
 - (instancetype)init {
     if (self = [super init]) {
         self.cancelsTouchesInView = NO;
+        self.delaysTouchesEnded = NO;
     }
     return self;
 }
