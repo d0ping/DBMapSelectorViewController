@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import <MapKit/MapKit.h>
 
-@interface DBMapSelectorAnnotation : NSObject <MKAnnotation>
+@interface DBMapSelectorAnnotation : MKPointAnnotation
+
+
 
 @end

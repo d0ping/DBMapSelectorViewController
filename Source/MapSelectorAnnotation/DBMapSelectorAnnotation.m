@@ -10,10 +10,4 @@
 
 @implementation DBMapSelectorAnnotation
 
-@synthesize coordinate = _coordinate;
-
-- (void)setCoordinate:(CLLocationCoordinate2D)coordinate {
-    _coordinate = coordinate;
-}
-
 @end
