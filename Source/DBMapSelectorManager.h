@@ -77,10 +77,7 @@ typedef NS_ENUM(NSInteger, DBMapSelectorEditingType) {
 
 - (void)updateMapRegionForMapSelector;
 
-#pragma mark - MKMapViewDelegate
-
-- (MKAnnotationView *)mapView:(MKMapView *)mapView
-            viewForAnnotation:(id <MKAnnotation>)annotation;
+#pragma mark - MKMapViewDelegate (forward when relevant)
 
 - (void)mapView:(MKMapView *)mapView
     annotationView:(MKAnnotationView *)annotationView
