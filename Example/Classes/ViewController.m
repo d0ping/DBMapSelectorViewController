@@ -15,25 +15,34 @@
     UIPickerView        *_strokeColorPickerView;
 }
 
+@property (nonatomic) DBMapSelectorManager *mapSelectorManager;
+
 @end
 
 @implementation ViewController
 
-@synthesize mapView = _mapView;
+- (DBMapSelectorManager *)mapSelectorManager {
+    if (!_mapSelectorManager) {
+        _mapSelectorManager = [DBMapSelectorManager new];
+        _mapSelectorManager.delegate = self;
+    }
+    return _mapSelectorManager;
+}
 
 #pragma mark - Source
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    self.delegate = self;
+
+    self.mapSelectorManager.mapView = self.mapView;
+
     _mapView.showsUserLocation = YES;
     
     // Set Begin Settings
-    self.circleCoordinate = CLLocationCoordinate2DMake(55.75399400, 37.62209300);
-    self.circleRadius = 3000;
-    self.circleRadiusMax = 25000;
-    [self updateMapRegionForMapSelector];
+    self.mapSelectorManager.circleCoordinate = CLLocationCoordinate2DMake(55.75399400, 37.62209300);
+    self.mapSelectorManager.circleRadius = 3000;
+    self.mapSelectorManager.circleRadiusMax = 25000;
+    [self.mapSelectorManager updateMapRegionForMapSelector];
     
     _fillColorDict = @{@"Orange": [UIColor orangeColor], @"Green": [UIColor greenColor],  @"Pure": [UIColor purpleColor],  @"Cyan": [UIColor cyanColor], @"Yellow": [UIColor yellowColor],  @"Magenta": [UIColor magentaColor]};
     _strokeColorDict = @{@"Dark Gray": [UIColor darkGrayColor], @"Black": [UIColor blackColor], @"Brown": [UIColor brownColor], @"Red": [UIColor redColor], @"Blue": [UIColor blueColor]};
@@ -50,11 +59,11 @@
     
     NSString *fillColorKey = @"Orange";
     _fillColorTextField.text = fillColorKey;
-    self.fillColor = _fillColorDict[fillColorKey];
+    self.mapSelectorManager.fillColor = _fillColorDict[fillColorKey];
     
     NSString *strokeColorKey = @"Dark Gray";
     _strokeColorTextField.text = strokeColorKey;
-    self.strokeColor = _strokeColorDict[strokeColorKey];
+    self.mapSelectorManager.strokeColor = _strokeColorDict[strokeColorKey];
     
     UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(inputAccessoryViewDidFinish)];
     UIToolbar *toolbar = [[UIToolbar alloc] initWithFrame:CGRectMake(0,0, 320, 44)];
@@ -76,24 +85,26 @@
 #pragma mark - Actions
 
 - (IBAction)editingTypeSegmentedControlValueDidChange:(UISegmentedControl *)sender {
-    self.editingType = sender.selectedSegmentIndex;
+    self.mapSelectorManager.editingType = sender.selectedSegmentIndex;
 }
 
 - (IBAction)fillingModeSegmentedControlValueDidChange:(UISegmentedControl *)sender {
-    self.fillInside = (sender.selectedSegmentIndex == 0);
+    self.mapSelectorManager.fillInside = (sender.selectedSegmentIndex == 0);
 }
 
 - (IBAction)hiddenSwitchValueDidChange:(UISwitch *)sender {
-    self.hidden = !sender.on;
+    self.mapSelectorManager.hidden = !sender.on;
 }
 
 #pragma mark - DBMapSelectorViewController Delegate
 
-- (void)mapSelectorViewController:(DBMapSelectorViewController *)mapSelectorViewController didChangeCoordinate:(CLLocationCoordinate2D)coordinate {
+- (void)mapSelectorManager:(DBMapSelectorManager *)mapSelectorViewController
+       didChangeCoordinate:(CLLocationCoordinate2D)coordinate {
     _coordinateLabel.text = [NSString stringWithFormat:@"Coordinate = {%.5f, %.5f}", coordinate.latitude, coordinate.longitude];
 }
 
-- (void)mapSelectorViewController:(DBMapSelectorViewController *)mapSelectorViewController didChangeRadius:(CLLocationDistance)radius {
+- (void)mapSelectorManager:(DBMapSelectorManager *)mapSelectorViewController
+           didChangeRadius:(CLLocationDistance)radius {
     NSString *radiusStr = (radius >= 1000) ? [NSString stringWithFormat:@"%.1f km", radius * .001f] : [NSString stringWithFormat:@"%.0f m", radius];
     _radiusLabel.text = [@"Radius = " stringByAppendingString:radiusStr];
 }
@@ -119,11 +130,41 @@
     NSString *colorKey = dict.allKeys[row];
     if ([pickerView isEqual:_fillColorPickerView]) {
         self.fillColorTextField.text = colorKey;
-        self.fillColor = _fillColorDict[colorKey];
+        self.mapSelectorManager.fillColor = _fillColorDict[colorKey];
     } else if ([pickerView isEqual:_strokeColorPickerView]) {
         self.strokeColorTextField.text = colorKey;
-        self.strokeColor = _strokeColorDict[colorKey];
+        self.mapSelectorManager.strokeColor = _strokeColorDict[colorKey];
     }
+}
+
+#pragma mark - MKMapViewDelegate
+
+- (MKAnnotationView *)mapView:(MKMapView *)mapView
+            viewForAnnotation:(id <MKAnnotation>)annotation {
+    return [self.mapSelectorManager mapView:mapView
+                          viewForAnnotation:annotation];
+}
+
+- (void)mapView:(MKMapView *)mapView
+    annotationView:(MKAnnotationView *)annotationView
+didChangeDragState:(MKAnnotationViewDragState)newState
+      fromOldState:(MKAnnotationViewDragState)oldState {
+    [self.mapSelectorManager mapView:mapView
+                      annotationView:annotationView
+                  didChangeDragState:newState
+                        fromOldState:oldState];
+}
+
+- (MKOverlayRenderer *)mapView:(MKMapView *)mapView
+            rendererForOverlay:(id <MKOverlay>)overlay {
+    return [self.mapSelectorManager mapView:mapView
+                         rendererForOverlay:overlay];
+}
+
+- (void)        mapView:(MKMapView *)mapView
+regionDidChangeAnimated:(BOOL)animated {
+    [self.mapSelectorManager mapView:mapView
+             regionDidChangeAnimated:animated];
 }
 
 @end

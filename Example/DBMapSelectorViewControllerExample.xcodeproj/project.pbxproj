@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		10738F2840FBDB59EAA13087 /* DBMapSelectorManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 107387F94AEE3D756972E9F6 /* DBMapSelectorManager.m */; };
 		C3FDCD671AC57B350053FDC7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C3FDCD661AC57B350053FDC7 /* main.m */; };
 		C3FDCD6A1AC57B350053FDC7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C3FDCD691AC57B350053FDC7 /* AppDelegate.m */; };
 		C3FDCD701AC57B350053FDC7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C3FDCD6E1AC57B350053FDC7 /* Main.storyboard */; };
@@ -14,7 +15,6 @@
 		C3FDCD8F1AC57C2B0053FDC7 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C3FDCD8C1AC57C2B0053FDC7 /* ViewController.m */; };
 		C3FDCD901AC57C2B0053FDC7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C3FDCD8E1AC57C2B0053FDC7 /* Images.xcassets */; };
 		C3FDCD921AC57C710053FDC7 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C3FDCD911AC57C710053FDC7 /* MapKit.framework */; };
-		C3FDCD991AC57CE40053FDC7 /* DBMapSelectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C3FDCD981AC57CE40053FDC7 /* DBMapSelectorViewController.m */; };
 		C3FDCD9E1AC580990053FDC7 /* DBMapSelectorAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = C3FDCD9D1AC580990053FDC7 /* DBMapSelectorAnnotation.m */; };
 		C3FDCDA11AC581DE0053FDC7 /* DBMapSelectorOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = C3FDCDA01AC581DE0053FDC7 /* DBMapSelectorOverlay.m */; };
 		C3FDCDA41AC5830E0053FDC7 /* DBMapSelectorOverlayRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = C3FDCDA31AC5830E0053FDC7 /* DBMapSelectorOverlayRenderer.m */; };
@@ -23,6 +23,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		107387F94AEE3D756972E9F6 /* DBMapSelectorManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DBMapSelectorManager.m; sourceTree = "<group>"; };
+		107389BDDF274E8BAF877B0B /* DBMapSelectorManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBMapSelectorManager.h; sourceTree = "<group>"; };
 		C3FDCD611AC57B350053FDC7 /* DBMapSelectorViewControllerExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DBMapSelectorViewControllerExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C3FDCD651AC57B350053FDC7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C3FDCD661AC57B350053FDC7 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -34,8 +36,6 @@
 		C3FDCD8C1AC57C2B0053FDC7 /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		C3FDCD8E1AC57C2B0053FDC7 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		C3FDCD911AC57C710053FDC7 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
-		C3FDCD971AC57CE40053FDC7 /* DBMapSelectorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DBMapSelectorViewController.h; path = ../../Source/DBMapSelectorViewController.h; sourceTree = "<group>"; };
-		C3FDCD981AC57CE40053FDC7 /* DBMapSelectorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DBMapSelectorViewController.m; path = ../../Source/DBMapSelectorViewController.m; sourceTree = "<group>"; };
 		C3FDCD9C1AC580990053FDC7 /* DBMapSelectorAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBMapSelectorAnnotation.h; sourceTree = "<group>"; };
 		C3FDCD9D1AC580990053FDC7 /* DBMapSelectorAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DBMapSelectorAnnotation.m; sourceTree = "<group>"; };
 		C3FDCD9F1AC581DE0053FDC7 /* DBMapSelectorOverlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBMapSelectorOverlay.h; sourceTree = "<group>"; };
@@ -126,8 +126,8 @@
 				C3FDCDAB1AC6EF450053FDC7 /* DBMapSelectorGestureRecognizer.m */,
 				C3FDCD9A1AC5805B0053FDC7 /* MapSelectorAnnotation */,
 				C3FDCD9B1AC5805B0053FDC7 /* MapSelectorOverlay */,
-				C3FDCD971AC57CE40053FDC7 /* DBMapSelectorViewController.h */,
-				C3FDCD981AC57CE40053FDC7 /* DBMapSelectorViewController.m */,
+				107387F94AEE3D756972E9F6 /* DBMapSelectorManager.m */,
+				107389BDDF274E8BAF877B0B /* DBMapSelectorManager.h */,
 			);
 			name = DBMapSelectorViewController;
 			sourceTree = "<group>";
@@ -224,7 +224,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C3FDCD991AC57CE40053FDC7 /* DBMapSelectorViewController.m in Sources */,
 				C3FDCD8F1AC57C2B0053FDC7 /* ViewController.m in Sources */,
 				C3FDCDA41AC5830E0053FDC7 /* DBMapSelectorOverlayRenderer.m in Sources */,
 				C3FDCDA11AC581DE0053FDC7 /* DBMapSelectorOverlay.m in Sources */,
@@ -232,6 +231,7 @@
 				C3FDCD9E1AC580990053FDC7 /* DBMapSelectorAnnotation.m in Sources */,
 				C3FDCDAC1AC6EF450053FDC7 /* DBMapSelectorGestureRecognizer.m in Sources */,
 				C3FDCD671AC57B350053FDC7 /* main.m in Sources */,
+				10738F2840FBDB59EAA13087 /* DBMapSelectorManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -292,7 +292,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -328,7 +328,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";

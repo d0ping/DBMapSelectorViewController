@@ -6,9 +6,11 @@
 //  Copyright (c) 2015 Denis Bogatyrev. All rights reserved.
 //
 
-#import "DBMapSelectorViewController.h"
+#import "DBMapSelectorManager.h"
 
-@interface ViewController : DBMapSelectorViewController <DBMapSelectorViewControllerDelegate>
+@interface ViewController : UIViewController <DBMapSelectorManagerDelegate, MKMapViewDelegate>
+
+@property (nonatomic, weak) IBOutlet MKMapView          *mapView;
 
 @property (nonatomic, weak) IBOutlet UISwitch               *hiddenSwitch;
 

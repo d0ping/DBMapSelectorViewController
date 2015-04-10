@@ -8,12 +8,6 @@
     <content url="file://$MODULE_DIR$/../Source/DBMapSelectorGestureRecognizer.m">
       <sourceFolder url="file://$MODULE_DIR$/../Source/DBMapSelectorGestureRecognizer.m" isTestSource="false" />
     </content>
-    <content url="file://$MODULE_DIR$/../Source/DBMapSelectorViewController.h">
-      <sourceFolder url="file://$MODULE_DIR$/../Source/DBMapSelectorViewController.h" isTestSource="false" />
-    </content>
-    <content url="file://$MODULE_DIR$/../Source/DBMapSelectorViewController.m">
-      <sourceFolder url="file://$MODULE_DIR$/../Source/DBMapSelectorViewController.m" isTestSource="false" />
-    </content>
     <content url="file://$MODULE_DIR$/../Source/MapSelectorAnnotation">
       <sourceFolder url="file://$MODULE_DIR$/../Source/MapSelectorAnnotation" isTestSource="false" />
     </content>
