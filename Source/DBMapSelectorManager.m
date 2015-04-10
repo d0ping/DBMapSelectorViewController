@@ -6,13 +6,12 @@
 //  Copyright (c) 2015 Denis Bogatyrev. All rights reserved.
 //
 
-#import "DBMapSelectorViewController.h"
-
 #import "DBMapSelectorGestureRecognizer.h"
 
 #import "DBMapSelectorAnnotation.h"
 #import "DBMapSelectorOverlay.h"
 #import "DBMapSelectorOverlayRenderer.h"
+#import "DBMapSelectorManager.h"
 
 
 NSInteger const defaultRadius       = 1000;
@@ -20,7 +19,7 @@ NSInteger const defaultMinDistance  = 100;
 NSInteger const defaultMaxDistance  = 10000;
 
 
-@interface DBMapSelectorViewController () {
+@interface DBMapSelectorManager () {
     DBMapSelectorOverlay            *_selectorOverlay;
     DBMapSelectorOverlayRenderer    *_selectorOverlayRenderer;
 
@@ -33,7 +32,35 @@ NSInteger const defaultMaxDistance  = 10000;
 
 @end
 
-@implementation DBMapSelectorViewController
+@implementation DBMapSelectorManager
+
+- (void)setMapView:(MKMapView *)mapView {
+    _mapView = mapView;
+    [self prepareForFirstUse];
+}
+
+- (void)prepareForFirstUse {
+
+    [self selectorSetDefaults];
+
+    [self displaySelectorAnnotationIfNeeded];
+
+    _selectorOverlay = [[DBMapSelectorOverlay alloc] initWithCenterCoordinate:_circleCoordinate radius:_circleRadius];
+    [self.mapView addOverlay:_selectorOverlay];
+
+#ifdef DEBUG
+    _radiusTouchView = [[UIView alloc] initWithFrame:CGRectZero];
+    _radiusTouchView.backgroundColor = [[UIColor redColor] colorWithAlphaComponent:.5f];
+    _radiusTouchView.userInteractionEnabled = NO;
+//    [self.mapView addSubview:_radiusTouchView];
+#endif
+
+    _mapViewGestureEnabled = YES;
+    [self.mapView addGestureRecognizer:[self selectorGestureRecognizer]];
+
+    [self performSelector:@selector(recalculateRadiusTouchRect) withObject:nil afterDelay:.2f];
+
+}
 
 #pragma mark Defaults
 
@@ -47,28 +74,6 @@ NSInteger const defaultMaxDistance  = 10000;
 }
 
 #pragma mark - Life cycle
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    [self selectorSetDefaults];
-    
-    [self displaySelectorAnnotationIfNeeded];
-    
-    _selectorOverlay = [[DBMapSelectorOverlay alloc] initWithCenterCoordinate:_circleCoordinate radius:_circleRadius];
-    [self.mapView addOverlay:_selectorOverlay];
-    
-#ifdef DEBUG
-    _radiusTouchView = [[UIView alloc] initWithFrame:CGRectZero];
-    _radiusTouchView.backgroundColor = [[UIColor redColor] colorWithAlphaComponent:.5f];
-    _radiusTouchView.userInteractionEnabled = NO;
-//    [self.mapView addSubview:_radiusTouchView];
-#endif
-    
-    _mapViewGestureEnabled = YES;
-    [self.mapView addGestureRecognizer:[self selectorGestureRecognizer]];
-    
-    [self performSelector:@selector(recalculateRadiusTouchRect) withObject:nil afterDelay:.2f];
-}
 
 #pragma mark - GestureRecognizer
 
@@ -136,8 +141,9 @@ NSInteger const defaultMaxDistance  = 10000;
     if (_circleRadius!= MAX(MIN(circleRadius, _circleRadiusMax), _circleRadiusMin)) {
         _circleRadius = MAX(MIN(circleRadius, _circleRadiusMax), _circleRadiusMin);
         _selectorOverlay.radius = _circleRadius;
-        if (_delegate && [_delegate respondsToSelector:@selector(mapSelectorViewController:didChangeRadius:)]) {
-            [_delegate mapSelectorViewController:self didChangeRadius:_circleRadius];
+        if (_delegate && [_delegate respondsToSelector:@selector(mapSelectorManager:didChangeRadius:)]) {
+            [_delegate mapSelectorManager:self
+                          didChangeRadius:_circleRadius];
         }
     }
 }
@@ -174,8 +180,9 @@ NSInteger const defaultMaxDistance  = 10000;
             [self.mapView addOverlay:_selectorOverlay];
         }
         [self recalculateRadiusTouchRect];
-        if (_delegate && [_delegate respondsToSelector:@selector(mapSelectorViewController:didChangeCoordinate:)]) {
-            [_delegate mapSelectorViewController:self didChangeCoordinate:_circleCoordinate];
+        if (_delegate && [_delegate respondsToSelector:@selector(mapSelectorManager:didChangeCoordinate:)]) {
+            [_delegate mapSelectorManager:self
+                      didChangeCoordinate:_circleCoordinate];
         }
     }
 }
@@ -234,7 +241,7 @@ NSInteger const defaultMaxDistance  = 10000;
     MKMapPoint selectorRadiusPoint = MKMapPointMake(MKMapRectGetMaxX(selectorMapRect), MKMapRectGetMidY(selectorMapRect));
     MKCoordinateRegion coordinateRegion = MKCoordinateRegionMakeWithDistance(MKCoordinateForMapPoint(selectorRadiusPoint), _circleRadius *.3f, _circleRadius *.3f);
     BOOL needDisplay = MKMapRectContainsPoint(self.mapView.visibleMapRect, selectorRadiusPoint) && (_hidden == NO);
-    _radiusTouchRect = needDisplay ? [self.mapView convertRegion:coordinateRegion toRectToView:self.view] : CGRectZero;
+    _radiusTouchRect = needDisplay ? [self.mapView convertRegion:coordinateRegion toRectToView:self.mapView] : CGRectZero;
 #ifdef DEBUG
     _radiusTouchView.frame = _radiusTouchRect;
     _radiusTouchView.hidden = !needDisplay;

@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		10738F2840FBDB59EAA13087 /* DBMapSelectorManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 107387F94AEE3D756972E9F6 /* DBMapSelectorManager.m */; };
 		C3FDCD671AC57B350053FDC7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C3FDCD661AC57B350053FDC7 /* main.m */; };
 		C3FDCD6A1AC57B350053FDC7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C3FDCD691AC57B350053FDC7 /* AppDelegate.m */; };
 		C3FDCD701AC57B350053FDC7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C3FDCD6E1AC57B350053FDC7 /* Main.storyboard */; };
@@ -20,11 +19,10 @@
 		C3FDCDA41AC5830E0053FDC7 /* DBMapSelectorOverlayRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = C3FDCDA31AC5830E0053FDC7 /* DBMapSelectorOverlayRenderer.m */; };
 		C3FDCDA91AC6A2060053FDC7 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C3FDCDA81AC6A2060053FDC7 /* CoreLocation.framework */; };
 		C3FDCDAC1AC6EF450053FDC7 /* DBMapSelectorGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = C3FDCDAB1AC6EF450053FDC7 /* DBMapSelectorGestureRecognizer.m */; };
+		F7DDE3181AD77FB900A67502 /* DBMapSelectorManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F7DDE3171AD77FB900A67502 /* DBMapSelectorManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		107387F94AEE3D756972E9F6 /* DBMapSelectorManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DBMapSelectorManager.m; sourceTree = "<group>"; };
-		107389BDDF274E8BAF877B0B /* DBMapSelectorManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBMapSelectorManager.h; sourceTree = "<group>"; };
 		C3FDCD611AC57B350053FDC7 /* DBMapSelectorViewControllerExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DBMapSelectorViewControllerExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C3FDCD651AC57B350053FDC7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C3FDCD661AC57B350053FDC7 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -45,6 +43,8 @@
 		C3FDCDA81AC6A2060053FDC7 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		C3FDCDAA1AC6EF450053FDC7 /* DBMapSelectorGestureRecognizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DBMapSelectorGestureRecognizer.h; path = ../../Source/DBMapSelectorGestureRecognizer.h; sourceTree = "<group>"; };
 		C3FDCDAB1AC6EF450053FDC7 /* DBMapSelectorGestureRecognizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DBMapSelectorGestureRecognizer.m; path = ../../Source/DBMapSelectorGestureRecognizer.m; sourceTree = "<group>"; };
+		F7DDE3161AD77FB900A67502 /* DBMapSelectorManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBMapSelectorManager.h; sourceTree = "<group>"; };
+		F7DDE3171AD77FB900A67502 /* DBMapSelectorManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DBMapSelectorManager.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -122,12 +122,12 @@
 		C3FDCD931AC57C860053FDC7 /* DBMapSelectorViewController */ = {
 			isa = PBXGroup;
 			children = (
+				F7DDE3161AD77FB900A67502 /* DBMapSelectorManager.h */,
+				F7DDE3171AD77FB900A67502 /* DBMapSelectorManager.m */,
 				C3FDCDAA1AC6EF450053FDC7 /* DBMapSelectorGestureRecognizer.h */,
 				C3FDCDAB1AC6EF450053FDC7 /* DBMapSelectorGestureRecognizer.m */,
 				C3FDCD9A1AC5805B0053FDC7 /* MapSelectorAnnotation */,
 				C3FDCD9B1AC5805B0053FDC7 /* MapSelectorOverlay */,
-				107387F94AEE3D756972E9F6 /* DBMapSelectorManager.m */,
-				107389BDDF274E8BAF877B0B /* DBMapSelectorManager.h */,
 			);
 			name = DBMapSelectorViewController;
 			sourceTree = "<group>";
@@ -225,13 +225,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				C3FDCD8F1AC57C2B0053FDC7 /* ViewController.m in Sources */,
+				F7DDE3181AD77FB900A67502 /* DBMapSelectorManager.m in Sources */,
 				C3FDCDA41AC5830E0053FDC7 /* DBMapSelectorOverlayRenderer.m in Sources */,
 				C3FDCDA11AC581DE0053FDC7 /* DBMapSelectorOverlay.m in Sources */,
 				C3FDCD6A1AC57B350053FDC7 /* AppDelegate.m in Sources */,
 				C3FDCD9E1AC580990053FDC7 /* DBMapSelectorAnnotation.m in Sources */,
 				C3FDCDAC1AC6EF450053FDC7 /* DBMapSelectorGestureRecognizer.m in Sources */,
 				C3FDCD671AC57B350053FDC7 /* main.m in Sources */,
-				10738F2840FBDB59EAA13087 /* DBMapSelectorManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
