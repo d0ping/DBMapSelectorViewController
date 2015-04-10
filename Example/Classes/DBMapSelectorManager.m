@@ -8,7 +8,6 @@
 
 #import "DBMapSelectorGestureRecognizer.h"
 
-#import "DBMapSelectorAnnotation.h"
 #import "DBMapSelectorOverlay.h"
 #import "DBMapSelectorOverlayRenderer.h"
 #import "DBMapSelectorManager.h"
@@ -42,8 +41,6 @@ NSInteger const defaultMaxDistance  = 10000;
 - (void)prepareForFirstUse {
 
     [self selectorSetDefaults];
-
-    [self displaySelectorAnnotationIfNeeded];
 
     _selectorOverlay = [[DBMapSelectorOverlay alloc] initWithCenterCoordinate:_circleCoordinate radius:_circleRadius];
     [self.mapView addOverlay:_selectorOverlay];
@@ -167,13 +164,6 @@ NSInteger const defaultMaxDistance  = 10000;
 - (void)setCircleCoordinate:(CLLocationCoordinate2D)circleCoordinate {
     if ((_circleCoordinate.latitude != circleCoordinate.latitude) || (_circleCoordinate.longitude != circleCoordinate.longitude)) {
         _circleCoordinate = circleCoordinate;
-        
-        for (id<MKAnnotation> currentAnnotation in self.mapView.annotations) {
-            if ([currentAnnotation isKindOfClass:DBMapSelectorAnnotation.class]) {
-                [currentAnnotation setCoordinate:_circleCoordinate];
-                break;
-            }
-        }
         [self.mapView removeOverlay:_selectorOverlay];
         _selectorOverlay.coordinate = _circleCoordinate;
         if (_hidden == NO) {
@@ -209,7 +199,6 @@ NSInteger const defaultMaxDistance  = 10000;
         
         _selectorOverlay.editingCoordinate = (_editingType == DBMapSelectorEditingTypeCoordinateOnly || _editingType == DBMapSelectorEditingTypeFull);
         _selectorOverlay.editingRadius = (_editingType == DBMapSelectorEditingTypeRadiusOnly || _editingType == DBMapSelectorEditingTypeFull);
-        [self displaySelectorAnnotationIfNeeded];
     }
 }
 
@@ -217,7 +206,6 @@ NSInteger const defaultMaxDistance  = 10000;
     if (_hidden != hidden) {
         _hidden = hidden;
         
-        [self displaySelectorAnnotationIfNeeded];
         if (_hidden) {
             [self.mapView removeOverlay:_selectorOverlay];
         } else {
@@ -256,49 +244,18 @@ NSInteger const defaultMaxDistance  = 10000;
     [self.mapView setRegion:region animated:YES];
 }
 
-- (void)displaySelectorAnnotationIfNeeded {
-    for (id<MKAnnotation> annotation in self.mapView.annotations) {
-        if ([annotation isKindOfClass:[DBMapSelectorAnnotation class]]) {
-            [self.mapView removeAnnotation:annotation];
-        }
-    }
-    
-    if (_hidden == NO && ((_editingType == DBMapSelectorEditingTypeFull) || (_editingType == DBMapSelectorEditingTypeCoordinateOnly))) {
-        DBMapSelectorAnnotation *selectorAnnotation = [[DBMapSelectorAnnotation alloc] init];
-        selectorAnnotation.coordinate = _circleCoordinate;
-        [self.mapView addAnnotation:selectorAnnotation];
-    }
-}
-
 #pragma mark - MKMapView Delegate
 
-- (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation {
-    if ([annotation isKindOfClass:[DBMapSelectorAnnotation class]]) {
-        static NSString *selectorIdentifier = @"DBMapSelectorAnnotationView";
-        MKPinAnnotationView *selectorAnnotationView = (MKPinAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:selectorIdentifier];
-        if (selectorAnnotationView) {
-            selectorAnnotationView.annotation = annotation;
-        } else {
-            selectorAnnotationView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:selectorIdentifier];
-            selectorAnnotationView.pinColor = MKPinAnnotationColorGreen;
-            selectorAnnotationView.draggable = YES;
-        }
-        return selectorAnnotationView;
-    } else {
-        return nil;
-    }
-}
-
 - (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)annotationView didChangeDragState:(MKAnnotationViewDragState)newState fromOldState:(MKAnnotationViewDragState)oldState {
-    if ([annotationView.annotation isKindOfClass:[DBMapSelectorAnnotation class]]) {
-        if(newState == MKAnnotationViewDragStateStarting){
-            _mapViewGestureEnabled = YES;
-        }
-        if (newState == MKAnnotationViewDragStateEnding) {
-            self.circleCoordinate = annotationView.annotation.coordinate;
-            if (NO == MKMapRectContainsRect(mapView.visibleMapRect, _selectorOverlay.boundingMapRect)) {
-                [self performSelector:@selector(updateMapRegionForMapSelector) withObject:nil afterDelay:.3f];
-            }
+    if (newState == MKAnnotationViewDragStateStarting) {
+        _mapViewGestureEnabled = YES;
+    }
+    if (newState == MKAnnotationViewDragStateEnding) {
+        self.circleCoordinate = annotationView.annotation.coordinate;
+        if (NO == MKMapRectContainsRect(mapView.visibleMapRect, _selectorOverlay.boundingMapRect)) {
+            [self performSelector:@selector(updateMapRegionForMapSelector)
+                       withObject:nil
+                       afterDelay:.3f];
         }
     }
 }

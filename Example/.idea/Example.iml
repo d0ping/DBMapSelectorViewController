@@ -8,9 +8,6 @@
     <content url="file://$MODULE_DIR$/../Source/DBMapSelectorGestureRecognizer.m">
       <sourceFolder url="file://$MODULE_DIR$/../Source/DBMapSelectorGestureRecognizer.m" isTestSource="false" />
     </content>
-    <content url="file://$MODULE_DIR$/../Source/MapSelectorAnnotation">
-      <sourceFolder url="file://$MODULE_DIR$/../Source/MapSelectorAnnotation" isTestSource="false" />
-    </content>
     <content url="file://$MODULE_DIR$/../Source/MapSelectorOverlay">
       <sourceFolder url="file://$MODULE_DIR$/../Source/MapSelectorOverlay" isTestSource="false" />
     </content>

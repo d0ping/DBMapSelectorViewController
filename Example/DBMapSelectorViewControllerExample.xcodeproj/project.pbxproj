@@ -14,7 +14,6 @@
 		C3FDCD8F1AC57C2B0053FDC7 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C3FDCD8C1AC57C2B0053FDC7 /* ViewController.m */; };
 		C3FDCD901AC57C2B0053FDC7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C3FDCD8E1AC57C2B0053FDC7 /* Images.xcassets */; };
 		C3FDCD921AC57C710053FDC7 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C3FDCD911AC57C710053FDC7 /* MapKit.framework */; };
-		C3FDCD9E1AC580990053FDC7 /* DBMapSelectorAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = C3FDCD9D1AC580990053FDC7 /* DBMapSelectorAnnotation.m */; };
 		C3FDCDA11AC581DE0053FDC7 /* DBMapSelectorOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = C3FDCDA01AC581DE0053FDC7 /* DBMapSelectorOverlay.m */; };
 		C3FDCDA41AC5830E0053FDC7 /* DBMapSelectorOverlayRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = C3FDCDA31AC5830E0053FDC7 /* DBMapSelectorOverlayRenderer.m */; };
 		C3FDCDA91AC6A2060053FDC7 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C3FDCDA81AC6A2060053FDC7 /* CoreLocation.framework */; };
@@ -34,8 +33,6 @@
 		C3FDCD8C1AC57C2B0053FDC7 /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		C3FDCD8E1AC57C2B0053FDC7 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		C3FDCD911AC57C710053FDC7 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
-		C3FDCD9C1AC580990053FDC7 /* DBMapSelectorAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBMapSelectorAnnotation.h; sourceTree = "<group>"; };
-		C3FDCD9D1AC580990053FDC7 /* DBMapSelectorAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DBMapSelectorAnnotation.m; sourceTree = "<group>"; };
 		C3FDCD9F1AC581DE0053FDC7 /* DBMapSelectorOverlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBMapSelectorOverlay.h; sourceTree = "<group>"; };
 		C3FDCDA01AC581DE0053FDC7 /* DBMapSelectorOverlay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DBMapSelectorOverlay.m; sourceTree = "<group>"; };
 		C3FDCDA21AC5830E0053FDC7 /* DBMapSelectorOverlayRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBMapSelectorOverlayRenderer.h; sourceTree = "<group>"; };
@@ -126,20 +123,9 @@
 				F7DDE3171AD77FB900A67502 /* DBMapSelectorManager.m */,
 				C3FDCDAA1AC6EF450053FDC7 /* DBMapSelectorGestureRecognizer.h */,
 				C3FDCDAB1AC6EF450053FDC7 /* DBMapSelectorGestureRecognizer.m */,
-				C3FDCD9A1AC5805B0053FDC7 /* MapSelectorAnnotation */,
 				C3FDCD9B1AC5805B0053FDC7 /* MapSelectorOverlay */,
 			);
 			name = DBMapSelectorViewController;
-			sourceTree = "<group>";
-		};
-		C3FDCD9A1AC5805B0053FDC7 /* MapSelectorAnnotation */ = {
-			isa = PBXGroup;
-			children = (
-				C3FDCD9C1AC580990053FDC7 /* DBMapSelectorAnnotation.h */,
-				C3FDCD9D1AC580990053FDC7 /* DBMapSelectorAnnotation.m */,
-			);
-			name = MapSelectorAnnotation;
-			path = ../../Source/MapSelectorAnnotation;
 			sourceTree = "<group>";
 		};
 		C3FDCD9B1AC5805B0053FDC7 /* MapSelectorOverlay */ = {
@@ -229,7 +215,6 @@
 				C3FDCDA41AC5830E0053FDC7 /* DBMapSelectorOverlayRenderer.m in Sources */,
 				C3FDCDA11AC581DE0053FDC7 /* DBMapSelectorOverlay.m in Sources */,
 				C3FDCD6A1AC57B350053FDC7 /* AppDelegate.m in Sources */,
-				C3FDCD9E1AC580990053FDC7 /* DBMapSelectorAnnotation.m in Sources */,
 				C3FDCDAC1AC6EF450053FDC7 /* DBMapSelectorGestureRecognizer.m in Sources */,
 				C3FDCD671AC57B350053FDC7 /* main.m in Sources */,
 			);

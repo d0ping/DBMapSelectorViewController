@@ -139,12 +139,6 @@
 
 #pragma mark - MKMapViewDelegate
 
-- (MKAnnotationView *)mapView:(MKMapView *)mapView
-            viewForAnnotation:(id <MKAnnotation>)annotation {
-    return [self.mapSelectorManager mapView:mapView
-                          viewForAnnotation:annotation];
-}
-
 - (void)mapView:(MKMapView *)mapView
     annotationView:(MKAnnotationView *)annotationView
 didChangeDragState:(MKAnnotationViewDragState)newState
