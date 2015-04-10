@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="CIDR_MODULE" version="4">
+  <component name="NewModuleRootManager">
+    <content url="file://$MODULE_DIR$" />
+    <content url="file://$MODULE_DIR$/../Source/DBMapSelectorGestureRecognizer.h">
+      <sourceFolder url="file://$MODULE_DIR$/../Source/DBMapSelectorGestureRecognizer.h" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../Source/DBMapSelectorGestureRecognizer.m">
+      <sourceFolder url="file://$MODULE_DIR$/../Source/DBMapSelectorGestureRecognizer.m" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../Source/DBMapSelectorViewController.h">
+      <sourceFolder url="file://$MODULE_DIR$/../Source/DBMapSelectorViewController.h" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../Source/DBMapSelectorViewController.m">
+      <sourceFolder url="file://$MODULE_DIR$/../Source/DBMapSelectorViewController.m" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../Source/MapSelectorAnnotation">
+      <sourceFolder url="file://$MODULE_DIR$/../Source/MapSelectorAnnotation" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../Source/MapSelectorOverlay">
+      <sourceFolder url="file://$MODULE_DIR$/../Source/MapSelectorOverlay" isTestSource="false" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>
