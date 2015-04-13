@@ -80,6 +80,7 @@ NSInteger const defaultMaxDistance  = 10000;
     DBMapSelectorGestureRecognizer *selectorGestureRecognizer = [[DBMapSelectorGestureRecognizer alloc] init];
     
     selectorGestureRecognizer.touchesBeganCallback = ^(NSSet * touches, UIEvent * event) {
+//        NSLog(@"touchesBeganCallback");
         UITouch *touch = [touches anyObject];
         CGPoint touchPoint = [touch locationInView:weakSelf.mapView];
 //        NSLog(@"---- %@", CGRectContainsPoint(_selectorRadiusRect, p) ? @"Y" : @"N");
@@ -87,21 +88,25 @@ NSInteger const defaultMaxDistance  = 10000;
         CLLocationCoordinate2D coord = [weakSelf.mapView convertPoint:touchPoint toCoordinateFromView:weakSelf.mapView];
         MKMapPoint mapPoint = MKMapPointForCoordinate(coord);
         
-        if (CGRectContainsPoint(_radiusTouchRect, touchPoint) && _selectorOverlay.editingRadius && (weakSelf.hidden == NO)){
-            __block int t = 0;
+        if (CGRectContainsPoint(_radiusTouchRect, touchPoint) && _selectorOverlay.editingRadius && !weakSelf.hidden){
+            if (_delegate && [_delegate respondsToSelector:@selector(mapSelectorManagerWillBeginHandlingUserInteraction:)]) {
+                [_delegate mapSelectorManagerWillBeginHandlingUserInteraction:self];
+            }
             dispatch_async(dispatch_get_main_queue(), ^{
-                t = 1;
                 weakSelf.mapView.scrollEnabled = NO;
+                weakSelf.mapView.userInteractionEnabled = NO;
                 _mapViewGestureEnabled = NO;
             });
         } else {
             weakSelf.mapView.scrollEnabled = YES;
+            weakSelf.mapView.userInteractionEnabled = YES;
         }
         _prevMapPoint = mapPoint;
         _prevRadius = weakSelf.circleRadius;
     };
     
     selectorGestureRecognizer.touchesMovedCallback = ^(NSSet * touches, UIEvent * event) {
+//        NSLog(@"  touchesMovedCallback");
         if(!_mapViewGestureEnabled && [event allTouches].count == 1){
             UITouch *touch = [touches anyObject];
             CGPoint touchPoint = [touch locationInView:weakSelf.mapView];
@@ -109,24 +114,30 @@ NSInteger const defaultMaxDistance  = 10000;
             CLLocationCoordinate2D coord = [weakSelf.mapView convertPoint:touchPoint toCoordinateFromView:weakSelf.mapView];
             MKMapPoint mapPoint = MKMapPointForCoordinate(coord);
             
-            double meterDistance = (mapPoint.x - _prevMapPoint.x)/MKMapPointsPerMeterAtLatitude(self.mapView.centerCoordinate.latitude) + _prevRadius;
+            double meterDistance = (mapPoint.x - _prevMapPoint.x)/MKMapPointsPerMeterAtLatitude(weakSelf.mapView.centerCoordinate.latitude) + _prevRadius;
             weakSelf.circleRadius = MIN( MAX( meterDistance, weakSelf.circleRadiusMin ), weakSelf.circleRadiusMax );
-//            NSLog(@"%.2f", (float)meterDistance);
         }
     };
     
     selectorGestureRecognizer.touchesEndedCallback = ^(NSSet * touches, UIEvent * event) {
-        _mapViewGestureEnabled = YES;
-        weakSelf.mapView.zoomEnabled = YES;
+//        NSLog(@"    touchesEndedCallback");
         weakSelf.mapView.scrollEnabled = YES;
         weakSelf.mapView.userInteractionEnabled = YES;
-        
+
         if (_prevRadius != weakSelf.circleRadius) {
             [weakSelf recalculateRadiusTouchRect];
-            if (((_prevRadius / weakSelf.circleRadius) >= 1.25f) || ((_prevRadius / weakSelf.circleRadius) <= .75f)) {
+//            if (((_prevRadius / weakSelf.circleRadius) >= 1.25f) || ((_prevRadius / weakSelf.circleRadius) <= .75f)) {
                 [weakSelf updateMapRegionForMapSelector];
+//            }
+        }
+        if(!_mapViewGestureEnabled) {
+            if (_delegate && [_delegate respondsToSelector:@selector(mapSelectorManagerDidHandleUserInteraction:)]) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [_delegate mapSelectorManagerDidHandleUserInteraction:self];
+                });
             }
         }
+        _mapViewGestureEnabled = YES;
     };
     
     return selectorGestureRecognizer;
