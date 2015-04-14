@@ -118,11 +118,11 @@
     CGContextAddLineToPoint(context, overlayRect.origin.x + overlayRect.size.width * .5f, overlayRect.origin.y);
     CGContextStrokePath(context);
     
-    CGFloat fontSize = radius * zoomScale;
+    CGFloat fontSize = radius * zoomScale * 1.5;
     NSString *radiusStr = [self.class stringForRadius:radius];
-    CGPoint point = CGPointMake([self pointForMapPoint:mpoint].x + overlayRect.size.width * .18f, [self pointForMapPoint:mpoint].y - overlayRect.size.width * .03f);
+    CGPoint point = CGPointMake([self pointForMapPoint:mpoint].x + overlayRect.size.width * .10f, [self pointForMapPoint:mpoint].y - overlayRect.size.width * .03f);
     CGContextSetFillColorWithColor(context, self.strokeColor.CGColor);
-    CGContextSelectFont(context, "HelveticaNeue", fontSize, kCGEncodingMacRoman);
+    CGContextSelectFont(context, "HelveticaNeue-Bold", fontSize, kCGEncodingMacRoman);
     CGContextSetTextDrawingMode(context, kCGTextFill);
     CGAffineTransform xform = CGAffineTransformMake(1.0 / zoomScale, 0.0, 0.0, -1.0 / zoomScale, 0.0, 0.0);
     CGContextSetTextMatrix(context, xform);
