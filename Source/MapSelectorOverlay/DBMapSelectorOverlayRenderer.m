@@ -117,16 +117,24 @@
     CGContextMoveToPoint(context, overlayRect.origin.x + (_selectorOverlay.editingCoordinate ? overlayRect.size.width * .05f : .0f), overlayRect.origin.y);
     CGContextAddLineToPoint(context, overlayRect.origin.x + overlayRect.size.width * .5f, overlayRect.origin.y);
     CGContextStrokePath(context);
-    
-    CGFloat fontSize = radius * zoomScale * 1.5;
-    NSString *radiusStr = [self.class stringForRadius:radius];
-    CGPoint point = CGPointMake([self pointForMapPoint:mpoint].x + overlayRect.size.width * .10f, [self pointForMapPoint:mpoint].y - overlayRect.size.width * .03f);
-    CGContextSetFillColorWithColor(context, self.strokeColor.CGColor);
-    CGContextSelectFont(context, "HelveticaNeue-Bold", fontSize, kCGEncodingMacRoman);
-    CGContextSetTextDrawingMode(context, kCGTextFill);
-    CGAffineTransform xform = CGAffineTransformMake(1.0 / zoomScale, 0.0, 0.0, -1.0 / zoomScale, 0.0, 0.0);
-    CGContextSetTextMatrix(context, xform);
-    CGContextShowTextAtPoint(context, point.x, point.y, [radiusStr cStringUsingEncoding:NSUTF8StringEncoding], radiusStr.length);
+
+    if (_selectorOverlay.shouldShowRadiusText) {
+        CGFloat fontSize = radius * zoomScale;
+        NSString *radiusStr = [self.class stringForRadius:radius];
+        CGPoint point = CGPointMake([self pointForMapPoint:mpoint].x + overlayRect.size.width * .18f, [self pointForMapPoint:mpoint].y - overlayRect.size.width * .03f);
+        CGContextSetFillColorWithColor(context, self.strokeColor.CGColor);
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+        CGContextSelectFont(context, "HelveticaNeue-Bold", fontSize, kCGEncodingMacRoman);
+#pragma clang diagnostic pop
+        CGContextSetTextDrawingMode(context, kCGTextFill);
+        CGAffineTransform xform = CGAffineTransformMake(1.0 / zoomScale, 0.0, 0.0, -1.0 / zoomScale, 0.0, 0.0);
+        CGContextSetTextMatrix(context, xform);
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+        CGContextShowTextAtPoint(context, point.x, point.y, [radiusStr cStringUsingEncoding:NSUTF8StringEncoding], radiusStr.length);
+#pragma clang diagnostic pop
+    }
     
     UIGraphicsPopContext();
 }

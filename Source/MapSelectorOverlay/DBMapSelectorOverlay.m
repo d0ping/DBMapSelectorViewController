@@ -13,7 +13,8 @@
 
 @synthesize boundingMapRect = _boundingMapRect;
 
-- (instancetype)initWithCenterCoordinate:(CLLocationCoordinate2D)coordinate radius:(CLLocationDistance)radius {
+- (instancetype)initWithCenterCoordinate:(CLLocationCoordinate2D)coordinate
+                                  radius:(CLLocationDistance)radius {
     self = [super init];
     if (self) {
         _coordinate = coordinate;
@@ -22,6 +23,7 @@
         _editingCoordinate = YES;
         _editingRadius = YES;
         _fillInside = YES;
+        self.shouldShowRadiusText = YES;
     }
     return self;
 }

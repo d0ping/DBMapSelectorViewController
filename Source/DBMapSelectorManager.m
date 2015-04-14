@@ -42,7 +42,8 @@ NSInteger const defaultMaxDistance  = 10000;
 
     [self selectorSetDefaults];
 
-    _selectorOverlay = [[DBMapSelectorOverlay alloc] initWithCenterCoordinate:_circleCoordinate radius:_circleRadius];
+    _selectorOverlay = [[DBMapSelectorOverlay alloc] initWithCenterCoordinate:_circleCoordinate
+                                                                       radius:_circleRadius];
     [self.mapView addOverlay:_selectorOverlay];
 
 #ifdef DEBUG
@@ -231,6 +232,10 @@ NSInteger const defaultMaxDistance  = 10000;
         _fillInside = fillInside;
         _selectorOverlay.fillInside = fillInside;
     }
+}
+
+- (void)setShouldShowRadiusText:(BOOL)shouldShowRadiusText {
+    _selectorOverlay.shouldShowRadiusText = shouldShowRadiusText;
 }
 
 #pragma mark - Additional
