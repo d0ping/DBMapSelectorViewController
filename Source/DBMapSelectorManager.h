@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import <MapKit/MapKit.h>
 
+@class DBMapSelectorManager;
+
 /*! @brief Determines how the selector can be edited */
 typedef NS_ENUM(NSInteger, DBMapSelectorEditingType) {
     DBMapSelectorEditingTypeFull = 0,
@@ -17,19 +19,20 @@ typedef NS_ENUM(NSInteger, DBMapSelectorEditingType) {
     DBMapSelectorEditingTypeNone,
 };
 
-@class DBMapSelectorViewController;
-@protocol DBMapSelectorViewControllerDelegate <NSObject>
+@protocol DBMapSelectorManagerDelegate <NSObject>
 
 @optional
-- (void)mapSelectorViewController:(DBMapSelectorViewController *)mapSelectorViewController didChangeCoordinate:(CLLocationCoordinate2D)coordinate;
-- (void)mapSelectorViewController:(DBMapSelectorViewController *)mapSelectorViewController didChangeRadius:(CLLocationDistance)radius;
+- (void)mapSelectorManager:(DBMapSelectorManager *)mapSelectorViewController didChangeCoordinate:(CLLocationCoordinate2D)coordinate;
+- (void)mapSelectorManager:(DBMapSelectorManager *)mapSelectorViewController didChangeRadius:(CLLocationDistance)radius;
+- (void)mapSelectorManagerWillBeginHandlingUserInteraction:(DBMapSelectorManager *)mapSelectorViewController;
+- (void)mapSelectorManagerDidHandleUserInteraction:(DBMapSelectorManager *)mapSelectorViewController;
 
 @end
 
 @class DBMapSelectorOverlay;
-@interface DBMapSelectorViewController : UIViewController <MKMapViewDelegate>
+@interface DBMapSelectorManager : NSObject
 
-@property (nonatomic, weak) id<DBMapSelectorViewControllerDelegate> delegate;
+@property (nonatomic, weak) id<DBMapSelectorManagerDelegate> delegate;
 @property (nonatomic, weak) IBOutlet MKMapView          *mapView;
 
 /*!
@@ -72,6 +75,17 @@ typedef NS_ENUM(NSInteger, DBMapSelectorEditingType) {
  */
 @property (nonatomic, strong) UIColor                   *strokeColor;
 
+/**
+* Indicates whether the radius text should be displayed or not.
+*/
+@property (nonatomic) BOOL shouldShowRadiusText;
+
 - (void)updateMapRegionForMapSelector;
+
+#pragma mark - MKMapViewDelegate (forward when relevant)
+
+- (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)annotationView didChangeDragState:(MKAnnotationViewDragState)newState fromOldState:(MKAnnotationViewDragState)oldState;
+- (MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id <MKOverlay>)overlay;
+- (void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated;
 
 @end

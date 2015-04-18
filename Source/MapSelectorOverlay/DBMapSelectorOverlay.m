@@ -22,6 +22,7 @@
         _editingCoordinate = YES;
         _editingRadius = YES;
         _fillInside = YES;
+        _shouldShowRadiusText = YES;
     }
     return self;
 }
