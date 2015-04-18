@@ -10,7 +10,7 @@
 
 @interface ViewController : UIViewController <DBMapSelectorManagerDelegate, MKMapViewDelegate>
 
-@property (nonatomic, weak) IBOutlet MKMapView          *mapView;
+@property (nonatomic, weak) IBOutlet MKMapView              *mapView;
 
 @property (nonatomic, weak) IBOutlet UISwitch               *hiddenSwitch;
 
