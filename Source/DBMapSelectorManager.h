@@ -1,5 +1,5 @@
 //
-//  DBMapSelectorViewController.h
+//  DBMapSelectorManager.h
 //  DBMapSelectorViewControllerExample
 //
 //  Created by Denis Bogatyrev on 27.03.15.
@@ -33,7 +33,7 @@ typedef NS_ENUM(NSInteger, DBMapSelectorEditingType) {
 @interface DBMapSelectorManager : NSObject
 
 @property (nonatomic, weak) id<DBMapSelectorManagerDelegate> delegate;
-@property (nonatomic, weak) IBOutlet MKMapView          *mapView;
+@property (nonatomic, strong) MKMapView *mapView;
 
 /*!
  @brief Used to specify the selector editing type
@@ -75,15 +75,14 @@ typedef NS_ENUM(NSInteger, DBMapSelectorEditingType) {
  */
 @property (nonatomic, strong) UIColor                   *strokeColor;
 
-/**
-* Indicates whether the radius text should be displayed or not.
-*/
+/*! @brief Indicates whether the radius text should be displayed or not. */
 @property (nonatomic) BOOL shouldShowRadiusText;
 
-- (void)updateMapRegionForMapSelector;
+- (void)applySelectorSettings;
 
 #pragma mark - MKMapViewDelegate (forward when relevant)
 
+- (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation;
 - (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)annotationView didChangeDragState:(MKAnnotationViewDragState)newState fromOldState:(MKAnnotationViewDragState)oldState;
 - (MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id <MKOverlay>)overlay;
 - (void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated;

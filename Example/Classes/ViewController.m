@@ -34,15 +34,14 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    self.mapSelectorManager.mapView = self.mapView;
-
     _mapView.showsUserLocation = YES;
-    
-    // Set Begin Settings
+
+    // Set MapSelector with settings
+    self.mapSelectorManager.mapView = _mapView;
     self.mapSelectorManager.circleCoordinate = CLLocationCoordinate2DMake(55.75399400, 37.62209300);
     self.mapSelectorManager.circleRadius = 3000;
     self.mapSelectorManager.circleRadiusMax = 25000;
-    [self.mapSelectorManager updateMapRegionForMapSelector];
+    [self.mapSelectorManager applySelectorSettings];
     
     _fillColorDict = @{@"Orange": [UIColor orangeColor], @"Green": [UIColor greenColor],  @"Pure": [UIColor purpleColor],  @"Cyan": [UIColor cyanColor], @"Yellow": [UIColor yellowColor],  @"Magenta": [UIColor magentaColor]};
     _strokeColorDict = @{@"Dark Gray": [UIColor darkGrayColor], @"Black": [UIColor blackColor], @"Brown": [UIColor brownColor], @"Red": [UIColor redColor], @"Blue": [UIColor blueColor]};
@@ -139,26 +138,20 @@
 
 #pragma mark - MKMapViewDelegate
 
-- (void)mapView:(MKMapView *)mapView
-    annotationView:(MKAnnotationView *)annotationView
-didChangeDragState:(MKAnnotationViewDragState)newState
-      fromOldState:(MKAnnotationViewDragState)oldState {
-    [self.mapSelectorManager mapView:mapView
-                      annotationView:annotationView
-                  didChangeDragState:newState
-                        fromOldState:oldState];
+- (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation {
+    return [self.mapSelectorManager mapView:mapView viewForAnnotation:annotation];
 }
 
-- (MKOverlayRenderer *)mapView:(MKMapView *)mapView
-            rendererForOverlay:(id <MKOverlay>)overlay {
-    return [self.mapSelectorManager mapView:mapView
-                         rendererForOverlay:overlay];
+- (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)annotationView didChangeDragState:(MKAnnotationViewDragState)newState fromOldState:(MKAnnotationViewDragState)oldState {
+    [self.mapSelectorManager mapView:mapView annotationView:annotationView didChangeDragState:newState fromOldState:oldState];
 }
 
-- (void)        mapView:(MKMapView *)mapView
-regionDidChangeAnimated:(BOOL)animated {
-    [self.mapSelectorManager mapView:mapView
-             regionDidChangeAnimated:animated];
+- (MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id <MKOverlay>)overlay {
+    return [self.mapSelectorManager mapView:mapView rendererForOverlay:overlay];
+}
+
+- (void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated {
+    [self.mapSelectorManager mapView:mapView regionDidChangeAnimated:animated];
 }
 
 @end
