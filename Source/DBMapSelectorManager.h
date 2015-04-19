@@ -75,7 +75,7 @@ typedef NS_ENUM(NSInteger, DBMapSelectorEditingType) {
 @property (nonatomic, strong) UIColor                   *strokeColor;
 
 /*! @brief Indicates whether the radius text should be displayed or not. */
-@property (nonatomic) BOOL shouldShowRadiusText;
+@property (nonatomic) BOOL                              shouldShowRadiusText;
 
 - (void)applySelectorSettings;
 

@@ -15,7 +15,8 @@
 @synthesize touchesEndedCallback;
 
 - (instancetype)init {
-    if (self = [super init]) {
+    self = [super init];
+    if (self) {
         self.cancelsTouchesInView = NO;
         self.delaysTouchesEnded = NO;
     }
