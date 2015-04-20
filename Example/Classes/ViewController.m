@@ -95,15 +95,13 @@
     self.mapSelectorManager.hidden = !sender.on;
 }
 
-#pragma mark - DBMapSelectorViewController Delegate
+#pragma mark - DBMapSelectorManager Delegate
 
-- (void)mapSelectorManager:(DBMapSelectorManager *)mapSelectorViewController
-       didChangeCoordinate:(CLLocationCoordinate2D)coordinate {
+- (void)mapSelectorManager:(DBMapSelectorManager *)mapSelectorManager didChangeCoordinate:(CLLocationCoordinate2D)coordinate {
     _coordinateLabel.text = [NSString stringWithFormat:@"Coordinate = {%.5f, %.5f}", coordinate.latitude, coordinate.longitude];
 }
 
-- (void)mapSelectorManager:(DBMapSelectorManager *)mapSelectorViewController
-           didChangeRadius:(CLLocationDistance)radius {
+- (void)mapSelectorManager:(DBMapSelectorManager *)mapSelectorManager didChangeRadius:(CLLocationDistance)radius {
     NSString *radiusStr = (radius >= 1000) ? [NSString stringWithFormat:@"%.1f km", radius * .001f] : [NSString stringWithFormat:@"%.0f m", radius];
     _radiusLabel.text = [@"Radius = " stringByAppendingString:radiusStr];
 }

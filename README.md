@@ -25,18 +25,26 @@ To add DBMapSelectorViewController manually into your project:
 To use DBMapSelectorViewController in your project you should perform the following steps:
 
 1. Import DBMapSelectorManager.h on your UIViewController subclass. Your class must include MKMapView instance and be his delegate.
-2. In your class implementation create instance of DBMapSelectorManager class. In Initialization method specify mapView instance: 
+2. In your class implementation create instance of DBMapSelectorManager class. In Initialization method specify mapView instance. (see below 2)
+3. After initialization, set the initial map selector settings (center and radius) and apply settings. (see below 3)
+4. Forward following messages mapView delegate by the MapSelectorManager instance. (see below 4)
+
 ```objc
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    // (2)
     self.mapSelectorManager = [[DBMapSelectorManager alloc] initWithMapView:self.mapView];
-```
-3. After initialization, set the initial map selector settings (center and radius) and apply settings:
-```objc
+
+    // (3)
     self.mapSelectorManager.circleCoordinate = CLLocationCoordinate2DMake(55.75399400, 37.62209300);
     self.mapSelectorManager.circleRadius = 3000;
     [self.mapSelectorManager applySelectorSettings];
-```
-4. Forward following messages mapView delegate by the MapSelectorManager instance as shown below:
-```objc
+}
+
+...
+
+// (4)
 - (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation {
     return [self.mapSelectorManager mapView:mapView viewForAnnotation:annotation];
 }
@@ -54,40 +62,9 @@ To use DBMapSelectorViewController in your project you should perform the follow
 }
 ```
 
-
-
-1. Create a subclass of `DBMapSelectorViewController` class (for example `MyViewController` class name)
-2. Into your Storyboard file create an instance of ViewController and specify your `MyViewController` class as a parent
-3. Add MKMapView instance on ViewController on Storyboard
-4. Make a connection for MKMapView and mapView outlets property
-5. Set the ViewController as a delegate for the mapView
-6. Add your implementation on the `MyViewController.m`
-
-### Setting
-
-To customize the selector you should set selector properties in the `viewDidLoad` method of your `MyViewController`. Selector properties must be set after execute `[super viewDidLoad];`.
-
-After you have set the `circleCoordinate` and `circleRadius` parameters manually you must execute `updateMapRegionForMapSelector` method.
-
-For example, how it can be implemented:
-
-```objc
-- (void)viewDidLoad {
-    [super viewDidLoad];
-
-    self.circleCoordinate = CLLocationCoordinate2DMake(55.75399400, 37.62209300);
-    self.circleRadius = 2500;
-    self.circleRadiusMin = 500;
-    self.circleRadiusMax = 25000;
-    [self updateMapRegionForMapSelector];
-
-    self.fillColor = [UIColor purpleColor];
-    self.strokeColor = [UIColor darkGrayColor];
-}
-```
-
 ### Property list selector
 
+You can change additional MapSelector properties. Full properties list is shown below:
 - `DBMapSelectorEditingType editingType` - Used to specify the selector editing type. Property can equal one of four values:
   - `DBMapSelectorEditingTypeFull` allows to edit coordinate and radius,
   - `DBMapSelectorEditingTypeCoordinateOnly` allows to edit cooordinate only,
@@ -102,16 +79,18 @@ For example, how it can be implemented:
 - `UIColor *fillColor` - Used to specify the selector fill color. Color is used to fill the circular map region;
 - `UIColor *strokeColor` - Used to specify the selector stroke color. Color is used to delimit the circular map region.
 
-### DBMapSelectorViewControllerDelegate
+### DBMapSelectorManagerDelegate
 
-To be able to react when the main properties (coordinate and radius) of the selector will be changed you must become delegate DBMapSelectorViewController. DBMapSelectorViewControllerDelegate protocol you can see here:
+To be able to react when the main properties (coordinate and radius) of the selector will be changed you must become delegate DBMapSelectorManager. DBMapSelectorManagerDelegate protocol you can see here:
 
 ```objc
-@protocol DBMapSelectorViewControllerDelegate <NSObject>
+@protocol DBMapSelectorManagerDelegate <NSObject>
 
 @optional
-- (void)mapSelectorViewController:(DBMapSelectorViewController *)mapSelectorViewController didChangeCoordinate:(CLLocationCoordinate2D)coordinate;
-- (void)mapSelectorViewController:(DBMapSelectorViewController *)mapSelectorViewController didChangeRadius:(CLLocationDistance)radius;
+- (void)mapSelectorManager:(DBMapSelectorManager *)mapSelectorManager didChangeCoordinate:(CLLocationCoordinate2D)coordinate;
+- (void)mapSelectorManager:(DBMapSelectorManager *)mapSelectorManager didChangeRadius:(CLLocationDistance)radius;
+- (void)mapSelectorManagerWillBeginHandlingUserInteraction:(DBMapSelectorManager *)mapSelectorManager;
+- (void)mapSelectorManagerDidHandleUserInteraction:(DBMapSelectorManager *)mapSelectorManager;
 
 @end
 ```
@@ -119,11 +98,11 @@ To be able to react when the main properties (coordinate and radius) of the sele
 You can implement these methods in your `MyViewController` class in order to respond to these changes. For example, how it can be implemented in your class:
 
 ```objc
-- (void)mapSelectorViewController:(DBMapSelectorViewController *)mapSelectorViewController didChangeCoordinate:(CLLocationCoordinate2D)coordinate {
+- (void)mapSelectorManager:(DBMapSelectorManager *)mapSelectorManager didChangeCoordinate:(CLLocationCoordinate2D)coordinate {
     _coordinateLabel.text = [NSString stringWithFormat:@"Coordinate = {%.5f, %.5f}", coordinate.latitude, coordinate.longitude];
 }
 
-- (void)mapSelectorViewController:(DBMapSelectorViewController *)mapSelectorViewController didChangeRadius:(CLLocationDistance)radius {
+- (void)mapSelectorManager:(DBMapSelectorManager *)mapSelectorManager didChangeRadius:(CLLocationDistance)radius {
     NSString *radiusStr = (radius >= 1000) ? [NSString stringWithFormat:@"%.1f km", radius * .001f] : [NSString stringWithFormat:@"%.0f m", radius];
     _radiusLabel.text = [@"Radius = " stringByAppendingString:radiusStr];
 }

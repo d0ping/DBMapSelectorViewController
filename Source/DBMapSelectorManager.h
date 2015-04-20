@@ -21,10 +21,10 @@ typedef NS_ENUM(NSInteger, DBMapSelectorEditingType) {
 @protocol DBMapSelectorManagerDelegate <NSObject>
 
 @optional
-- (void)mapSelectorManager:(DBMapSelectorManager *)mapSelectorViewController didChangeCoordinate:(CLLocationCoordinate2D)coordinate;
-- (void)mapSelectorManager:(DBMapSelectorManager *)mapSelectorViewController didChangeRadius:(CLLocationDistance)radius;
-- (void)mapSelectorManagerWillBeginHandlingUserInteraction:(DBMapSelectorManager *)mapSelectorViewController;
-- (void)mapSelectorManagerDidHandleUserInteraction:(DBMapSelectorManager *)mapSelectorViewController;
+- (void)mapSelectorManager:(DBMapSelectorManager *)mapSelectorManager didChangeCoordinate:(CLLocationCoordinate2D)coordinate;
+- (void)mapSelectorManager:(DBMapSelectorManager *)mapSelectorManager didChangeRadius:(CLLocationDistance)radius;
+- (void)mapSelectorManagerWillBeginHandlingUserInteraction:(DBMapSelectorManager *)mapSelectorManager;
+- (void)mapSelectorManagerDidHandleUserInteraction:(DBMapSelectorManager *)mapSelectorManager;
 
 @end
 
