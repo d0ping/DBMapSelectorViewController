@@ -286,6 +286,7 @@ NSInteger const defaultMaxDistance  = 10000;
             selectorAnnotationView.pinColor = MKPinAnnotationColorGreen;
             selectorAnnotationView.draggable = YES;
         }
+        selectorAnnotationView.selected = YES;
         return selectorAnnotationView;
     } else {
         return nil;

@@ -96,6 +96,17 @@ You can implement these methods in your `MyViewController` class in order to res
     _radiusLabel.text = [@"Radius = " stringByAppendingString:radiusStr];
 }
 ```
+## Version history
+### 1.0.0 
+Is first version.
+
+### 1.1.0
+- Added Outside circle mode.
+
+### 1.2.0
+- The DBMapSelectorViewController was replaced by a DBMapSelectorManager. This change allows the functionality provided by this component to be more easily integrated into existing projects where, for instance, the target view controller already inherits from another custom view controller. (Thank Marcelo Schroeder for giving solution).
+- Improved user experience when moving the map selector.
+- Fixed bug with incorrect determinating zoom button position in some cases.
 
 ## Contact
 
