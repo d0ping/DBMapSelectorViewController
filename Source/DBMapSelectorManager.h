@@ -32,7 +32,7 @@ typedef NS_ENUM(NSInteger, DBMapSelectorEditingType) {
 @interface DBMapSelectorManager : NSObject
 
 @property (nonatomic, weak) id<DBMapSelectorManagerDelegate> delegate;
-@property (nonatomic, strong) MKMapView *mapView;
+@property (nonatomic, strong, readonly) MKMapView       *mapView;
 
 /*!
  @brief Used to specify the selector editing type
@@ -77,6 +77,7 @@ typedef NS_ENUM(NSInteger, DBMapSelectorEditingType) {
 /*! @brief Indicates whether the radius text should be displayed or not. */
 @property (nonatomic) BOOL                              shouldShowRadiusText;
 
+- (instancetype)initWithMapView:(MKMapView *)mapView;
 - (void)applySelectorSettings;
 
 #pragma mark - MKMapViewDelegate (forward when relevant)

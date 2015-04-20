@@ -34,9 +34,13 @@ NSInteger const defaultMaxDistance  = 10000;
 
 @implementation DBMapSelectorManager
 
-- (void)setMapView:(MKMapView *)mapView {
-    _mapView = mapView;
-    [self prepareForFirstUse];
+- (instancetype)initWithMapView:(MKMapView *)mapView {
+    self = [super init];
+    if (self) {
+        _mapView = mapView;
+        [self prepareForFirstUse];
+    }
+    return self;
 }
 
 - (void)prepareForFirstUse {
@@ -53,7 +57,6 @@ NSInteger const defaultMaxDistance  = 10000;
 
     _mapViewGestureEnabled = YES;
     [self.mapView addGestureRecognizer:[self selectorGestureRecognizer]];
-
 }
 
 #pragma mark Defaults

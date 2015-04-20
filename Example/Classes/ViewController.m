@@ -7,23 +7,24 @@
 //
 
 #import "ViewController.h"
+#import "DBMapSelectorManager.h"
 
-@interface ViewController () <UIPickerViewDataSource, UIPickerViewDelegate> {
+@interface ViewController () <UIPickerViewDataSource, UIPickerViewDelegate, DBMapSelectorManagerDelegate> {
     NSDictionary        *_fillColorDict;
     NSDictionary        *_strokeColorDict;
     UIPickerView        *_fillColorPickerView;
     UIPickerView        *_strokeColorPickerView;
 }
 
-@property (nonatomic) DBMapSelectorManager *mapSelectorManager;
+@property (nonatomic, strong) DBMapSelectorManager      *mapSelectorManager;
 
 @end
 
 @implementation ViewController
 
 - (DBMapSelectorManager *)mapSelectorManager {
-    if (!_mapSelectorManager) {
-        _mapSelectorManager = [DBMapSelectorManager new];
+    if (nil == _mapSelectorManager) {
+        _mapSelectorManager = [[DBMapSelectorManager alloc] initWithMapView:self.mapView];
         _mapSelectorManager.delegate = self;
     }
     return _mapSelectorManager;
@@ -36,8 +37,7 @@
 
     _mapView.showsUserLocation = YES;
 
-    // Set MapSelector with settings
-    self.mapSelectorManager.mapView = _mapView;
+    // Set map selector settings
     self.mapSelectorManager.circleCoordinate = CLLocationCoordinate2DMake(55.75399400, 37.62209300);
     self.mapSelectorManager.circleRadius = 3000;
     self.mapSelectorManager.circleRadiusMax = 25000;

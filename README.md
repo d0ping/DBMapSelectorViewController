@@ -24,6 +24,38 @@ To add DBMapSelectorViewController manually into your project:
 
 To use DBMapSelectorViewController in your project you should perform the following steps:
 
+1. Import DBMapSelectorManager.h on your UIViewController subclass. Your class must include MKMapView instance and be his delegate.
+2. In your class implementation create instance of DBMapSelectorManager class. In Initialization method specify mapView instance: 
+```objc
+    self.mapSelectorManager = [[DBMapSelectorManager alloc] initWithMapView:self.mapView];
+```
+3. After initialization, set the initial map selector settings (center and radius) and apply settings:
+```objc
+    self.mapSelectorManager.circleCoordinate = CLLocationCoordinate2DMake(55.75399400, 37.62209300);
+    self.mapSelectorManager.circleRadius = 3000;
+    [self.mapSelectorManager applySelectorSettings];
+```
+4. Forward following messages mapView delegate by the MapSelectorManager instance as shown below:
+```objc
+- (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation {
+    return [self.mapSelectorManager mapView:mapView viewForAnnotation:annotation];
+}
+
+- (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)annotationView didChangeDragState:(MKAnnotationViewDragState)newState fromOldState:(MKAnnotationViewDragState)oldState {
+    [self.mapSelectorManager mapView:mapView annotationView:annotationView didChangeDragState:newState fromOldState:oldState];
+}
+
+- (MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id <MKOverlay>)overlay {
+    return [self.mapSelectorManager mapView:mapView rendererForOverlay:overlay];
+}
+
+- (void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated {
+    [self.mapSelectorManager mapView:mapView regionDidChangeAnimated:animated];
+}
+```
+
+
+
 1. Create a subclass of `DBMapSelectorViewController` class (for example `MyViewController` class name)
 2. Into your Storyboard file create an instance of ViewController and specify your `MyViewController` class as a parent
 3. Add MKMapView instance on ViewController on Storyboard
@@ -97,14 +129,12 @@ You can implement these methods in your `MyViewController` class in order to res
 }
 ```
 ## Version history
-### 1.0.0 
-Is first version.
 
 ### 1.1.0
 - Added Outside circle mode.
 
 ### 1.2.0
-- The DBMapSelectorViewController was replaced by a DBMapSelectorManager. This change allows the functionality provided by this component to be more easily integrated into existing projects where, for instance, the target view controller already inherits from another custom view controller. (Thank Marcelo Schroeder for giving solution).
+- The DBMapSelectorViewController was replaced by a DBMapSelectorManager. This change allows the functionality provided by this component to be more easily integrated into existing projects where, for instance, the target view controller already inherits from another custom view controller. (Thank [Marcelo Schroeder](https://github.com/marcelo-schroeder) for giving solution).
 - Improved user experience when moving the map selector.
 - Fixed bug with incorrect determinating zoom button position in some cases.
 

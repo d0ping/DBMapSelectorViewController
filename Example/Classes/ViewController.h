@@ -6,9 +6,10 @@
 //  Copyright (c) 2015 Denis Bogatyrev. All rights reserved.
 //
 
-#import "DBMapSelectorManager.h"
+#import <UIKit/UIKit.h>
+#import <MapKit/MapKit.h>
 
-@interface ViewController : UIViewController <DBMapSelectorManagerDelegate, MKMapViewDelegate>
+@interface ViewController : UIViewController <MKMapViewDelegate>
 
 @property (nonatomic, weak) IBOutlet MKMapView              *mapView;
 
