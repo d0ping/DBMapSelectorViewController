@@ -16,6 +16,7 @@
 @property (nonatomic, assign) BOOL                              editingCoordinate;
 @property (nonatomic, assign) BOOL                              editingRadius;
 @property (nonatomic, assign) BOOL                              fillInside;
+@property (nonatomic) BOOL                                      shouldShowRadiusText;
 
 - (instancetype)initWithCenterCoordinate:(CLLocationCoordinate2D)coordinate radius:(CLLocationDistance)radius;
 

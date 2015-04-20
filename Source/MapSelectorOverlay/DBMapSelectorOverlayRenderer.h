@@ -12,5 +12,6 @@
 @interface DBMapSelectorOverlayRenderer : MKCircleRenderer
 
 - (instancetype)initWithSelectorOverlay:(DBMapSelectorOverlay *)selectorOverlay;
++ (NSString *)stringForRadius:(CLLocationDistance)a_radius;
 
 @end

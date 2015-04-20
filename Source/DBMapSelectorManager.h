@@ -1,13 +1,14 @@
 //
-//  DBMapSelectorViewController.h
+//  DBMapSelectorManager.h
 //  DBMapSelectorViewControllerExample
 //
 //  Created by Denis Bogatyrev on 27.03.15.
 //  Copyright (c) 2015 Denis Bogatyrev. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
 #import <MapKit/MapKit.h>
+
+@class DBMapSelectorManager;
 
 /*! @brief Determines how the selector can be edited */
 typedef NS_ENUM(NSInteger, DBMapSelectorEditingType) {
@@ -17,20 +18,21 @@ typedef NS_ENUM(NSInteger, DBMapSelectorEditingType) {
     DBMapSelectorEditingTypeNone,
 };
 
-@class DBMapSelectorViewController;
-@protocol DBMapSelectorViewControllerDelegate <NSObject>
+@protocol DBMapSelectorManagerDelegate <NSObject>
 
 @optional
-- (void)mapSelectorViewController:(DBMapSelectorViewController *)mapSelectorViewController didChangeCoordinate:(CLLocationCoordinate2D)coordinate;
-- (void)mapSelectorViewController:(DBMapSelectorViewController *)mapSelectorViewController didChangeRadius:(CLLocationDistance)radius;
+- (void)mapSelectorManager:(DBMapSelectorManager *)mapSelectorManager didChangeCoordinate:(CLLocationCoordinate2D)coordinate;
+- (void)mapSelectorManager:(DBMapSelectorManager *)mapSelectorManager didChangeRadius:(CLLocationDistance)radius;
+- (void)mapSelectorManagerWillBeginHandlingUserInteraction:(DBMapSelectorManager *)mapSelectorManager;
+- (void)mapSelectorManagerDidHandleUserInteraction:(DBMapSelectorManager *)mapSelectorManager;
 
 @end
 
 @class DBMapSelectorOverlay;
-@interface DBMapSelectorViewController : UIViewController <MKMapViewDelegate>
+@interface DBMapSelectorManager : NSObject
 
-@property (nonatomic, weak) id<DBMapSelectorViewControllerDelegate> delegate;
-@property (nonatomic, weak) IBOutlet MKMapView          *mapView;
+@property (nonatomic, weak) id<DBMapSelectorManagerDelegate> delegate;
+@property (nonatomic, strong, readonly) MKMapView       *mapView;
 
 /*!
  @brief Used to specify the selector editing type
@@ -72,6 +74,17 @@ typedef NS_ENUM(NSInteger, DBMapSelectorEditingType) {
  */
 @property (nonatomic, strong) UIColor                   *strokeColor;
 
-- (void)updateMapRegionForMapSelector;
+/*! @brief Indicates whether the radius text should be displayed or not. */
+@property (nonatomic) BOOL                              shouldShowRadiusText;
+
+- (instancetype)initWithMapView:(MKMapView *)mapView;
+- (void)applySelectorSettings;
+
+#pragma mark - MKMapViewDelegate (forward when relevant)
+
+- (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation;
+- (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)annotationView didChangeDragState:(MKAnnotationViewDragState)newState fromOldState:(MKAnnotationViewDragState)oldState;
+- (MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id <MKOverlay>)overlay;
+- (void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated;
 
 @end

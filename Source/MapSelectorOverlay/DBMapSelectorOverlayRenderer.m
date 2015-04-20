@@ -68,8 +68,9 @@
 
 - (void)drawMapRect:(MKMapRect)mapRect zoomScale:(MKZoomScale)zoomScale inContext:(CGContextRef)context {
     MKMapPoint mpoint = MKMapPointForCoordinate([[self overlay] coordinate]);
-    
-    CGFloat radiusAtLatitude = (_selectorOverlay.radius)*MKMapPointsPerMeterAtLatitude([[self overlay] coordinate].latitude);
+
+    CLLocationDistance radius = _selectorOverlay.radius;
+    CGFloat radiusAtLatitude = radius * MKMapPointsPerMeterAtLatitude([[self overlay] coordinate].latitude);
     
     MKMapRect circlebounds = MKMapRectMake(mpoint.x, mpoint.y, radiusAtLatitude *2, radiusAtLatitude * 2);
     CGRect overlayRect = [self rectForMapRect:circlebounds];
@@ -116,26 +117,39 @@
     CGContextMoveToPoint(context, overlayRect.origin.x + (_selectorOverlay.editingCoordinate ? overlayRect.size.width * .05f : .0f), overlayRect.origin.y);
     CGContextAddLineToPoint(context, overlayRect.origin.x + overlayRect.size.width * .5f, overlayRect.origin.y);
     CGContextStrokePath(context);
-    
-    CGFloat fontSize = _selectorOverlay.radius * zoomScale;
-    NSString *radiusStr;
-    if (_selectorOverlay.radius >= 1000) {
-        NSString *diatanceOfKmStr = [NSString stringWithFormat:@"%.1f", _selectorOverlay.radius * .001f];
-        radiusStr = [NSString stringWithFormat:@"%@ km", diatanceOfKmStr];
-    } else {
-        NSString *diatanceOfMeterStr = [NSString stringWithFormat:@"%.0f", _selectorOverlay.radius];
-        radiusStr = [NSString stringWithFormat:@"%@ m", diatanceOfMeterStr];
+
+    if (_selectorOverlay.shouldShowRadiusText) {
+        CGFloat fontSize = radius * zoomScale;
+        NSString *radiusStr = [self.class stringForRadius:radius];
+        CGPoint point = CGPointMake([self pointForMapPoint:mpoint].x + overlayRect.size.width * .18f, [self pointForMapPoint:mpoint].y - overlayRect.size.width * .03f);
+        CGContextSetFillColorWithColor(context, self.strokeColor.CGColor);
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+        CGContextSelectFont(context, "HelveticaNeue-Bold", fontSize, kCGEncodingMacRoman);
+#pragma clang diagnostic pop
+        CGContextSetTextDrawingMode(context, kCGTextFill);
+        CGAffineTransform xform = CGAffineTransformMake(1.0 / zoomScale, 0.0, 0.0, -1.0 / zoomScale, 0.0, 0.0);
+        CGContextSetTextMatrix(context, xform);
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+        CGContextShowTextAtPoint(context, point.x, point.y, [radiusStr cStringUsingEncoding:NSUTF8StringEncoding], radiusStr.length);
+#pragma clang diagnostic pop
     }
-    CGPoint point = CGPointMake([self pointForMapPoint:mpoint].x + overlayRect.size.width * .18f, [self pointForMapPoint:mpoint].y - overlayRect.size.width * .03f);
-    CGContextSetFillColorWithColor(context, self.strokeColor.CGColor);
-    CGContextSelectFont(context, "HelveticaNeue", fontSize, kCGEncodingMacRoman);
-    CGContextSetTextDrawingMode(context, kCGTextFill);
-    CGAffineTransform xform = CGAffineTransformMake(1.0 / zoomScale, 0.0, 0.0, -1.0 / zoomScale, 0.0, 0.0);
-    CGContextSetTextMatrix(context, xform);
-    CGContextShowTextAtPoint(context, point.x, point.y, [radiusStr cStringUsingEncoding:NSUTF8StringEncoding], radiusStr.length);
     
     UIGraphicsPopContext();
 }
 
++ (NSString *)stringForRadius:(CLLocationDistance)a_radius {
+    NSString *radiusStr;
+    if (a_radius >= 1000) {
+        NSString *diatanceOfKmStr = [NSString stringWithFormat:@"%.1f", a_radius * .001f];
+        radiusStr = [NSString stringWithFormat:NSLocalizedString(@"%@ km", @"RADIUS_IN_KILOMETRES km"), diatanceOfKmStr];
+    } else {
+        NSString *diatanceOfMeterStr = [NSString stringWithFormat:@"%.0f",
+                                                                  a_radius];
+        radiusStr = [NSString stringWithFormat:NSLocalizedString(@"%@ m", @"RADIUS IN METRES m"), diatanceOfMeterStr];
+    }
+    return radiusStr;
+}
 
 @end

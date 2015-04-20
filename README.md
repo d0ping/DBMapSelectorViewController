@@ -24,38 +24,60 @@ To add DBMapSelectorViewController manually into your project:
 
 To use DBMapSelectorViewController in your project you should perform the following steps:
 
-1. Create a subclass of `DBMapSelectorViewController` class (for example `MyViewController` class name)
-2. Into your Storyboard file create an instance of ViewController and specify your `MyViewController` class as a parent
-3. Add MKMapView instance on ViewController on Storyboard
-4. Make a connection for MKMapView and mapView outlets property
-5. Set the ViewController as a delegate for the mapView
-6. Add your implementation on the `MyViewController.m`
-
-### Setting
-
-To customize the selector you should set selector properties in the `viewDidLoad` method of your `MyViewController`. Selector properties must be set after execute `[super viewDidLoad];`.
-
-After you have set the `circleCoordinate` and `circleRadius` parameters manually you must execute `updateMapRegionForMapSelector` method.
-
-For example, how it can be implemented:
+1. Import DBMapSelectorManager.h on your UIViewController subclass. Your class must include MKMapView instance and be his delegate.
+2. In your class implementation create instance of DBMapSelectorManager class. In Initialization method specify mapView instance. Assign your class as the delegate mapSelectorManager if needed.
+3. After initialization, set the initial map selector settings (center and radius) and apply settings.
+4. Forward following messages mapView delegate by the MapSelectorManager instance.
 
 ```objc
+...
+// (1)
+#import "DBMapSelectorManager.h"
+
+@interface ViewController () <DBMapSelectorManagerDelegate>
+@property (nonatomic, strong) DBMapSelectorManager *mapSelectorManager;
+@end
+
+@implementation ViewController
+
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    // (2)
+    self.mapSelectorManager = [[DBMapSelectorManager alloc] initWithMapView:self.mapView];
+    self.mapSelectorManager.delegate = self;
 
-    self.circleCoordinate = CLLocationCoordinate2DMake(55.75399400, 37.62209300);
-    self.circleRadius = 2500;
-    self.circleRadiusMin = 500;
-    self.circleRadiusMax = 25000;
-    [self updateMapRegionForMapSelector];
-
-    self.fillColor = [UIColor purpleColor];
-    self.strokeColor = [UIColor darkGrayColor];
+    // (3)
+    self.mapSelectorManager.circleCoordinate = CLLocationCoordinate2DMake(55.75399400, 37.62209300);
+    self.mapSelectorManager.circleRadius = 3000;
+    [self.mapSelectorManager applySelectorSettings];
 }
+
+...
+
+// (4)
+- (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation {
+    return [self.mapSelectorManager mapView:mapView viewForAnnotation:annotation];
+}
+
+- (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)annotationView didChangeDragState:(MKAnnotationViewDragState)newState fromOldState:(MKAnnotationViewDragState)oldState {
+    [self.mapSelectorManager mapView:mapView annotationView:annotationView didChangeDragState:newState fromOldState:oldState];
+}
+
+- (MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id <MKOverlay>)overlay {
+    return [self.mapSelectorManager mapView:mapView rendererForOverlay:overlay];
+}
+
+- (void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated {
+    [self.mapSelectorManager mapView:mapView regionDidChangeAnimated:animated];
+}
+
+@end
 ```
 
 ### Property list selector
 
+You can change additional MapSelector properties. Full properties list is shown below:
 - `DBMapSelectorEditingType editingType` - Used to specify the selector editing type. Property can equal one of four values:
   - `DBMapSelectorEditingTypeFull` allows to edit coordinate and radius,
   - `DBMapSelectorEditingTypeCoordinateOnly` allows to edit cooordinate only,
@@ -68,18 +90,21 @@ For example, how it can be implemented:
 - `BOOL hidden` - Used to hide or show selector. Default is NO;
 - `BOOL fillInside` - Used to switching between inside or outside filling;
 - `UIColor *fillColor` - Used to specify the selector fill color. Color is used to fill the circular map region;
-- `UIColor *strokeColor` - Used to specify the selector stroke color. Color is used to delimit the circular map region.
+- `UIColor *strokeColor` - Used to specify the selector stroke color. Color is used to delimit the circular map region;
+- `BOOL shouldShowRadiusText` - Indicates whether the radius text should be displayed or not.
 
-### DBMapSelectorViewControllerDelegate
+### DBMapSelectorManagerDelegate
 
-To be able to react when the main properties (coordinate and radius) of the selector will be changed you must become delegate DBMapSelectorViewController. DBMapSelectorViewControllerDelegate protocol you can see here:
+To be able to react when the main properties (coordinate and radius) of the selector will be changed you must become delegate DBMapSelectorManager. DBMapSelectorManagerDelegate protocol you can see here:
 
 ```objc
-@protocol DBMapSelectorViewControllerDelegate <NSObject>
+@protocol DBMapSelectorManagerDelegate <NSObject>
 
 @optional
-- (void)mapSelectorViewController:(DBMapSelectorViewController *)mapSelectorViewController didChangeCoordinate:(CLLocationCoordinate2D)coordinate;
-- (void)mapSelectorViewController:(DBMapSelectorViewController *)mapSelectorViewController didChangeRadius:(CLLocationDistance)radius;
+- (void)mapSelectorManager:(DBMapSelectorManager *)mapSelectorManager didChangeCoordinate:(CLLocationCoordinate2D)coordinate;
+- (void)mapSelectorManager:(DBMapSelectorManager *)mapSelectorManager didChangeRadius:(CLLocationDistance)radius;
+- (void)mapSelectorManagerWillBeginHandlingUserInteraction:(DBMapSelectorManager *)mapSelectorManager;
+- (void)mapSelectorManagerDidHandleUserInteraction:(DBMapSelectorManager *)mapSelectorManager;
 
 @end
 ```
@@ -87,15 +112,24 @@ To be able to react when the main properties (coordinate and radius) of the sele
 You can implement these methods in your `MyViewController` class in order to respond to these changes. For example, how it can be implemented in your class:
 
 ```objc
-- (void)mapSelectorViewController:(DBMapSelectorViewController *)mapSelectorViewController didChangeCoordinate:(CLLocationCoordinate2D)coordinate {
+- (void)mapSelectorManager:(DBMapSelectorManager *)mapSelectorManager didChangeCoordinate:(CLLocationCoordinate2D)coordinate {
     _coordinateLabel.text = [NSString stringWithFormat:@"Coordinate = {%.5f, %.5f}", coordinate.latitude, coordinate.longitude];
 }
 
-- (void)mapSelectorViewController:(DBMapSelectorViewController *)mapSelectorViewController didChangeRadius:(CLLocationDistance)radius {
+- (void)mapSelectorManager:(DBMapSelectorManager *)mapSelectorManager didChangeRadius:(CLLocationDistance)radius {
     NSString *radiusStr = (radius >= 1000) ? [NSString stringWithFormat:@"%.1f km", radius * .001f] : [NSString stringWithFormat:@"%.0f m", radius];
     _radiusLabel.text = [@"Radius = " stringByAppendingString:radiusStr];
 }
 ```
+## Version history
+
+### 1.2.0
+- The DBMapSelectorViewController was replaced by a DBMapSelectorManager. This change allows the functionality provided by this component to be more easily integrated into existing projects where, for instance, the target view controller already inherits from another custom view controller. (Thank [Marcelo Schroeder](https://github.com/marcelo-schroeder) for giving solution).
+- Improved user experience when moving the map selector.
+- Fixed bug with incorrect determinating zoom button position in some cases.
+
+### 1.1.0
+- Added Outside circle mode.
 
 ## Contact
 
