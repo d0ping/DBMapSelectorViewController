@@ -25,16 +25,27 @@ To add DBMapSelectorViewController manually into your project:
 To use DBMapSelectorViewController in your project you should perform the following steps:
 
 1. Import DBMapSelectorManager.h on your UIViewController subclass. Your class must include MKMapView instance and be his delegate.
-2. In your class implementation create instance of DBMapSelectorManager class. In Initialization method specify mapView instance. (see below 2)
-3. After initialization, set the initial map selector settings (center and radius) and apply settings. (see below 3)
-4. Forward following messages mapView delegate by the MapSelectorManager instance. (see below 4)
+2. In your class implementation create instance of DBMapSelectorManager class. In Initialization method specify mapView instance. Assign your class as the delegate mapSelectorManager if needed.
+3. After initialization, set the initial map selector settings (center and radius) and apply settings.
+4. Forward following messages mapView delegate by the MapSelectorManager instance.
 
 ```objc
+...
+// (1)
+#import "DBMapSelectorManager.h"
+
+@interface ViewController () <DBMapSelectorManagerDelegate>
+@property (nonatomic, strong) DBMapSelectorManager *mapSelectorManager;
+@end
+
+@implementation ViewController
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
     // (2)
     self.mapSelectorManager = [[DBMapSelectorManager alloc] initWithMapView:self.mapView];
+    self.mapSelectorManager.delegate = self;
 
     // (3)
     self.mapSelectorManager.circleCoordinate = CLLocationCoordinate2DMake(55.75399400, 37.62209300);
@@ -60,6 +71,8 @@ To use DBMapSelectorViewController in your project you should perform the follow
 - (void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated {
     [self.mapSelectorManager mapView:mapView regionDidChangeAnimated:animated];
 }
+
+@end
 ```
 
 ### Property list selector
@@ -77,7 +90,8 @@ You can change additional MapSelector properties. Full properties list is shown 
 - `BOOL hidden` - Used to hide or show selector. Default is NO;
 - `BOOL fillInside` - Used to switching between inside or outside filling;
 - `UIColor *fillColor` - Used to specify the selector fill color. Color is used to fill the circular map region;
-- `UIColor *strokeColor` - Used to specify the selector stroke color. Color is used to delimit the circular map region.
+- `UIColor *strokeColor` - Used to specify the selector stroke color. Color is used to delimit the circular map region;
+- `BOOL shouldShowRadiusText` - Indicates whether the radius text should be displayed or not.
 
 ### DBMapSelectorManagerDelegate
 
@@ -109,13 +123,13 @@ You can implement these methods in your `MyViewController` class in order to res
 ```
 ## Version history
 
-### 1.1.0
-- Added Outside circle mode.
-
 ### 1.2.0
 - The DBMapSelectorViewController was replaced by a DBMapSelectorManager. This change allows the functionality provided by this component to be more easily integrated into existing projects where, for instance, the target view controller already inherits from another custom view controller. (Thank [Marcelo Schroeder](https://github.com/marcelo-schroeder) for giving solution).
 - Improved user experience when moving the map selector.
 - Fixed bug with incorrect determinating zoom button position in some cases.
+
+### 1.1.0
+- Added Outside circle mode.
 
 ## Contact
 

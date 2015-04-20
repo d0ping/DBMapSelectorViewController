@@ -68,6 +68,9 @@ NSInteger const defaultMaxDistance  = 10000;
     self.circleRadiusMax = defaultMaxDistance;
     self.hidden = NO;
     self.fillInside = YES;
+    self.shouldShowRadiusText = YES;
+    self.fillColor = [UIColor orangeColor];
+    self.strokeColor = [UIColor darkGrayColor];
 }
 
 - (void)applySelectorSettings {
