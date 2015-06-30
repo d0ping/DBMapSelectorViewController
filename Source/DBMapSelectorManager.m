@@ -85,8 +85,9 @@ NSInteger const defaultMaxDistance  = 10000;
     [self displaySelectorAnnotationIfNeeded];
     [self recalculateRadiusTouchRect];
     if (_isFirstTimeApplySelectorSettings) {
-        [self performSelector:@selector(updateMapRegionForMapSelector) withObject:nil afterDelay:.1f];
         _isFirstTimeApplySelectorSettings = NO;
+        [self.mapView removeOverlay:_selectorOverlay];
+        [self.mapView addOverlay:_selectorOverlay];
     }
 }
 
