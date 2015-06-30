@@ -20,14 +20,17 @@ NSInteger const defaultMaxDistance  = 10000;
 
 
 @interface DBMapSelectorManager () {
+    BOOL                            _isFirstTimeApplySelectorSettings;
     DBMapSelectorOverlay            *_selectorOverlay;
     DBMapSelectorOverlayRenderer    *_selectorOverlayRenderer;
-
+    
     BOOL                            _mapViewGestureEnabled;
     MKMapPoint                      _prevMapPoint;
     CLLocationDistance              _prevRadius;
     CGRect                          _radiusTouchRect;
     UIView                          *_radiusTouchView;
+    
+    UILongPressGestureRecognizer    *_longPressGestureRecognizer;
 }
 
 @end
@@ -37,6 +40,7 @@ NSInteger const defaultMaxDistance  = 10000;
 - (instancetype)initWithMapView:(MKMapView *)mapView {
     self = [super init];
     if (self) {
+        _isFirstTimeApplySelectorSettings = YES;
         _mapView = mapView;
         [self prepareForFirstUse];
     }
@@ -55,8 +59,11 @@ NSInteger const defaultMaxDistance  = 10000;
 //    [self.mapView addSubview:_radiusTouchView];
 #endif
 
+    _longPressGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressGestureRecognizer:)];
+    
     _mapViewGestureEnabled = YES;
     [self.mapView addGestureRecognizer:[self selectorGestureRecognizer]];
+    
 }
 
 #pragma mark Defaults
@@ -71,12 +78,18 @@ NSInteger const defaultMaxDistance  = 10000;
     self.shouldShowRadiusText = YES;
     self.fillColor = [UIColor orangeColor];
     self.strokeColor = [UIColor darkGrayColor];
+    self.mapRegionCoef = 2.f;
 }
 
 - (void)applySelectorSettings {
     [self updateMapRegionForMapSelector];
     [self displaySelectorAnnotationIfNeeded];
     [self recalculateRadiusTouchRect];
+    if (_isFirstTimeApplySelectorSettings) {
+        _isFirstTimeApplySelectorSettings = NO;
+        [self.mapView removeOverlay:_selectorOverlay];
+        [self.mapView addOverlay:_selectorOverlay];
+    }
 }
 
 #pragma mark - GestureRecognizer
@@ -145,6 +158,28 @@ NSInteger const defaultMaxDistance  = 10000;
     };
     
     return selectorGestureRecognizer;
+}
+
+- (void)longPressGestureRecognizer:(UILongPressGestureRecognizer *)gestureRecognizer {
+    if ([gestureRecognizer isKindOfClass:[UILongPressGestureRecognizer class]] &&
+        ( self.editingType == DBMapSelectorEditingTypeFull || self.editingType == DBMapSelectorEditingTypeCoordinateOnly )) {
+        switch (gestureRecognizer.state) {
+            case UIGestureRecognizerStateBegan: {
+                CGPoint touchPoint = [gestureRecognizer locationInView:self.mapView];
+                CLLocationCoordinate2D coord = [self.mapView convertPoint:touchPoint toCoordinateFromView:self.mapView];
+                self.circleCoordinate = coord;
+                [self displaySelectorAnnotationIfNeeded];
+                break;
+            }
+            case UIGestureRecognizerStateEnded:
+                if (NO == MKMapRectContainsRect(self.mapView.visibleMapRect, _selectorOverlay.boundingMapRect)) {
+                    [self updateMapRegionForMapSelector];
+                }
+                break;
+            default:
+                break;
+        }
+    }
 }
 
 #pragma mark - Accessors
@@ -243,6 +278,17 @@ NSInteger const defaultMaxDistance  = 10000;
     _selectorOverlay.shouldShowRadiusText = shouldShowRadiusText;
 }
 
+- (void)setShouldLongPressGesture:(BOOL)shouldLongPressGesture {
+    if (_shouldLongPressGesture != shouldLongPressGesture) {
+        _shouldLongPressGesture = shouldLongPressGesture;
+        if (_shouldLongPressGesture) {
+            [self.mapView addGestureRecognizer:_longPressGestureRecognizer];
+        } else {
+            [self.mapView removeGestureRecognizer:_longPressGestureRecognizer];
+        }
+    }
+}
+
 #pragma mark - Additional
 
 - (void)recalculateRadiusTouchRect {
@@ -261,7 +307,7 @@ NSInteger const defaultMaxDistance  = 10000;
     MKCoordinateRegion selectorRegion = MKCoordinateRegionForMapRect(_selectorOverlay.boundingMapRect);
     MKCoordinateRegion region;
     region.center = selectorRegion.center;
-    region.span = MKCoordinateSpanMake(selectorRegion.span.latitudeDelta *2.f, selectorRegion.span.longitudeDelta *2.f);
+    region.span = MKCoordinateSpanMake(selectorRegion.span.latitudeDelta * _mapRegionCoef, selectorRegion.span.longitudeDelta * _mapRegionCoef);
     [self.mapView setRegion:region animated:YES];
 }
 
