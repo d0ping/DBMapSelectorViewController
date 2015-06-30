@@ -74,10 +74,16 @@ typedef NS_ENUM(NSInteger, DBMapSelectorEditingType) {
  */
 @property (nonatomic, strong) UIColor                   *strokeColor;
 
-/*! @brief Indicates whether the radius text should be displayed or not. */
+/*!
+ @brief The magnification factor maps region after changing the selector settings
+ @discussion It is recommended to set a value greater than 1.f
+ */
+@property (nonatomic, assign) CGFloat                   mapRegionCoef;          // default is equal 2.f
+
+/*! @brief Indicates whether the radius text should be displayed or not */
 @property (nonatomic) BOOL                              shouldShowRadiusText;
 
-/*! @brief It allows to move the selector to a new location via long press gesture. */
+/*! @brief It allows to move the selector to a new location via long press gesture */
 @property (nonatomic) BOOL                              shouldLongPressGesture; // default is NO
 
 - (instancetype)initWithMapView:(MKMapView *)mapView;
