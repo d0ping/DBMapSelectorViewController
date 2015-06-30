@@ -57,6 +57,9 @@ NSInteger const defaultMaxDistance  = 10000;
 
     _mapViewGestureEnabled = YES;
     [self.mapView addGestureRecognizer:[self selectorGestureRecognizer]];
+    
+    UILongPressGestureRecognizer *recognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressGestureRecognizer:)];
+    [self.mapView addGestureRecognizer:recognizer];
 }
 
 #pragma mark Defaults
@@ -145,6 +148,28 @@ NSInteger const defaultMaxDistance  = 10000;
     };
     
     return selectorGestureRecognizer;
+}
+
+- (void)longPressGestureRecognizer:(UILongPressGestureRecognizer *)gestureRecognizer {
+    if ([gestureRecognizer isKindOfClass:[UILongPressGestureRecognizer class]] &&
+        ( self.editingType == DBMapSelectorEditingTypeFull || self.editingType == DBMapSelectorEditingTypeCoordinateOnly )) {
+        switch (gestureRecognizer.state) {
+            case UIGestureRecognizerStateBegan: {
+                CGPoint touchPoint = [gestureRecognizer locationInView:self.mapView];
+                CLLocationCoordinate2D coord = [self.mapView convertPoint:touchPoint toCoordinateFromView:self.mapView];
+                self.circleCoordinate = coord;
+                [self displaySelectorAnnotationIfNeeded];
+                break;
+            }
+            case UIGestureRecognizerStateEnded:
+                if (NO == MKMapRectContainsRect(self.mapView.visibleMapRect, _selectorOverlay.boundingMapRect)) {
+                    [self updateMapRegionForMapSelector];
+                }
+                break;
+            default:
+                break;
+        }
+    }
 }
 
 #pragma mark - Accessors
