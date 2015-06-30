@@ -74,6 +74,9 @@ typedef NS_ENUM(NSInteger, DBMapSelectorEditingType) {
  */
 @property (nonatomic, strong) UIColor                   *strokeColor;
 
+/*! @brief */
+@property (nonatomic, assign) CGFloat                   mapRegionCoef;          // default is equal 2.f
+
 /*! @brief Indicates whether the radius text should be displayed or not. */
 @property (nonatomic) BOOL                              shouldShowRadiusText;
 

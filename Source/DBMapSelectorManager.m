@@ -78,6 +78,7 @@ NSInteger const defaultMaxDistance  = 10000;
     self.shouldShowRadiusText = YES;
     self.fillColor = [UIColor orangeColor];
     self.strokeColor = [UIColor darkGrayColor];
+    self.mapRegionCoef = 2.f;
 }
 
 - (void)applySelectorSettings {
@@ -306,7 +307,7 @@ NSInteger const defaultMaxDistance  = 10000;
     MKCoordinateRegion selectorRegion = MKCoordinateRegionForMapRect(_selectorOverlay.boundingMapRect);
     MKCoordinateRegion region;
     region.center = selectorRegion.center;
-    region.span = MKCoordinateSpanMake(selectorRegion.span.latitudeDelta *2.f, selectorRegion.span.longitudeDelta *2.f);
+    region.span = MKCoordinateSpanMake(selectorRegion.span.latitudeDelta * _mapRegionCoef, selectorRegion.span.longitudeDelta * _mapRegionCoef);
     [self.mapView setRegion:region animated:YES];
 }
 
