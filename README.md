@@ -126,6 +126,7 @@ You can implement these methods in your `MyViewController` class in order to res
 
 ### 1.2.1
 - Added new property `BOOL shouldLongPressGesture`. It allows to move the selector to a new location via long press gesture.
+- Improved drawing selector after first display map controller. Fixed problem when sometimes it cuts the circle after first load.
 
 ### 1.2.0
 - The DBMapSelectorViewController was replaced by a DBMapSelectorManager. This change allows the functionality provided by this component to be more easily integrated into existing projects where, for instance, the target view controller already inherits from another custom view controller. (Thank [Marcelo Schroeder](https://github.com/marcelo-schroeder) for giving solution).
