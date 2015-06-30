@@ -28,6 +28,8 @@ NSInteger const defaultMaxDistance  = 10000;
     CLLocationDistance              _prevRadius;
     CGRect                          _radiusTouchRect;
     UIView                          *_radiusTouchView;
+    
+    UILongPressGestureRecognizer    *_longPressGestureRecognizer;
 }
 
 @end
@@ -55,8 +57,11 @@ NSInteger const defaultMaxDistance  = 10000;
 //    [self.mapView addSubview:_radiusTouchView];
 #endif
 
+    _longPressGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressGestureRecognizer:)];
+    
     _mapViewGestureEnabled = YES;
     [self.mapView addGestureRecognizer:[self selectorGestureRecognizer]];
+    
 }
 
 #pragma mark Defaults
@@ -145,6 +150,28 @@ NSInteger const defaultMaxDistance  = 10000;
     };
     
     return selectorGestureRecognizer;
+}
+
+- (void)longPressGestureRecognizer:(UILongPressGestureRecognizer *)gestureRecognizer {
+    if ([gestureRecognizer isKindOfClass:[UILongPressGestureRecognizer class]] &&
+        ( self.editingType == DBMapSelectorEditingTypeFull || self.editingType == DBMapSelectorEditingTypeCoordinateOnly )) {
+        switch (gestureRecognizer.state) {
+            case UIGestureRecognizerStateBegan: {
+                CGPoint touchPoint = [gestureRecognizer locationInView:self.mapView];
+                CLLocationCoordinate2D coord = [self.mapView convertPoint:touchPoint toCoordinateFromView:self.mapView];
+                self.circleCoordinate = coord;
+                [self displaySelectorAnnotationIfNeeded];
+                break;
+            }
+            case UIGestureRecognizerStateEnded:
+                if (NO == MKMapRectContainsRect(self.mapView.visibleMapRect, _selectorOverlay.boundingMapRect)) {
+                    [self updateMapRegionForMapSelector];
+                }
+                break;
+            default:
+                break;
+        }
+    }
 }
 
 #pragma mark - Accessors
@@ -241,6 +268,17 @@ NSInteger const defaultMaxDistance  = 10000;
 
 - (void)setShouldShowRadiusText:(BOOL)shouldShowRadiusText {
     _selectorOverlay.shouldShowRadiusText = shouldShowRadiusText;
+}
+
+- (void)setShouldLongPressGesture:(BOOL)shouldLongPressGesture {
+    if (_shouldLongPressGesture != shouldLongPressGesture) {
+        _shouldLongPressGesture = shouldLongPressGesture;
+        if (_shouldLongPressGesture) {
+            [self.mapView addGestureRecognizer:_longPressGestureRecognizer];
+        } else {
+            [self.mapView removeGestureRecognizer:_longPressGestureRecognizer];
+        }
+    }
 }
 
 #pragma mark - Additional

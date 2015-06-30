@@ -91,7 +91,8 @@ You can change additional MapSelector properties. Full properties list is shown 
 - `BOOL fillInside` - Used to switching between inside or outside filling;
 - `UIColor *fillColor` - Used to specify the selector fill color. Color is used to fill the circular map region;
 - `UIColor *strokeColor` - Used to specify the selector stroke color. Color is used to delimit the circular map region;
-- `BOOL shouldShowRadiusText` - Indicates whether the radius text should be displayed or not.
+- `BOOL shouldShowRadiusText` - Indicates whether the radius text should be displayed or not;
+- `BOOL shouldLongPressGesture` - It allows to move the selector to a new location via long press gesture.
 
 ### DBMapSelectorManagerDelegate
 
@@ -122,6 +123,9 @@ You can implement these methods in your `MyViewController` class in order to res
 }
 ```
 ## Version history
+
+### 1.2.1
+- Added new property `BOOL shouldLongPressGesture`. It allows to move the selector to a new location via long press gesture.
 
 ### 1.2.0
 - The DBMapSelectorViewController was replaced by a DBMapSelectorManager. This change allows the functionality provided by this component to be more easily integrated into existing projects where, for instance, the target view controller already inherits from another custom view controller. (Thank [Marcelo Schroeder](https://github.com/marcelo-schroeder) for giving solution).

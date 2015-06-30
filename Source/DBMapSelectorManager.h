@@ -77,6 +77,9 @@ typedef NS_ENUM(NSInteger, DBMapSelectorEditingType) {
 /*! @brief Indicates whether the radius text should be displayed or not. */
 @property (nonatomic) BOOL                              shouldShowRadiusText;
 
+/*! @brief It allows to move the selector to a new location via long press gesture. */
+@property (nonatomic) BOOL                              shouldLongPressGesture; // default is NO
+
 - (instancetype)initWithMapView:(MKMapView *)mapView;
 - (void)applySelectorSettings;
 
