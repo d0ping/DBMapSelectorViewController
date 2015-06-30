@@ -126,7 +126,7 @@ You can implement these methods in your `MyViewController` class in order to res
 
 ### 1.2.1
 - Added new property `BOOL shouldLongPressGesture`. It allows to move the selector to a new location via long press gesture.
-- Added new property `CGFloat mapRegionCoef;`. The magnification factor maps region after changing the selector settings. It is recommended to set a value greater than 1.f.
+- Added new property `CGFloat mapRegionCoef`. The magnification factor maps region after changing the selector settings. It is recommended to set a value greater than 1.f.
 - Improved drawing selector after first display map controller. Fixed problem when sometimes it cuts the circle after first load.
 
 ### 1.2.0
