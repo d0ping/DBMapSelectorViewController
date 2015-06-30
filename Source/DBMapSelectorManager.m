@@ -20,9 +20,10 @@ NSInteger const defaultMaxDistance  = 10000;
 
 
 @interface DBMapSelectorManager () {
+    BOOL                            _isFirstTimeApplySelectorSettings;
     DBMapSelectorOverlay            *_selectorOverlay;
     DBMapSelectorOverlayRenderer    *_selectorOverlayRenderer;
-
+    
     BOOL                            _mapViewGestureEnabled;
     MKMapPoint                      _prevMapPoint;
     CLLocationDistance              _prevRadius;
@@ -39,6 +40,7 @@ NSInteger const defaultMaxDistance  = 10000;
 - (instancetype)initWithMapView:(MKMapView *)mapView {
     self = [super init];
     if (self) {
+        _isFirstTimeApplySelectorSettings = YES;
         _mapView = mapView;
         [self prepareForFirstUse];
     }
@@ -82,6 +84,11 @@ NSInteger const defaultMaxDistance  = 10000;
     [self updateMapRegionForMapSelector];
     [self displaySelectorAnnotationIfNeeded];
     [self recalculateRadiusTouchRect];
+    if (_isFirstTimeApplySelectorSettings) {
+        _isFirstTimeApplySelectorSettings = NO;
+        [self.mapView removeOverlay:_selectorOverlay];
+        [self.mapView addOverlay:_selectorOverlay];
+    }
 }
 
 #pragma mark - GestureRecognizer
