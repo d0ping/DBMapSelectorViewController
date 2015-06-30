@@ -28,6 +28,8 @@ NSInteger const defaultMaxDistance  = 10000;
     CLLocationDistance              _prevRadius;
     CGRect                          _radiusTouchRect;
     UIView                          *_radiusTouchView;
+    
+    UILongPressGestureRecognizer    *_longPressGestureRecognizer;
 }
 
 @end
@@ -55,11 +57,11 @@ NSInteger const defaultMaxDistance  = 10000;
 //    [self.mapView addSubview:_radiusTouchView];
 #endif
 
+    _longPressGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressGestureRecognizer:)];
+    
     _mapViewGestureEnabled = YES;
     [self.mapView addGestureRecognizer:[self selectorGestureRecognizer]];
     
-    UILongPressGestureRecognizer *recognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressGestureRecognizer:)];
-    [self.mapView addGestureRecognizer:recognizer];
 }
 
 #pragma mark Defaults
@@ -266,6 +268,17 @@ NSInteger const defaultMaxDistance  = 10000;
 
 - (void)setShouldShowRadiusText:(BOOL)shouldShowRadiusText {
     _selectorOverlay.shouldShowRadiusText = shouldShowRadiusText;
+}
+
+- (void)setShouldLongPressGesture:(BOOL)shouldLongPressGesture {
+    if (_shouldLongPressGesture != shouldLongPressGesture) {
+        _shouldLongPressGesture = shouldLongPressGesture;
+        if (_shouldLongPressGesture) {
+            [self.mapView addGestureRecognizer:_longPressGestureRecognizer];
+        } else {
+            [self.mapView removeGestureRecognizer:_longPressGestureRecognizer];
+        }
+    }
 }
 
 #pragma mark - Additional
