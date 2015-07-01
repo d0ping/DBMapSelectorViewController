@@ -1,4 +1,7 @@
 # DBMapSelectorViewController
+[![Version](https://img.shields.io/cocoapods/v/DBMapSelectorViewController.svg?style=flat)](http://cocoadocs.org/docsets/DBMapSelectorViewController)
+[![License](https://img.shields.io/cocoapods/l/DBMapSelectorViewController.svg?style=flat)](http://cocoadocs.org/docsets/DBMapSelectorViewController)
+[![Platform](https://img.shields.io/cocoapods/p/DBMapSelectorViewController.svg?style=flat)](http://cocoadocs.org/docsets/DBMapSelectorViewController)
 
 This component allows you to select circular map region from the MKMapView.
 
