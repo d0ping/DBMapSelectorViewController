@@ -6,7 +6,7 @@ This component allows you to select circular map region from the MKMapView.
 
 ## Adding to your project
 
-### Cocoapods
+### CocoaPods
 
 To add DBMapSelectorViewController via [CocoaPods](http://cocoapods.org/) into your project:
 
