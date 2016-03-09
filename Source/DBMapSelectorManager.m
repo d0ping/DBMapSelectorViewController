@@ -27,24 +27,23 @@
 #import "DBMapSelectorManager.h"
 
 
-NSInteger const defaultRadius       = 1000;
-NSInteger const defaultMinDistance  = 100;
-NSInteger const defaultMaxDistance  = 10000;
-
+static const NSInteger kDefaultRadius       = 1000;
+static const NSInteger kDefaultMinDistance  = 100;
+static const NSInteger kDefaultMaxDistance  = 10000;
 
 @interface DBMapSelectorManager () {
     BOOL                            _isFirstTimeApplySelectorSettings;
-    DBMapSelectorOverlay            *_selectorOverlay;
-    DBMapSelectorOverlayRenderer    *_selectorOverlayRenderer;
-    
-    BOOL                            _mapViewGestureEnabled;
-    MKMapPoint                      _prevMapPoint;
-    CLLocationDistance              _prevRadius;
-    CGRect                          _radiusTouchRect;
     UIView                          *_radiusTouchView;
-    
     UILongPressGestureRecognizer    *_longPressGestureRecognizer;
 }
+
+@property (strong, nonatomic) DBMapSelectorOverlay          *selectorOverlay;
+@property (strong, nonatomic) DBMapSelectorOverlayRenderer  *selectorOverlayRenderer;
+
+@property (assign, nonatomic) BOOL                          mapViewGestureEnabled;
+@property (assign, nonatomic) MKMapPoint                    prevMapPoint;
+@property (assign, nonatomic) CLLocationDistance            prevRadius;
+@property (assign, nonatomic) CGRect                        radiusTouchRect;
 
 @end
 
@@ -83,9 +82,9 @@ NSInteger const defaultMaxDistance  = 10000;
 
 - (void)selectorSetDefaults {
     self.editingType = DBMapSelectorEditingTypeFull;
-    self.circleRadius = defaultRadius;
-    self.circleRadiusMin = defaultMinDistance;
-    self.circleRadiusMax = defaultMaxDistance;
+    self.circleRadius = kDefaultRadius;
+    self.circleRadiusMin = kDefaultMinDistance;
+    self.circleRadiusMax = kDefaultMaxDistance;
     self.hidden = NO;
     self.fillInside = YES;
     self.shouldShowRadiusText = YES;
@@ -115,37 +114,37 @@ NSInteger const defaultMaxDistance  = 10000;
     selectorGestureRecognizer.touchesBeganCallback = ^(NSSet * touches, UIEvent * event) {
         UITouch *touch = [touches anyObject];
         CGPoint touchPoint = [touch locationInView:weakSelf.mapView];
-//        NSLog(@"---- %@", CGRectContainsPoint(_selectorRadiusRect, p) ? @"Y" : @"N");
+//        NSLog(@"---- %@", CGRectContainsPoint(weakSelf.selectorRadiusRect, p) ? @"Y" : @"N");
         
         CLLocationCoordinate2D coord = [weakSelf.mapView convertPoint:touchPoint toCoordinateFromView:weakSelf.mapView];
         MKMapPoint mapPoint = MKMapPointForCoordinate(coord);
         
-        if (CGRectContainsPoint(_radiusTouchRect, touchPoint) && _selectorOverlay.editingRadius && !weakSelf.hidden){
-            if (_delegate && [_delegate respondsToSelector:@selector(mapSelectorManagerWillBeginHandlingUserInteraction:)]) {
-                [_delegate mapSelectorManagerWillBeginHandlingUserInteraction:self];
+        if (CGRectContainsPoint(weakSelf.radiusTouchRect, touchPoint) && weakSelf.selectorOverlay.editingRadius && !weakSelf.hidden){
+            if (weakSelf.delegate && [weakSelf.delegate respondsToSelector:@selector(mapSelectorManagerWillBeginHandlingUserInteraction:)]) {
+                [weakSelf.delegate mapSelectorManagerWillBeginHandlingUserInteraction:weakSelf];
             }
             dispatch_async(dispatch_get_main_queue(), ^{
                 weakSelf.mapView.scrollEnabled = NO;
                 weakSelf.mapView.userInteractionEnabled = NO;
-                _mapViewGestureEnabled = NO;
+                weakSelf.mapViewGestureEnabled = NO;
             });
         } else {
             weakSelf.mapView.scrollEnabled = YES;
             weakSelf.mapView.userInteractionEnabled = YES;
         }
-        _prevMapPoint = mapPoint;
-        _prevRadius = weakSelf.circleRadius;
+        weakSelf.prevMapPoint = mapPoint;
+        weakSelf.prevRadius = weakSelf.circleRadius;
     };
     
     selectorGestureRecognizer.touchesMovedCallback = ^(NSSet * touches, UIEvent * event) {
-        if(!_mapViewGestureEnabled && [event allTouches].count == 1){
+        if(!weakSelf.mapViewGestureEnabled && [event allTouches].count == 1){
             UITouch *touch = [touches anyObject];
             CGPoint touchPoint = [touch locationInView:weakSelf.mapView];
             
             CLLocationCoordinate2D coord = [weakSelf.mapView convertPoint:touchPoint toCoordinateFromView:weakSelf.mapView];
             MKMapPoint mapPoint = MKMapPointForCoordinate(coord);
             
-            double meterDistance = (mapPoint.x - _prevMapPoint.x)/MKMapPointsPerMeterAtLatitude(weakSelf.mapView.centerCoordinate.latitude) + _prevRadius;
+            double meterDistance = (mapPoint.x - weakSelf.prevMapPoint.x)/MKMapPointsPerMeterAtLatitude(weakSelf.mapView.centerCoordinate.latitude) + weakSelf.prevRadius;
             weakSelf.circleRadius = MIN( MAX( meterDistance, weakSelf.circleRadiusMin ), weakSelf.circleRadiusMax );
         }
     };
@@ -154,20 +153,20 @@ NSInteger const defaultMaxDistance  = 10000;
         weakSelf.mapView.scrollEnabled = YES;
         weakSelf.mapView.userInteractionEnabled = YES;
 
-        if (_prevRadius != weakSelf.circleRadius) {
+        if (weakSelf.prevRadius != weakSelf.circleRadius) {
             [weakSelf recalculateRadiusTouchRect];
-//            if (((_prevRadius / weakSelf.circleRadius) >= 1.25f) || ((_prevRadius / weakSelf.circleRadius) <= .75f)) {
+//            if (((weakSelf.prevRadius / weakSelf.circleRadius) >= 1.25f) || ((weakSelf.prevRadius / weakSelf.circleRadius) <= .75f)) {
                 [weakSelf updateMapRegionForMapSelector];
 //            }
         }
-        if(!_mapViewGestureEnabled) {
-            if (_delegate && [_delegate respondsToSelector:@selector(mapSelectorManagerDidHandleUserInteraction:)]) {
+        if(!weakSelf.mapViewGestureEnabled) {
+            if (weakSelf.delegate && [weakSelf.delegate respondsToSelector:@selector(mapSelectorManagerDidHandleUserInteraction:)]) {
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    [_delegate mapSelectorManagerDidHandleUserInteraction:self];
+                    [weakSelf.delegate mapSelectorManagerDidHandleUserInteraction:weakSelf];
                 });
             }
         }
-        _mapViewGestureEnabled = YES;
+        weakSelf.mapViewGestureEnabled = YES;
     };
     
     return selectorGestureRecognizer;
