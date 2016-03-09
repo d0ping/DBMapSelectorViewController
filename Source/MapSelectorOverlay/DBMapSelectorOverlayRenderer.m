@@ -91,17 +91,17 @@
 //    CGFloat radiusAtLatitude = (_selectorOverlay.radius) * MKMapPointsPerMeterAtLatitude([[self overlay] coordinate].latitude);
 //    CGRect overlayRect = [self rectForMapRect:_selectorOverlay.boundingMapRect];
     
-    [self drawMainOverlayFillInside:_selectorOverlay.fillInside mapRect:mapRect radius:radiusAtLatitude overlayRect:overlayRect inContext:context];
-    [self drawCenterPointWithAllowEditing:_selectorOverlay.editingCoordinate mapRect:mapRect radius:radiusAtLatitude overlayRect:overlayRect inContext:context];
-    [self drawRadiusPointWithAllowEditing:_selectorOverlay.editingRadius mapRect:mapRect radius:radiusAtLatitude overlayRect:overlayRect inContext:context];
-    [self drawRadiusLineWithText:_selectorOverlay.shouldShowRadiusText mapRect:mapRect centerMapPoint:mpoint radius:radius overlayRect:overlayRect zoomScale:zoomScale inContext:context];
+    [self drawMainCircleOverlayIfNeddedOnMapRect:mapRect fillInside:_selectorOverlay.fillInside radius:radiusAtLatitude overlayRect:overlayRect inContext:context];
+    [self drawCenterPointIfNeddedOnMapRect:mapRect allowEditing:_selectorOverlay.editingCoordinate radius:radiusAtLatitude overlayRect:overlayRect inContext:context];
+    [self drawRadiusPointIfNeddedOnMapRect:mapRect allowEditing:_selectorOverlay.editingRadius radius:radiusAtLatitude overlayRect:overlayRect inContext:context];
+    [self drawRadiusLineIfNeddedOnMapRect:mapRect showText:_selectorOverlay.shouldShowRadiusText centerMapPoint:mpoint radius:radius overlayRect:overlayRect zoomScale:zoomScale inContext:context];
     
     UIGraphicsPopContext();
 }
 
 #pragma mark Helpers
 
-- (void)drawMainOverlayFillInside:(BOOL)fillInside mapRect:(MKMapRect)mapRect radius:(CGFloat)radius overlayRect:(CGRect)overlayRect inContext:(CGContextRef)context {
+- (void)drawMainCircleOverlayIfNeddedOnMapRect:(MKMapRect)mapRect fillInside:(BOOL)fillInside radius:(CGFloat)radius overlayRect:(CGRect)overlayRect inContext:(CGContextRef)context {
     CGRect rect = [self rectForMapRect:mapRect];
     if (fillInside && !CGRectIntersectsRect( rect, [self rectForMapRect:[self.overlay boundingMapRect]] )) {
         return;
@@ -131,7 +131,7 @@
     CGContextDrawPath(context, kCGPathFillStroke);
 }
 
-- (void)drawCenterPointWithAllowEditing:(BOOL)allowEdit mapRect:(MKMapRect)mapRect radius:(CGFloat)radius overlayRect:(CGRect)overlayRect inContext:(CGContextRef)context {
+- (void)drawCenterPointIfNeddedOnMapRect:(MKMapRect)mapRect allowEditing:(BOOL)allowEdit radius:(CGFloat)radius overlayRect:(CGRect)overlayRect inContext:(CGContextRef)context {
     CGRect rect = [self rectForMapRect:mapRect];
     CGFloat pointRadius = radius * (allowEdit ? .1f : .015f);
     CGRect pointVisibleRect = CGRectMake(overlayRect.origin.x - pointRadius * 1.5f, overlayRect.origin.y - pointRadius * 1.5f, pointRadius *3.f, pointRadius *3.f) ;
@@ -144,7 +144,7 @@
     CGContextDrawPath(context, kCGPathFillStroke);
 }
 
-- (void)drawRadiusPointWithAllowEditing:(BOOL)allowEdit mapRect:(MKMapRect)mapRect radius:(CGFloat)radius overlayRect:(CGRect)overlayRect inContext:(CGContextRef)context {
+- (void)drawRadiusPointIfNeddedOnMapRect:(MKMapRect)mapRect allowEditing:(BOOL)allowEdit radius:(CGFloat)radius overlayRect:(CGRect)overlayRect inContext:(CGContextRef)context {
     CGRect rect = [self rectForMapRect:mapRect];
     CGFloat pointRadius = radius * (allowEdit ? .075f : .015f);
     CGRect pointVisibleRect = CGRectMake(overlayRect.origin.x + radius - pointRadius * 1.5f, overlayRect.origin.y - pointRadius * 1.5f, pointRadius *3.f, pointRadius *3.f) ;
@@ -157,7 +157,7 @@
     CGContextDrawPath(context, kCGPathFillStroke);
 }
 
-- (void)drawRadiusLineWithText:(BOOL)showText mapRect:(MKMapRect)mapRect centerMapPoint:(MKMapPoint)centerMapPoint radius:(CGFloat)radius overlayRect:(CGRect)overlayRect zoomScale:(MKZoomScale)zoomScale inContext:(CGContextRef)context {
+- (void)drawRadiusLineIfNeddedOnMapRect:(MKMapRect)mapRect showText:(BOOL)showText centerMapPoint:(MKMapPoint)centerMapPoint radius:(CGFloat)radius overlayRect:(CGRect)overlayRect zoomScale:(MKZoomScale)zoomScale inContext:(CGContextRef)context {
     CGRect rect = [self rectForMapRect:mapRect];
     CGRect lineVisibleRect = CGRectMake(overlayRect.origin.x, overlayRect.origin.y - overlayRect.size.height *.2f, overlayRect.size.width, overlayRect.size.height *.25f) ;
     if (!CGRectIntersectsRect( rect, lineVisibleRect)) {
