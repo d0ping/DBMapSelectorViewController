@@ -91,12 +91,27 @@
 //    CGFloat radiusAtLatitude = (_selectorOverlay.radius) * MKMapPointsPerMeterAtLatitude([[self overlay] coordinate].latitude);
 //    CGRect overlayRect = [self rectForMapRect:_selectorOverlay.boundingMapRect];
     
+    [self drawMainOverlayFillInside:_selectorOverlay.fillInside mapRect:mapRect radius:radiusAtLatitude overlayRect:overlayRect inContext:context];
+    [self drawCenterPointWithAllowEditing:_selectorOverlay.editingCoordinate mapRect:mapRect radius:radiusAtLatitude overlayRect:overlayRect inContext:context];
+    [self drawRadiusPointWithAllowEditing:_selectorOverlay.editingRadius mapRect:mapRect radius:radiusAtLatitude overlayRect:overlayRect inContext:context];
+    [self drawRadiusLineWithText:_selectorOverlay.shouldShowRadiusText mapRect:mapRect centerMapPoint:mpoint radius:radius overlayRect:overlayRect zoomScale:zoomScale inContext:context];
+    
+    UIGraphicsPopContext();
+}
+
+#pragma mark Helpers
+
+- (void)drawMainOverlayFillInside:(BOOL)fillInside mapRect:(MKMapRect)mapRect radius:(CGFloat)radius overlayRect:(CGRect)overlayRect inContext:(CGContextRef)context {
+    CGRect rect = [self rectForMapRect:mapRect];
+    if (fillInside && !CGRectIntersectsRect( rect, [self rectForMapRect:[self.overlay boundingMapRect]] )) {
+        return;
+    }
+    
     CGContextSetStrokeColorWithColor(context, self.strokeColor.CGColor);
     CGContextSetLineWidth(context, overlayRect.size.width *.015f);
     CGContextSetShouldAntialias(context, YES);
     
-    if (NO == _selectorOverlay.fillInside) {
-        
+    if (!fillInside) {
         CGRect rect = [self rectForMapRect:mapRect];
         CGContextSaveGState(context);
         CGContextAddRect(context, rect);
@@ -111,17 +126,43 @@
         CGContextRestoreGState(context);
     }
     
-    CGContextSetFillColorWithColor(context, (_selectorOverlay.fillInside ? [self.fillColor colorWithAlphaComponent:.2f].CGColor : [UIColor clearColor].CGColor));
-    CGContextAddArc(context, overlayRect.origin.x, overlayRect.origin.y, radiusAtLatitude, 0, 2 * M_PI, true);
+    CGContextSetFillColorWithColor(context, (fillInside ? [self.fillColor colorWithAlphaComponent:.2f].CGColor : [UIColor clearColor].CGColor));
+    CGContextAddArc(context, overlayRect.origin.x, overlayRect.origin.y, radius, 0, 2 * M_PI, true);
     CGContextDrawPath(context, kCGPathFillStroke);
+}
+
+- (void)drawCenterPointWithAllowEditing:(BOOL)allowEdit mapRect:(MKMapRect)mapRect radius:(CGFloat)radius overlayRect:(CGRect)overlayRect inContext:(CGContextRef)context {
+    CGRect rect = [self rectForMapRect:mapRect];
+    CGFloat pointRadius = radius * (allowEdit ? .1f : .015f);
+    CGRect pointVisibleRect = CGRectMake(overlayRect.origin.x - pointRadius * 1.5f, overlayRect.origin.y - pointRadius * 1.5f, pointRadius *3.f, pointRadius *3.f) ;
+    if (!CGRectIntersectsRect( rect, pointVisibleRect)) {
+        return;
+    }
     
     CGContextSetFillColorWithColor(context, [self.fillColor colorWithAlphaComponent:.75f].CGColor);
-    CGContextAddArc(context, overlayRect.origin.x, overlayRect.origin.y, radiusAtLatitude *(_selectorOverlay.editingCoordinate ? .1f : .015f), 0, 2 * M_PI, true);
+    CGContextAddArc(context, overlayRect.origin.x, overlayRect.origin.y, pointRadius, 0, 2 * M_PI, true);
     CGContextDrawPath(context, kCGPathFillStroke);
+}
+
+- (void)drawRadiusPointWithAllowEditing:(BOOL)allowEdit mapRect:(MKMapRect)mapRect radius:(CGFloat)radius overlayRect:(CGRect)overlayRect inContext:(CGContextRef)context {
+    CGRect rect = [self rectForMapRect:mapRect];
+    CGFloat pointRadius = radius * (allowEdit ? .075f : .015f);
+    CGRect pointVisibleRect = CGRectMake(overlayRect.origin.x + radius - pointRadius * 1.5f, overlayRect.origin.y - pointRadius * 1.5f, pointRadius *3.f, pointRadius *3.f) ;
+    if (!CGRectIntersectsRect( rect, pointVisibleRect)) {
+        return;
+    }
     
     CGContextSetFillColorWithColor(context, self.strokeColor.CGColor);
-    CGContextAddArc(context, overlayRect.origin.x + radiusAtLatitude, overlayRect.origin.y, radiusAtLatitude * (_selectorOverlay.editingRadius ? .075f : .015f), 0, 2 * M_PI, true);
+    CGContextAddArc(context, overlayRect.origin.x + radius, overlayRect.origin.y, pointRadius, 0, 2 * M_PI, true);
     CGContextDrawPath(context, kCGPathFillStroke);
+}
+
+- (void)drawRadiusLineWithText:(BOOL)showText mapRect:(MKMapRect)mapRect centerMapPoint:(MKMapPoint)centerMapPoint radius:(CGFloat)radius overlayRect:(CGRect)overlayRect zoomScale:(MKZoomScale)zoomScale inContext:(CGContextRef)context {
+    CGRect rect = [self rectForMapRect:mapRect];
+    CGRect lineVisibleRect = CGRectMake(overlayRect.origin.x, overlayRect.origin.y - overlayRect.size.height *.2f, overlayRect.size.width, overlayRect.size.height *.25f) ;
+    if (!CGRectIntersectsRect( rect, lineVisibleRect)) {
+        return;
+    }
     
     CGFloat kDashedLinesLength[] = {overlayRect.size.width * .01f, overlayRect.size.width * .01f};
     CGContextSetLineWidth(context, overlayRect.size.width *.01f);
@@ -130,11 +171,11 @@
     CGContextMoveToPoint(context, overlayRect.origin.x + (_selectorOverlay.editingCoordinate ? overlayRect.size.width * .05f : .0f), overlayRect.origin.y);
     CGContextAddLineToPoint(context, overlayRect.origin.x + overlayRect.size.width * .5f, overlayRect.origin.y);
     CGContextStrokePath(context);
-
-    if (_selectorOverlay.shouldShowRadiusText) {
+    
+    if (showText) {
         CGFloat fontSize = radius * zoomScale;
         NSString *radiusStr = [self.class stringForRadius:radius];
-        CGPoint point = CGPointMake([self pointForMapPoint:mpoint].x + overlayRect.size.width * .18f, [self pointForMapPoint:mpoint].y - overlayRect.size.width * .03f);
+        CGPoint point = CGPointMake([self pointForMapPoint:centerMapPoint].x + overlayRect.size.width * .18f, [self pointForMapPoint:centerMapPoint].y - overlayRect.size.width * .03f);
         CGContextSetFillColorWithColor(context, self.strokeColor.CGColor);
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
@@ -148,18 +189,17 @@
         CGContextShowTextAtPoint(context, point.x, point.y, [radiusStr cStringUsingEncoding:NSUTF8StringEncoding], radiusStr.length);
 #pragma clang diagnostic pop
     }
-    
-    UIGraphicsPopContext();
 }
 
-+ (NSString *)stringForRadius:(CLLocationDistance)a_radius {
+#pragma mark - Public
+
++ (NSString *)stringForRadius:(CLLocationDistance)radius {
     NSString *radiusStr;
-    if (a_radius >= 1000) {
-        NSString *diatanceOfKmStr = [NSString stringWithFormat:@"%.1f", a_radius * .001f];
+    if (radius >= 1000) {
+        NSString *diatanceOfKmStr = [NSString stringWithFormat:@"%.1f", radius * .001f];
         radiusStr = [NSString stringWithFormat:NSLocalizedString(@"%@ km", @"RADIUS_IN_KILOMETRES km"), diatanceOfKmStr];
     } else {
-        NSString *diatanceOfMeterStr = [NSString stringWithFormat:@"%.0f",
-                                                                  a_radius];
+        NSString *diatanceOfMeterStr = [NSString stringWithFormat:@"%.0f", radius];
         radiusStr = [NSString stringWithFormat:NSLocalizedString(@"%@ m", @"RADIUS IN METRES m"), diatanceOfMeterStr];
     }
     return radiusStr;
