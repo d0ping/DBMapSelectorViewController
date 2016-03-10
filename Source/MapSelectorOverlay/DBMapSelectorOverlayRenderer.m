@@ -139,7 +139,8 @@ static const CGFloat kDefaultDashLineCoef = .01f;
 - (void)drawCenterPointIfNeddedOnMapRect:(MKMapRect)mapRect allowEditing:(BOOL)allowEdit radius:(CGFloat)radius overlayRect:(CGRect)overlayRect inContext:(CGContextRef)context {
     CGRect rect = [self rectForMapRect:mapRect];
     CGFloat pointRadius = radius * (allowEdit ? kEditCenterPointRadiusCoef : kDefaultPointRadiusCoef);
-    CGRect pointVisibleRect = CGRectMake(overlayRect.origin.x - pointRadius *1.5f, overlayRect.origin.y - pointRadius *1.5f, pointRadius *3.f, pointRadius *3.f) ;
+    CGSize pointVisibleSize = CGSizeMake(pointRadius *3.f, pointRadius *3.f);           // set 150% because drawing point with border line
+    CGRect pointVisibleRect = CGRectMake(overlayRect.origin.x - pointVisibleSize.width *.5f, overlayRect.origin.y - pointVisibleSize.height *.5f, pointVisibleSize.width, pointVisibleSize.height) ;
     if (!CGRectIntersectsRect( rect, pointVisibleRect)) {
         return;
     }
@@ -152,7 +153,8 @@ static const CGFloat kDefaultDashLineCoef = .01f;
 - (void)drawRadiusPointIfNeddedOnMapRect:(MKMapRect)mapRect allowEditing:(BOOL)allowEdit radius:(CGFloat)radius overlayRect:(CGRect)overlayRect inContext:(CGContextRef)context {
     CGRect rect = [self rectForMapRect:mapRect];
     CGFloat pointRadius = radius * (allowEdit ? kEditRadiusPointRadiusCoef : kDefaultPointRadiusCoef);
-    CGRect pointVisibleRect = CGRectMake(overlayRect.origin.x + radius - pointRadius *1.5f, overlayRect.origin.y - pointRadius *1.5f, pointRadius *3.f, pointRadius *3.f) ;
+    CGSize pointVisibleSize = CGSizeMake(pointRadius *3.f, pointRadius *3.f);           // set 150% because drawing point with border line
+    CGRect pointVisibleRect = CGRectMake(overlayRect.origin.x + radius - pointVisibleSize.width *.5f, overlayRect.origin.y - pointVisibleSize.height *.5f, pointVisibleSize.width, pointVisibleSize.height) ;
     if (!CGRectIntersectsRect( rect, pointVisibleRect)) {
         return;
     }
@@ -164,7 +166,8 @@ static const CGFloat kDefaultDashLineCoef = .01f;
 
 - (void)drawRadiusLineIfNeddedOnMapRect:(MKMapRect)mapRect showText:(BOOL)showText centerMapPoint:(MKMapPoint)centerMapPoint radius:(CGFloat)radius overlayRect:(CGRect)overlayRect zoomScale:(MKZoomScale)zoomScale inContext:(CGContextRef)context {
     CGRect rect = [self rectForMapRect:mapRect];
-    CGRect lineVisibleRect = CGRectMake(overlayRect.origin.x, overlayRect.origin.y - overlayRect.size.height *.2f, overlayRect.size.width, overlayRect.size.height *.25f) ;
+    CGSize lineVisibleSize = CGSizeMake(overlayRect.size.width *.5f, overlayRect.size.height *.15f);        // set 15% of overlayRect.size for drawing line with text
+    CGRect lineVisibleRect = CGRectMake(overlayRect.origin.x, overlayRect.origin.y - overlayRect.size.height *.1f, lineVisibleSize.width, lineVisibleSize.height) ;
     if (!CGRectIntersectsRect( rect, lineVisibleRect)) {
         return;
     }
@@ -173,7 +176,7 @@ static const CGFloat kDefaultDashLineCoef = .01f;
     CGContextSetLineWidth(context, overlayRect.size.width * kDefaultDashLineCoef);
     CGContextSetLineDash(context, .0f, kDashedLinesLength, kFullLineWidthCoef);
     
-    CGContextMoveToPoint(context, overlayRect.origin.x + (_selectorOverlay.editingCoordinate ? overlayRect.size.width * .05f : .0f), overlayRect.origin.y);
+    CGContextMoveToPoint(context, overlayRect.origin.x + (_selectorOverlay.editingCoordinate ? overlayRect.size.width * kEditRadiusPointRadiusCoef : .0f), overlayRect.origin.y);
     CGContextAddLineToPoint(context, overlayRect.origin.x + overlayRect.size.width * .5f, overlayRect.origin.y);
     CGContextStrokePath(context);
     
@@ -187,7 +190,7 @@ static const CGFloat kDefaultDashLineCoef = .01f;
         CGContextSelectFont(context, "HelveticaNeue-Bold", fontSize, kCGEncodingMacRoman);
 #pragma clang diagnostic pop
         CGContextSetTextDrawingMode(context, kCGTextFill);
-        CGAffineTransform xform = CGAffineTransformMake(1.0 / zoomScale, 0.0, 0.0, -1.0 / zoomScale, 0.0, 0.0);
+        CGAffineTransform xform = CGAffineTransformMakeScale(1.0 / zoomScale, -1.0 / zoomScale);
         CGContextSetTextMatrix(context, xform);
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
@@ -199,8 +202,8 @@ static const CGFloat kDefaultDashLineCoef = .01f;
 #pragma mark - Public
 
 + (NSString *)stringForRadius:(CLLocationDistance)radius {
-    NSString *radiusStr;
-    if (radius >= 1000) {
+    NSString *radiusStr = nil;
+    if (radius >= 1000) {       // 1000 meters
         NSString *diatanceOfKmStr = [NSString stringWithFormat:@"%.1f", radius * .001f];
         radiusStr = [NSString stringWithFormat:NSLocalizedString(@"%@ km", @"RADIUS_IN_KILOMETRES km"), diatanceOfKmStr];
     } else {
