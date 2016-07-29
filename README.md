@@ -1,4 +1,8 @@
 # DBMapSelectorViewController
+[![Version](https://img.shields.io/cocoapods/v/DBMapSelectorViewController.svg?style=flat)](http://cocoadocs.org/docsets/DBMapSelectorViewController)
+[![License](https://img.shields.io/cocoapods/l/DBMapSelectorViewController.svg?style=flat)](http://cocoadocs.org/docsets/DBMapSelectorViewController)
+[![Platform](https://img.shields.io/cocoapods/p/DBMapSelectorViewController.svg?style=flat)](http://cocoadocs.org/docsets/DBMapSelectorViewController)
+![Language](https://img.shields.io/badge/Language-%20Objective%20C%20-blue.svg)
 
 This component allows you to select circular map region from the MKMapView.
 
@@ -124,6 +128,10 @@ You can implement these methods in your `MyViewController` class in order to res
 }
 ```
 ## Version history
+
+### 1.2.2
+- Improve rendering speed by code optimization
+- Other optimizations
 
 ### 1.2.1
 - Added new property `BOOL shouldLongPressGesture`. It allows to move the selector to a new location via long press gesture.
