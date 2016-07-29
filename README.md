@@ -129,6 +129,10 @@ You can implement these methods in your `MyViewController` class in order to res
 ```
 ## Version history
 
+### 1.2.2
+- Improve rendering speed by code optimization
+- Other optimizations
+
 ### 1.2.1
 - Added new property `BOOL shouldLongPressGesture`. It allows to move the selector to a new location via long press gesture.
 - Added new property `CGFloat mapRegionCoef`. The magnification factor maps region after changing the selector settings. It is recommended to set a value greater than 1.f.
