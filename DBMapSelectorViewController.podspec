@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = 'DBMapSelectorViewController'
-  s.version      = '1.2.1'
+  s.version      = '1.2.2'
   s.authors = { 'Denis Bogatyrev' => 'denis.bogatyrev@gmail.com' }
   s.summary      = 'This component allows you to select circular map region from the MKMapView'
   s.homepage     = 'https://github.com/d0ping/DBMapSelectorViewController'
