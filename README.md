@@ -36,7 +36,7 @@ To use DBMapSelectorViewController in your project you should perform the follow
 ```objc
 ...
 // (1)
-#import "DBMapSelectorManager.h"
+# import "DBMapSelectorManager.h"
 
 @interface ViewController () <DBMapSelectorManagerDelegate>
 @property (nonatomic, strong) DBMapSelectorManager *mapSelectorManager;
@@ -153,7 +153,7 @@ Denis Bogatyrev (maintainer)
 - https://github.com/d0ping
 - denis.bogatyrev@gmail.com
 
-##License
+## License
 
 DBMapSelectorViewController - Copyright (c) 2015 Denis Bogatyrev
 
