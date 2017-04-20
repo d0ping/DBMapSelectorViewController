@@ -153,7 +153,7 @@ Denis Bogatyrev (maintainer)
 - https://github.com/d0ping
 - denis.bogatyrev@gmail.com
 
-##License
+## License
 
 DBMapSelectorViewController - Copyright (c) 2015 Denis Bogatyrev
 
